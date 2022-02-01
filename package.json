@@ -1,15 +1,15 @@
 {
-  "name": "nestjs-react-mongodb-template",
+  "name": "money-tracker",
   "version": "1.0.0",
   "license": "MIT",
   "main": "./dist/main.js",
   "author": "async-devil",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/async-devil/nestjs-react-mongodb-template.git"
+    "url": "git+https://github.com/async-devil/money-tracker.git"
   },
   "bugs": {
-    "url": "https://github.com/async-devil/nestjs-react-mongodb-template/issues"
+    "url": "https://github.com/async-devil/money-tracker/issues"
   },
   "keywords": [
     "MongoDB",
