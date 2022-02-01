@@ -1,0 +1,37 @@
+module.exports = {
+	rootDir: "../",
+	roots: ["<rootDir>/test"],
+	collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
+	setupFiles: ["react-app-polyfill/jsdom"],
+	setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
+	testMatch: ["**/*.spec.{js,jsx,ts,tsx}"],
+	testEnvironment: "jsdom",
+	transform: {
+		"^.+\\.(js|jsx|ts|tsx)$": "ts-jest",
+		".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|svg)$": "jest-transform-stub",
+	},
+	transformIgnorePatterns: [
+		"[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+		"^.+\\.module\\.(css|sass|scss)$",
+	],
+	modulePaths: [],
+	moduleNameMapper: {
+		"^react-native$": "react-native-web",
+		"^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+		"^src/(.*)$": "<rootDir>/src/$1",
+	},
+	moduleFileExtensions: [
+		"web.js",
+		"js",
+		"web.ts",
+		"ts",
+		"web.tsx",
+		"tsx",
+		"json",
+		"web.jsx",
+		"jsx",
+		"node",
+	],
+	watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
+	resetMocks: true,
+};

@@ -1,0 +1,48 @@
+$palettes: (
+	dark: (
+		background: (
+			primary: #000000,
+			secondary: #313131,
+			secondary-variant: #414141,
+		),
+		text: (
+			primary: #ffffff,
+			secondary: #aaaaaa,
+		),
+	),
+	bright: (
+		background: (
+			primary: #ffffff,
+			secondary: #cccccc,
+			secondary-variant: #bbbbbb,
+		),
+		text: (
+			primary: #000000,
+			secondary: #444444,
+		),
+	),
+);
+
+@function color($color, $tone, $themeName) {
+	@if map-has-key($palettes, $themeName) {
+		$theme: map-get($palettes, $themeName);
+
+		@if map-has-key($theme, $color) {
+			$color: map-get($theme, $color);
+
+			@if map-has-key($color, $tone) {
+				$tone: map-get($color, $tone);
+				@return $tone;
+			}
+
+			@warn "unknown tone `#{$tone}` in color";
+			@return null;
+		}
+
+		@warn "unknown color `#{$color}` in palette";
+		@return null;
+	}
+
+	@warn "unknown theme `#{$theme}` in palette";
+	@return null;
+}
