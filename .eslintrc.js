@@ -45,7 +45,6 @@ const typescriptRules = {
 	"@typescript-eslint/indent": 0,
 	"@typescript-eslint/quotes": 0,
 	"@typescript-eslint/no-unused-vars": 1,
-	"@typescript-eslint/comma-dangle": 0,
 	"@typescript-eslint/interface-name-prefix": 0,
 	"@typescript-eslint/explicit-function-return-type": 0,
 	"@typescript-eslint/explicit-module-boundary-types": 0,
@@ -86,6 +85,14 @@ module.exports = {
 			],
 			plugins: ["@typescript-eslint"],
 			rules: Object.assign(typescriptRules, mainRules),
+		},
+		{
+			files: ["*.spec.ts", "*.spec.tsx"],
+			plugins: ["jest"],
+			rules: {
+				"@typescript-eslint/unbound-method": 0,
+				"jest/unbound-method": 1,
+			},
 		},
 		{
 			files: "*.js",
