@@ -1,8 +1,9 @@
 {
-  "editor.formatOnPaste": false,
-  "editor.formatOnSave": true,
-  "eslint.alwaysShowStatus": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  }
+	"editor.formatOnPaste": false,
+	"editor.formatOnSave": true,
+	"eslint.alwaysShowStatus": true,
+	"eslint.workingDirectories": [{ "mode": "auto" }],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	}
 }

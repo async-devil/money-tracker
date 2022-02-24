@@ -1,0 +1,56 @@
+version: "3.2"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - rabbitmq_network
+
+  gateway:
+    image: gateway
+    container_name: gateway
+    hostname: gateway
+
+    build:
+      context: ./apps/gateway
+
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_network
+
+    restart: on-failure
+
+  clients-service:
+    image: clients-service
+    container_name: clients-service
+    hostname: clients-service
+
+    build:
+      context: ./apps/clients-service
+
+    env_file:
+      - .env
+
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_network
+
+    restart: unless-stopped
+
+networks:
+  rabbitmq_network:
+    driver: bridge

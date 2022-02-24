@@ -1,5 +1,3 @@
-# NestJS-React-MongoDB template [![wakatime](https://wakatime.com/badge/user/bc8fa60c-fa34-4507-b70f-24bdba32a74d/project/cb758364-5c0d-4ba7-9fd1-816058d6c2d7.svg)](https://wakatime.com/badge/user/bc8fa60c-fa34-4507-b70f-24bdba32a74d/project/cb758364-5c0d-4ba7-9fd1-816058d6c2d7) <hr/>
-
 This template is based on the [Create React App](https://github.com/facebook/create-react-app) and the [NestJS](https://nestjs.com/) project builder.
 
 # Technologies:
@@ -7,7 +5,7 @@ This template is based on the [Create React App](https://github.com/facebook/cre
 - Server:
 
   - NestJS
-  - Mongoose
+  - TypeORM
   - Swagger
 
 - Client:
@@ -39,9 +37,17 @@ Template supports developing and production env files. Will be using `.env.devel
 
 List of available variables, default values and their names:
 
-- db host: `mongodb://localhost`; MONGO_HOST
-- db port: `27017`; MONGO_PORT
-- db name: `test`; MONGO_DB
+- db host: `localhost`; TYPEORM_HOST
+- db port: `5432`; TYPEORM_PORT
+- db username: `postgres`; TYPEORM_USERNAME
+- db username password: `toor`; TYPEORM_PASSWORD
+- db name: `test`; TYPEORM_DATABASE
+
+- jwt access token password: `SECRET_KEY`; JWT_ACCESS_TOKEN_SECRET
+- jwt access token expiration time in seconds: `1800`; JWT_ACCESS_TOKEN_EXPIRATION_TIME
+- jwt refresh token password: `SECRET_KEY`; JWT_REFRESH_TOKEN_SECRET
+- jwt refresh token expiration time in seconds: `432000`; JWT_REFRESH_TOKEN_EXPIRATION_TIME (432000s = 5d)
+
 - server port: `5000`; SERVER_PORT
 - client port: `3000`; PORT
 
