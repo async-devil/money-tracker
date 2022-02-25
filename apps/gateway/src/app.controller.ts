@@ -7,7 +7,7 @@ export class AppController {
 	constructor(private readonly appService: AppService) {}
 
 	@Get()
-	public ping() {
-		return this.appService.ping();
+	public async ping() {
+		return await this.appService.ping();
 	}
 }

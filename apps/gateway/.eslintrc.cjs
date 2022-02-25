@@ -49,7 +49,7 @@ module.exports = {
 		"plugin:promise/recommended",
 		"plugin:security-node/recommended",
 	],
-	ignorePatterns: ["**/*.cjs"],
+	ignorePatterns: ["**/*.cjs", "dist"],
 	rules: mainRules,
 	plugins: ["prettier", "import", "sonarjs", "promise", "security-node"],
 	settings: {
@@ -85,6 +85,7 @@ module.exports = {
 				"@typescript-eslint/unbound-method": 0,
 				"@typescript-eslint/no-misused-promises": 0,
 				"jest/unbound-method": 1,
+				"import/no-unresolved": 0,
 			},
 		},
 		{

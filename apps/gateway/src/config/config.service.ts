@@ -1,5 +1,3 @@
-import { Transport } from "@nestjs/microservices";
-
 export class ConfigService {
 	private readonly envConfig: { [key: string]: any } = null;
 
@@ -7,8 +5,20 @@ export class ConfigService {
 		this.envConfig = {
 			port: process.env.GATEWAY_PORT || 8000,
 
-			clientService: {
+			clientsService: {
 				queue: process.env.CLIENTS_SERVICE_QUEUE || "clients_queue",
+			},
+
+			accountsService: {
+				queue: process.env.ACCOUNTS_SERVICE_QUEUE || "accounts_queue",
+			},
+
+			transactionsService: {
+				queue: process.env.TRANSACTIONS_SERVICE_QUEUE || "transactions_queue",
+			},
+
+			authService: {
+				queue: process.env.AUTH_SERVICE_QUEUE || "auth_queue",
 			},
 
 			rmq: {
