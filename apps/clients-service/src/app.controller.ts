@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 
 import { AppService } from "./app.service";
@@ -8,12 +8,7 @@ export class AppController {
 	constructor(private readonly appService: AppService) {}
 
 	@MessagePattern({ cmd: "ping" })
-	public async ping(): Promise<string> {
-		return this.appService.ping();
-	}
-
-	@MessagePattern({ cmd: "greet" })
-	public async greet(@Payload() name: string): Promise<string> {
-		return this.appService.greet(name);
+	public ping(@Payload() date: number): number {
+		return this.appService.ping(date);
 	}
 }
