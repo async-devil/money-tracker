@@ -51,6 +51,60 @@ services:
 
     restart: unless-stopped
 
+  accounts-service:
+    image: accounts-service
+    container_name: accounts-service
+    hostname: accounts-service
+
+    build:
+      context: ./apps/accounts-service
+
+    env_file:
+      - .env
+
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_network
+
+    restart: unless-stopped
+
+  transactions-service:
+    image: transactions-service
+    container_name: transactions-service
+    hostname: transactions-service
+
+    build:
+      context: ./apps/transactions-service
+
+    env_file:
+      - .env
+
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_network
+
+    restart: unless-stopped
+
+  auth-service:
+    image: auth-service
+    container_name: auth-service
+    hostname: auth-service
+
+    build:
+      context: ./apps/auth-service
+
+    env_file:
+      - .env
+
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_network
+
+    restart: unless-stopped
+
 volumes:
     rabbitmq_data:
     rabbitmq_log:

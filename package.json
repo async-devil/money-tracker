@@ -24,7 +24,12 @@
     "apps/**"
   ],
   "scripts": {
-    "start:dev": "concurrently --kill-others-on-fail \"yarn workspace gateway start:dev\" \"yarn workspace client start:dev\""
+    "start:dev-gateway": "yarn workspace gateway start:dev",
+    "start:dev-clients-service": "yarn workspace clients-service start:dev",
+    "start:dev-accounts-service": "yarn workspace accounts-service start:dev",
+    "start:dev-transactions-service": "yarn workspace transactions-service start:dev",
+    "start:dev-auth-service": "yarn workspace auth-service start:dev",
+    "start:dev": "concurrently --kill-others-on-fail \"yarn start:dev-gateway\" \"yarn start:dev-clients-service\" \"yarn start:dev-accounts-service\" \"yarn start:dev-transactions-service\" \"yarn start:dev-auth-service\""
   },
   "devDependencies": {
     "concurrently": "^7.0.0"
