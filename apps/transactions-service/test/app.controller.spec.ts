@@ -1,4 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
+
 import { AppController } from "src/app.controller";
 import { AppService } from "src/app.service";
 
@@ -16,7 +17,7 @@ describe("AppController", () => {
 
 	describe("root", () => {
 		it('should return pong"', () => {
-			expect(appController.ping(Date.now())).toBeGreaterThanOrEqual(0);
+			expect(appController.ping()).toBe("pong");
 		});
 	});
 });

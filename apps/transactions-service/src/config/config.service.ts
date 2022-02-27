@@ -5,7 +5,8 @@ export class ConfigService {
 		this.envConfig = {
 			rmq: {
 				host: process.env.RMQ_HOST || "localhost",
-				port: process.env.RMQ_PORT || 5672,
+				user: process.env.RMQ_USER || "root",
+				password: process.env.RMQ_PASS || "toor",
 			},
 
 			queue: process.env.TRANSACTIONS_SERVICE_QUEUE || "transactions_queue",

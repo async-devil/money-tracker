@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
-import { firstValueFrom } from "rxjs";
+import { defaultIfEmpty, map, Observable, takeUntil, timer, zip } from "rxjs";
 
 @Injectable()
 export class AppService {
@@ -11,26 +11,27 @@ export class AppService {
 		@Inject("AUTH_SERVICE") private readonly authService: ClientProxy
 	) {}
 
-	public async *pingGenerator() {
-		const services = [
-			this.clientsService,
-			this.accountsService,
-			this.transactionsService,
-			this.authService,
-		];
+	private pingService(service: ClientProxy): Observable<{ message: string; duration: number }> {
+		const startDate = Date.now();
 
-		for await (const service of services) {
-			const serviceObservable = service.send({ cmd: "ping" }, Date.now());
+		const serviceObservable = service.send<string>({ cmd: "ping" }, {}).pipe(takeUntil(timer(100)));
 
-			yield await firstValueFrom(serviceObservable);
-		}
+		return serviceObservable.pipe(
+			defaultIfEmpty("error"),
+			map((message) => ({ message, duration: Date.now() - startDate }))
+		);
 	}
 
-	public async ping() {
-		const pings = [];
-
-		for await (const ping of this.pingGenerator()) pings.push(ping);
-
-		return pings.join(" ");
+	public ping(): Observable<{ message: string; duration: number }[]> {
+		return zip(
+			this.pingService(this.clientsService),
+			this.pingService(this.accountsService),
+			this.pingService(this.transactionsService),
+			this.pingService(this.authService)
+		).pipe(
+			map((messages: { message: string; duration: number }[]) => {
+				return messages;
+			})
+		);
 	}
 }

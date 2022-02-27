@@ -6,13 +6,15 @@ import { ConfigService } from "./config/config.service";
 
 async function bootstrap() {
 	const config = new ConfigService();
-	const rmqConfig = config.get<{ host: string; port: number }>("rmq");
+	const rmqConfig = config.get<{ host: string; user: string; password: string }>("rmq");
 	const queue = config.get<string>("queue");
+
+	const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:5672`;
 
 	const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
 		transport: Transport.RMQ,
 		options: {
-			urls: [`amqp://${rmqConfig.host}:${rmqConfig.port}`],
+			urls: [url],
 			queue: queue,
 			queueOptions: {
 				durable: false,
