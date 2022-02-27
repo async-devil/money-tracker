@@ -3,20 +3,52 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
-    hostname: rabbitmq
+    hostname: ${RMQ_HOST}
+
+    env_file:
+      - .env
     ports:
       - 5672:5672
       - 15672:15672
+
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RMQ_PASS}
+
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq/
       - rabbitmq_log:/var/log/rabbitmq/
     networks:
       - rabbitmq_network
 
+    restart: on-failure
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    hostname: postgres
+
+    env_file:
+      - .env
+    ports: 
+      - 5432:5432
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER} 
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+
+    restart: on-failure
+
+
   gateway:
     image: gateway
     container_name: gateway
-    hostname: gateway
 
     build:
       context: ./apps/gateway
@@ -36,7 +68,6 @@ services:
   clients-service:
     image: clients-service
     container_name: clients-service
-    hostname: clients-service
 
     build:
       context: ./apps/clients-service
@@ -44,17 +75,22 @@ services:
     env_file:
       - .env
 
+    environment:
+      RMQ_USER: ${RMQ_USER}
+      RMQ_PASS: ${RMQ_PASS}
+
     depends_on:
       - rabbitmq
+      - postgres
     networks:
       - rabbitmq_network
+      - postgres_network
 
     restart: unless-stopped
 
   accounts-service:
     image: accounts-service
     container_name: accounts-service
-    hostname: accounts-service
 
     build:
       context: ./apps/accounts-service
@@ -62,17 +98,22 @@ services:
     env_file:
       - .env
 
+    environment:
+      RMQ_USER: ${RMQ_USER}
+      RMQ_PASS: ${RMQ_PASS}
+
     depends_on:
       - rabbitmq
+      - postgres
     networks:
       - rabbitmq_network
+      - postgres_network
 
     restart: unless-stopped
 
   transactions-service:
     image: transactions-service
     container_name: transactions-service
-    hostname: transactions-service
 
     build:
       context: ./apps/transactions-service
@@ -80,17 +121,22 @@ services:
     env_file:
       - .env
 
+    environment:
+      RMQ_USER: ${RMQ_USER}
+      RMQ_PASS: ${RMQ_PASS}
+
     depends_on:
       - rabbitmq
+      - postgres
     networks:
       - rabbitmq_network
+      - postgres_network
 
     restart: unless-stopped
 
   auth-service:
     image: auth-service
     container_name: auth-service
-    hostname: auth-service
 
     build:
       context: ./apps/auth-service
@@ -98,10 +144,16 @@ services:
     env_file:
       - .env
 
+    environment:
+      RMQ_USER: ${RMQ_USER}
+      RMQ_PASS: ${RMQ_PASS}
+
     depends_on:
       - rabbitmq
+      - postgres
     networks:
       - rabbitmq_network
+      - postgres_network
 
     restart: unless-stopped
 
@@ -109,6 +161,11 @@ volumes:
     rabbitmq_data:
     rabbitmq_log:
 
+    postgres_data:
+
 networks:
   rabbitmq_network:
+    driver: bridge
+
+  postgres_network:
     driver: bridge
