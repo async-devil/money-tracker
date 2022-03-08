@@ -30,12 +30,12 @@ services:
 
     env_file:
       - .env
-    ports: 
+    ports:
       - 5432:5432
 
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER} 
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASS}
 
     volumes:
@@ -45,6 +45,23 @@ services:
 
     restart: on-failure
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+
+    env_file:
+      - .env
+    ports:
+      - "5050:80"
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
+
+    networks:
+      - postgres_network
+
+    restart: on-failure
 
   gateway:
     image: gateway
@@ -78,6 +95,13 @@ services:
     environment:
       RMQ_USER: ${RMQ_USER}
       RMQ_PASS: ${RMQ_PASS}
+
+      TYPEORM_HOST: postgres
+      TYPEORM_PORT: 5432
+
+      TYPEORM_USERNAME: ${POSTGRES_USER}
+      TYPEORM_PASSWORD: ${POSTGRES_PASS}
+      TYPEORM_DATABASE: ${POSTGRES_DB}
 
     depends_on:
       - rabbitmq
@@ -158,10 +182,10 @@ services:
     restart: unless-stopped
 
 volumes:
-    rabbitmq_data:
-    rabbitmq_log:
+  rabbitmq_data:
+  rabbitmq_log:
 
-    postgres_data:
+  postgres_data:
 
 networks:
   rabbitmq_network:
