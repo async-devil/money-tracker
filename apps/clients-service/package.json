@@ -15,7 +15,8 @@
     "test:cov": "jest --coverage",
     "typeorm": "ts-node typeOrmCli.ts --config ./src/database/ormconfig.ts",
     "migration:generate": "yarn run typeorm migration:generate -n",
-    "migration:blank": "yarn run typeorm migration:create -n"
+    "migration:blank": "yarn run typeorm migration:create -n",
+    "migration:run": "yarn run typeorm migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^8.3.1",
