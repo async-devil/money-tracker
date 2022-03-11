@@ -7,4 +7,5 @@ RUN yarn install
 
 COPY . .
 
-CMD ["yarn", "start"]
+RUN chmod +x ./scripts/start.sh
+CMD ["./scripts/start.sh"]
