@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 
+import { RequestService } from "../common/request.service";
 import { ConfigService } from "../config/config.service";
 import { ClientsController } from "./clients-service.controller";
 import { ClientsService } from "./clients-service.service";
@@ -29,6 +30,6 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 		]),
 	],
 	controllers: [ClientsController],
-	providers: [ClientsService],
+	providers: [ClientsService, RequestService],
 })
 export class ClientsServiceModule {}
