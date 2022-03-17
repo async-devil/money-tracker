@@ -1,4 +1,10 @@
-import { BadGatewayException, GatewayTimeoutException, Injectable } from "@nestjs/common";
+import {
+	BadGatewayException,
+	GatewayTimeoutException,
+	HttpException,
+	Injectable,
+	Logger,
+} from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { firstValueFrom, timeout } from "rxjs";
 
@@ -20,16 +26,18 @@ export class RequestService {
 
 			result = await firstValueFrom(source);
 
-			if (result.error) throw result.error;
+			if (result.error) throw new HttpException(result.error, result.error.statusCode);
 		} catch (err) {
-			const error = err as { message: string; name: string };
-
-			if (error.name === "HttpException") throw err;
-			if (error.name === "TimeoutError") throw new GatewayTimeoutException(error.message);
-
-			throw new BadGatewayException(error.message || "Bad Gateway");
+			this.filterErrorByName(err as Error);
 		}
 
 		return result;
+	}
+
+	private filterErrorByName(error: Error) {
+		if (error.name === "HttpException") throw error;
+		if (error.name === "TimeoutError") throw new GatewayTimeoutException(error.message);
+
+		throw new BadGatewayException(error.message || "Bad Gateway");
 	}
 }
