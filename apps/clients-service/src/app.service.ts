@@ -21,7 +21,7 @@ export class AppService {
 
 	public async createClient(dto: CreateClientDto): Promise<Client> {
 		const password = await bcrypt.hash(dto.password, 5);
-		return this.clientsRepository.create(Object.assign(dto, { password }));
+		return this.clientsRepository.save(Object.assign(dto, { password }));
 	}
 
 	public async getClientById(id: string): Promise<Client> {
@@ -36,7 +36,7 @@ export class AppService {
 		const client = await this.getClientById(dto.id);
 
 		Object.assign(client, dto.data);
-		await this.repository.save(client);
+		await this.clientsRepository.save(client);
 
 		return client;
 	}

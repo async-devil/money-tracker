@@ -31,9 +31,9 @@ export class ClientsRepository {
 		return client;
 	}
 
-	public async create(dto: CreateClientDto): Promise<Client> {
+	public async save(entity: CreateClientDto | Client): Promise<Client> {
 		try {
-			return await this.repository.save(dto);
+			return await this.repository.save(entity);
 		} catch (err) {
 			const error = err as Error;
 
