@@ -67,11 +67,11 @@ describe("Clients repository service", () => {
 		});
 	});
 
-	describe("create method", () => {
+	describe("save method", () => {
 		it("should insert a new one", async () => {
 			jest.spyOn(repository, "save").mockImplementationOnce(() => Promise.resolve(clientStub()));
 
-			const client = await service.create(createClientDtoStub());
+			const client = await service.save(createClientDtoStub());
 			expect(client).toEqual(clientStub());
 		});
 	});
@@ -82,11 +82,48 @@ describe("Clients repository service", () => {
 			.mockImplementationOnce(() => Promise.resolve(clientStub()))
 			.mockImplementationOnce(() => Promise.resolve(clientStubSecondary()));
 
-		const client = await service.create(createClientDtoStub());
+		const client = await service.save(createClientDtoStub());
 		expect(client).toEqual(clientStub());
 
-		const clientSecondary = await service.create(createClientDtoStubSecondary());
+		const clientSecondary = await service.save(createClientDtoStubSecondary());
 		expect(clientSecondary).toEqual(clientStubSecondary());
+	});
+
+	it("should update existing scheme", async () => {
+		const updateEmail = "client1@example.com";
+
+		jest
+			.spyOn(repository, "save")
+			.mockImplementationOnce(() => Promise.resolve(clientStub()))
+			.mockImplementationOnce(() =>
+				Promise.resolve(Object.assign(clientStub(), { email: updateEmail }))
+			);
+
+		const client = await service.save(createClientDtoStub());
+		expect(client).toEqual(clientStub());
+
+		const clientUpdated = await service.save(Object.assign(client, { email: updateEmail }));
+		expect(clientUpdated).toEqual(Object.assign(client, { email: updateEmail }));
+	});
+
+	it("should throw bad request on duplicate update credential", async () => {
+		jest
+			.spyOn(repository, "save")
+			.mockImplementationOnce(() => Promise.resolve(clientStub()))
+			.mockImplementationOnce(() => Promise.resolve(clientStubSecondary()))
+			.mockImplementationOnce(() =>
+				Promise.reject(new Error("duplicate key value violates unique constraint"))
+			);
+
+		const client = await service.save(createClientDtoStub());
+		expect(client).toEqual(clientStub());
+
+		const clientSecondary = await service.save(createClientDtoStubSecondary());
+		expect(clientSecondary).toEqual(clientStubSecondary());
+
+		await expect(
+			service.save(Object.assign(client, { email: clientSecondary.email }))
+		).rejects.toHaveProperty("name", "BadRequestException");
 	});
 
 	it("should throw bad request on duplicate scheme", async () => {
@@ -97,10 +134,10 @@ describe("Clients repository service", () => {
 				Promise.reject(new Error("duplicate key value violates unique constraint"))
 			);
 
-		const client = await service.create(createClientDtoStub());
+		const client = await service.save(createClientDtoStub());
 		expect(client).toEqual(clientStub());
 
-		await expect(service.create(createClientDtoStub())).rejects.toHaveProperty(
+		await expect(service.save(createClientDtoStub())).rejects.toHaveProperty(
 			"name",
 			"BadRequestException"
 		);
@@ -111,7 +148,7 @@ describe("Clients repository service", () => {
 			.spyOn(repository, "save")
 			.mockImplementationOnce(() => Promise.reject(new Error("Something you don't expect")));
 
-		await expect(service.create(createClientDtoStub())).rejects.toHaveProperty(
+		await expect(service.save(createClientDtoStub())).rejects.toHaveProperty(
 			"name",
 			"InternalServerErrorException"
 		);
