@@ -35,9 +35,11 @@ export class AppService {
 	public async updateClientById(dto: UpdateClientByIdDto): Promise<Client> {
 		const client = await this.getClientById(dto.id);
 
-		Object.assign(client, dto.data);
-		await this.clientsRepository.save(client);
+		Object.assign(client, {
+			...dto.data,
+			password: dto.data.password ? await bcrypt.hash(dto.data.password, 5) : undefined,
+		});
 
-		return client;
+		return await this.clientsRepository.save(client);
 	}
 }
