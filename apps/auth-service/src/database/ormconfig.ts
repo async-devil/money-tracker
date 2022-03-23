@@ -1,8 +1,8 @@
 import * as path from "path";
 
-import { ConnectionOptions } from "typeorm";
+import { DataSourceOptions } from "typeorm";
 
-export const typeOrmConfigBase = (): ConnectionOptions => {
+export const typeOrmConfigBase = (): DataSourceOptions => {
 	return {
 		type: "postgres",
 
@@ -28,4 +28,4 @@ export default Object.assign(typeOrmConfigBase(), {
 		entitiesDir: path.join(__dirname, "..", "entities"),
 		migrationsDir: path.join(__dirname, "migrations"),
 	},
-}) as ConnectionOptions;
+}) as DataSourceOptions;
