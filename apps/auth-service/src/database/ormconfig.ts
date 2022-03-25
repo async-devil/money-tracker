@@ -1,6 +1,6 @@
 import * as path from "path";
 
-import { DataSourceOptions } from "typeorm";
+import { DataSource, DataSourceOptions } from "typeorm";
 
 export const typeOrmConfigBase = (): DataSourceOptions => {
 	return {
@@ -23,9 +23,11 @@ export const typeOrmConfigBase = (): DataSourceOptions => {
 	};
 };
 
-export default Object.assign(typeOrmConfigBase(), {
-	cli: {
-		entitiesDir: path.join(__dirname, "..", "entities"),
-		migrationsDir: path.join(__dirname, "migrations"),
-	},
-}) as DataSourceOptions;
+export default new DataSource(
+	Object.assign(typeOrmConfigBase(), {
+		cli: {
+			entitiesDir: path.join(__dirname, "..", "entities"),
+			migrationsDir: path.join(__dirname, "migrations"),
+		},
+	})
+);
