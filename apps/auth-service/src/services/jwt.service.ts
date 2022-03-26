@@ -23,9 +23,9 @@ export abstract class JWTService {
 			.sign(this.getKey());
 	}
 
-	public async getJwtData(jwt: string): Promise<jose.JWTDecryptResult> {
+	public async getJwtData(jwt: string): Promise<jose.JWTVerifyResult> {
 		try {
-			return await jose.jwtDecrypt(jwt, this.getKey());
+			return await jose.jwtVerify(jwt, this.getKey());
 		} catch (err) {
 			const error = err as Error;
 			throw new UnauthorizedException(error.message);
