@@ -27,14 +27,15 @@ export abstract class JWTService {
 		try {
 			return await jose.jwtVerify(jwt, this.getKey());
 		} catch (err) {
-			const error = err as Error;
-			throw new UnauthorizedException(error.message);
+			throw new UnauthorizedException("Invalid JWT token");
 		}
 	}
 
 	public async isValidJwt(jwt: string): Promise<boolean> {
 		try {
-			if (await this.getJwtData(jwt)) return true;
+			const data = await this.getJwtData(jwt);
+
+			return !!data;
 		} catch (err) {
 			return false;
 		}
