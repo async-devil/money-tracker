@@ -49,6 +49,9 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin4
 
+    logging:
+      driver: none
+
     env_file:
       - .env
     ports:
