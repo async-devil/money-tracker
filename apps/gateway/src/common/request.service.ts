@@ -16,12 +16,13 @@ export class RequestService {
 		service: ClientProxy,
 		command: string,
 		data: unknown,
-		timeoutMs = 150
+		timeoutMs = 200
 	): Promise<Type> {
 		type Result = Type & RpcException;
 		let result: Result;
 
 		try {
+			//? Send request and wait until timeout, if timeout reached throw
 			const source = service.send<Result>({ cmd: command }, data).pipe(timeout(timeoutMs));
 
 			result = await firstValueFrom(source);
