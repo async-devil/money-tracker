@@ -6,12 +6,12 @@ export class AddSessionEntity1648394274350 implements MigrationInterface {
 	public async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(
 			`
-		CREATE TABLE "session"
-			(
-				"refresh_token"       	 CHARACTER VARYING NOT NULL,
-				"client_id"           	 CHARACTER VARYING,
-				"ip"                  	 INET NOT NULL,
-				"device"              	 CHARACTER VARYING NOT NULL,
+			CREATE TABLE "session" (
+				"refresh_token"          character varying NOT NULL,
+				"client_id"              character varying NOT NULL,
+				"ip"                     inet NOT NULL,
+				"device"                 character varying NOT NULL,
+
 				"create_date_time"       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 				"last_changed_date_time" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 
@@ -20,13 +20,11 @@ export class AddSessionEntity1648394274350 implements MigrationInterface {
 		);
 		await queryRunner.query(
 			`
-		ALTER TABLE "session"
-  		ADD CONSTRAINT "FK_49bf92b17e136d0bc8b9a915ab1" FOREIGN KEY ("client_id")
-  		REFERENCES "session_storage"("client_id")
+			ALTER TABLE "session"
+			ADD CONSTRAINT "FK_49bf92b17e136d0bc8b9a915ab1" FOREIGN KEY ("client_id") REFERENCES "session_storage"("client_id")
 
-			ON DELETE no action 
-			ON UPDATE no action
-			`
+			ON DELETE NO ACTION
+			ON UPDATE NO ACTION`
 		);
 	}
 

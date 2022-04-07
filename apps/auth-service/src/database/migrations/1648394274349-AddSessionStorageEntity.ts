@@ -6,9 +6,9 @@ export class AddSessionStorageEntity1648394274350 implements MigrationInterface 
 	public async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(
 			`
-		CREATE TABLE "session_storage"
-			(
-				"client_id"           	 CHARACTER VARYING NOT NULL,
+			CREATE TABLE "session_storage" (
+				"client_id"              character varying NOT NULL,
+
 				"create_date_time"       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 				"last_changed_date_time" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 
