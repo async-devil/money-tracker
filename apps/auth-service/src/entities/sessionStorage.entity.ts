@@ -9,6 +9,6 @@ export class SessionStorage extends BaseEntity {
 	@PrimaryColumn({ type: "varchar", unique: true })
 	client_id: string;
 
-	@OneToMany(() => Session, (session) => session.client_id)
+	@OneToMany(() => Session, (session) => session.session_storage)
 	sessions: Session[];
 }
