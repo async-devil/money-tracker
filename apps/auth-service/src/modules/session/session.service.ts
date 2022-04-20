@@ -39,7 +39,7 @@ export class SessionService {
 	public async getSessionByToken(dto: GetSessionByTokenDto): Promise<Session> {
 		return await this.sessionRepository.getOneByCredential({
 			name: "refresh_token",
-			value: dto.token,
+			value: dto.refreshToken,
 		});
 	}
 

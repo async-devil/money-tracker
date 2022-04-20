@@ -50,7 +50,7 @@ export class SessionRepository {
 
 	public async delete(dto: DeleteSessionByTokenDto) {
 		try {
-			await this.sessionRepository.delete({ refresh_token: dto.token });
+			await this.sessionRepository.delete({ refresh_token: dto.refreshToken });
 		} catch (err) {
 			this.throwDefaultError();
 		}

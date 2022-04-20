@@ -65,7 +65,9 @@ describe("Session service", () => {
 		test("should get session by token", async () => {
 			jest.spyOn(repository, "findOne").mockResolvedValueOnce(sessionStub());
 
-			const session = await service.getSessionByToken({ token: sessionStub().refresh_token });
+			const session = await service.getSessionByToken({
+				refreshToken: sessionStub().refresh_token,
+			});
 
 			expect(session).toEqual(sessionStub());
 		});
@@ -75,7 +77,9 @@ describe("Session service", () => {
 		test("should delete session by token", async () => {
 			jest.spyOn(repository, "delete").mockResolvedValueOnce({} as DeleteResult);
 
-			const session = await service.deleteSessionByToken({ token: sessionStub().refresh_token });
+			const session = await service.deleteSessionByToken({
+				refreshToken: sessionStub().refresh_token,
+			});
 
 			expect(session).toEqual({});
 		});
