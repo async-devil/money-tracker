@@ -45,3 +45,16 @@ export const createSessionDtoStub = (
 		properties
 	);
 };
+
+export const createSessionDtoStubSecondary = (
+	properties: Partial<CreateSessionDto> = {}
+): CreateSessionDto => {
+	return Object.assign(
+		{
+			clientId: "319e4567-e89b-12d3-a456-426655440000",
+			ip: "157.37.13.2",
+			device: "Chrome/5.0 (Windows NT 10.0; Win64; x64; rv:99.0)",
+		},
+		properties
+	);
+};
