@@ -2,13 +2,7 @@ import { UnauthorizedException } from "@nestjs/common";
 import * as jose from "jose";
 
 export abstract class JWTService {
-	protected readonly secretKey: string;
-	protected readonly expiresInS: number;
-
-	constructor(secretKey: string, expiresInS: number) {
-		this.secretKey = secretKey;
-		this.expiresInS = expiresInS;
-	}
+	constructor(protected readonly secretKey: string, protected readonly expiresInS: number) {}
 
 	/** Get key acceptable for signing jwt */
 	private getKey(): Buffer {
