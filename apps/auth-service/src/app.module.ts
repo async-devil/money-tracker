@@ -1,28 +1,15 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+
+import { AuthModule } from "src/modules/auth/auth.module";
+import { SessionModule } from "src/modules/session/session.module";
+import { SessionStorageModule } from "src/modules/sessionStorage/sessionStorage.module";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { typeOrmConfigBase } from "./database/ormconfig";
-import { Session } from "./entities/session.entity";
-import { SessionStorage } from "./entities/sessionStorage.entity";
-import { SessionRepository } from "./repositories/session.repository";
-import { SessionStorageRepository } from "./repositories/sessionStorage.repository";
-import { AccessTokenService } from "./services/accessToken.service";
-import { RefreshTokenService } from "./services/refreshToken.service";
 
 @Module({
-	imports: [
-		TypeOrmModule.forRoot(typeOrmConfigBase()),
-		TypeOrmModule.forFeature([Session, SessionStorage]),
-	],
+	imports: [SessionModule, SessionStorageModule, AuthModule],
 	controllers: [AppController],
-	providers: [
-		AppService,
-		AccessTokenService,
-		RefreshTokenService,
-		SessionRepository,
-		SessionStorageRepository,
-	],
+	providers: [AppService],
 })
 export class AppModule {}
