@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 
-import { JWTService } from "./jwt.service";
+import { HexTokenService } from "./hexToken.service";
 
 @Injectable()
-export class RefreshTokenService extends JWTService {
+export class RefreshTokenService extends HexTokenService {
 	constructor() {
-		super(process.env.JWT_REFRESH_SECRET, parseInt(process.env.JWT_REFRESH_EXPIRE));
+		super(parseInt(process.env.JWT_REFRESH_EXPIRE));
 	}
 }
