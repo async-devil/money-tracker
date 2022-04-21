@@ -7,23 +7,21 @@ import { SessionRepository } from "src/modules/session/session.repository";
 import { SessionService } from "src/modules/session/session.service";
 import { RefreshTokenService } from "src/services/refreshToken.service";
 
-import { RefreshTokenMock } from "../../mocks/refreshToken.service.mock";
 import { SessionModel } from "../../mocks/session.repository.mock";
 import { SessionServiceMock } from "../../mocks/session.service.mock";
+import { createSessionDtoStub, sessionStub } from "../../stubs/session.stub";
 
 describe("Session controller", () => {
 	let controller: SessionController;
+	let session: SessionService;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			controllers: [SessionController],
 			providers: [
 				SessionRepository,
+				RefreshTokenService,
 				{ provide: SessionService, useValue: SessionServiceMock },
-				{
-					provide: RefreshTokenService,
-					useValue: RefreshTokenMock,
-				},
 				{
 					provide: getRepositoryToken(Session),
 					useValue: SessionModel,
@@ -32,6 +30,7 @@ describe("Session controller", () => {
 		}).compile();
 
 		controller = module.get<SessionController>(SessionController);
+		session = module.get<SessionService>(SessionService);
 	});
 
 	afterEach(() => {
@@ -40,5 +39,39 @@ describe("Session controller", () => {
 
 	test("should be defined", () => {
 		expect(controller).toBeDefined();
+	});
+
+	describe("createSession method tests", () => {
+		test("should create session", async () => {
+			jest.spyOn(session, "createSession").mockResolvedValueOnce(sessionStub());
+
+			const result = await controller.createSession(createSessionDtoStub());
+
+			expect(result).toEqual(sessionStub());
+		});
+	});
+
+	describe("getSessionByToken method tests", () => {
+		test("should get session", async () => {
+			jest.spyOn(session, "getSessionByToken").mockResolvedValueOnce(sessionStub());
+
+			const result = await controller.getSessionByToken({
+				refreshToken: sessionStub().refresh_token,
+			});
+
+			expect(result).toEqual(sessionStub());
+		});
+	});
+
+	describe("deleteSessionByToken method tests", () => {
+		test("should delete session", async () => {
+			jest.spyOn(session, "deleteSessionByToken").mockResolvedValueOnce({});
+
+			const result = await controller.deleteSessionByToken({
+				refreshToken: sessionStub().refresh_token,
+			});
+
+			expect(result).toEqual({});
+		});
 	});
 });
