@@ -4,7 +4,10 @@ export class HttpException {
 	@ApiProperty({ example: 400 })
 	statusCode: number;
 
-	@ApiProperty({ example: ["email must be an email"] })
+	@ApiProperty({
+		example: [["email must be email"], "Microservice timeout"],
+		oneOf: [{ type: "string" }, { type: "array", items: { type: "string" } }],
+	})
 	message: string | string[];
 
 	@ApiProperty({ example: "Bad Request" })
