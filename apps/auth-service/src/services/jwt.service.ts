@@ -6,7 +6,7 @@ export abstract class JWTService {
 
 	/** Get key acceptable for signing jwt */
 	private getKey(): Buffer {
-		return Buffer.from(Buffer.from(this.secretKey).toString("base64url"));
+		return Buffer.from(Buffer.from(this.secretKey).toString("base64"));
 	}
 
 	public async signJwt(message: jose.JWTPayload): Promise<string> {
