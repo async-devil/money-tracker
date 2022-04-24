@@ -101,7 +101,7 @@ describe("Auth service", () => {
 					refreshToken: sessionStub().refresh_token,
 					tokenData: createSessionDtoStubSecondary(),
 				})
-			).rejects.toHaveProperty("name", "NotFoundException");
+			).rejects.toHaveProperty("name", "UnauthorizedException");
 		});
 	});
 
