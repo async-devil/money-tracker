@@ -23,7 +23,7 @@ export class AuthController {
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@Post("/auth")
+	@Post("/validate")
 	public async validateAccessToken(
 		@Body() dto: ValidateAccessTokenDto
 	): Promise<ValidateAccessTokenResultDto> {

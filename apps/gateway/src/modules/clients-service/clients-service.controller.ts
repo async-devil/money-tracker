@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
-import { HttpException } from "../common/HttpException";
+import { HttpException } from "../../common/HttpException";
 import { ClientsService } from "./clients-service.service";
 import { CreateClientDto } from "./types/create-client.dto";
 

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 
-import { RequestService } from "../common/request.service";
+import { RequestService } from "../../common/request.service";
 import { CreateClientDto } from "./types/create-client.dto";
 import { UpdateClientByIdDto } from "./types/update-client-by-id.dto";
 

@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 
-import { RequestService } from "../common/request.service";
-import { ConfigService } from "../config/config.service";
+import { RequestService } from "../../common/request.service";
+import { ConfigService } from "../../config/config.service";
 import { AuthController } from "./auth-service.controller";
 import { AuthService } from "./auth-service.service";
 
@@ -23,7 +23,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 					urls: [url],
 					queue: authServiceConfig.queue,
 					queueOptions: {
-						durable: false,
+						expires: 2000,
 					},
 				},
 			},
