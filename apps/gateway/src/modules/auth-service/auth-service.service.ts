@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 
-import { RequestService } from "../common/request.service";
+import { RequestService } from "../../common/request.service";
 import { CreateSessionDto } from "./types/request/createSession.dto";
 import { DeleteSessionByTokenDto } from "./types/request/deleteSessionByToken.dto";
 import { DeleteSessionsByClientIdDto } from "./types/request/deleteSessionsByClientId.dto";
