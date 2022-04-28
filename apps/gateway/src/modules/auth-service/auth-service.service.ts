@@ -19,14 +19,6 @@ export class AuthService {
 		private readonly requestService: RequestService
 	) {}
 
-	public async generateTokenPair(dto: GenerateTokenPairDto): Promise<TokenPairDto> {
-		return await this.requestService.sendRequest<TokenPairDto>(
-			this.authService,
-			"generate-token-pair",
-			dto
-		);
-	}
-
 	public async createSession(dto: CreateSessionDto): Promise<Session> {
 		return await this.requestService.sendRequest<Session>(this.authService, "create-session", dto);
 	}
@@ -63,6 +55,14 @@ export class AuthService {
 		return await this.requestService.sendRequest<ValidateAccessTokenResultDto>(
 			this.authService,
 			"validate-access-token",
+			dto
+		);
+	}
+
+	public async generateTokenPair(dto: GenerateTokenPairDto): Promise<TokenPairDto> {
+		return await this.requestService.sendRequest<TokenPairDto>(
+			this.authService,
+			"generate-token-pair",
 			dto
 		);
 	}
