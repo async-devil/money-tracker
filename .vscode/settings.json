@@ -5,5 +5,10 @@
 	"eslint.workingDirectories": [{ "mode": "auto" }],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
+	},
+	"jest.autoRun": {
+		"watch": false,
+		"onSave": "test-file",
+		"onStartup": ["all-tests"]
 	}
 }
