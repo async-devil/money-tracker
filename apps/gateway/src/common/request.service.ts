@@ -16,7 +16,7 @@ export class RequestService {
 		service: ClientProxy,
 		command: string,
 		data: unknown,
-		timeoutMs = 200
+		timeoutMs = 2000
 	): Promise<Type> {
 		type Result = Type & RpcException;
 		let result: Result;

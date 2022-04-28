@@ -5,6 +5,9 @@ import { RequestService } from "../../common/request.service";
 import { ConfigService } from "../../config/config.service";
 import { AuthController } from "./auth-service.controller";
 import { AuthService } from "./auth-service.service";
+import { AuthRouteController } from "./routes/auth-route.controller";
+import { SessionRouteController } from "./routes/session-route.controller";
+import { SessionStorageRouteController } from "./routes/sessionStorage-route.controller";
 
 const config = new ConfigService();
 const rmqConfig = config.get<{ host: string; user: string; password: string }>("rmq");
@@ -23,13 +26,21 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 					urls: [url],
 					queue: authServiceConfig.queue,
 					queueOptions: {
-						expires: 2000,
+						durable: true,
+						arguments: {
+							"x-message-ttl": 2000,
+						},
 					},
 				},
 			},
 		]),
 	],
-	controllers: [AuthController],
+	controllers: [
+		AuthController,
+		AuthRouteController,
+		SessionRouteController,
+		SessionStorageRouteController,
+	],
 	providers: [AuthService, RequestService],
 })
 export class AuthServiceModule {}

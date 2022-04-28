@@ -17,7 +17,10 @@ async function bootstrap() {
 			urls: [url],
 			queue: queue,
 			queueOptions: {
-				durable: false,
+				durable: true,
+				arguments: {
+					"x-message-ttl": 2000,
+				},
 			},
 		},
 	});

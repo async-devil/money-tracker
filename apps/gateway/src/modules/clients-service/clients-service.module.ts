@@ -23,7 +23,10 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 					urls: [url],
 					queue: clientsServiceConfig.queue,
 					queueOptions: {
-						expires: 2000,
+						durable: true,
+						arguments: {
+							"x-message-ttl": 2000,
+						},
 					},
 				},
 			},
