@@ -7,18 +7,42 @@ export class ConfigService {
 
 			clientsService: {
 				queue: process.env.CLIENTS_SERVICE_QUEUE || "clients_queue",
+				options: {
+					durable: true,
+					arguments: {
+						"x-message-ttl": 2000,
+					},
+				},
 			},
 
 			accountsService: {
 				queue: process.env.ACCOUNTS_SERVICE_QUEUE || "accounts_queue",
+				options: {
+					durable: true,
+					arguments: {
+						"x-message-ttl": 2000,
+					},
+				},
 			},
 
 			transactionsService: {
 				queue: process.env.TRANSACTIONS_SERVICE_QUEUE || "transactions_queue",
+				options: {
+					durable: true,
+					arguments: {
+						"x-message-ttl": 2000,
+					},
+				},
 			},
 
 			authService: {
 				queue: process.env.AUTH_SERVICE_QUEUE || "auth_queue",
+				options: {
+					durable: true,
+					arguments: {
+						"x-message-ttl": 2000,
+					},
+				},
 			},
 
 			rmq: {

@@ -10,6 +10,13 @@ export class ConfigService {
 			},
 
 			queue: process.env.ACCOUNTS_SERVICE_QUEUE || "accounts_queue",
+
+			options: {
+				durable: true,
+				arguments: {
+					"x-message-ttl": 2000,
+				},
+			},
 		};
 	}
 
