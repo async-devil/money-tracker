@@ -6,12 +6,14 @@ import { AppService } from "./app.service";
 import { AccountsServiceModule } from "./modules/accounts-service/accounts-service.module";
 import { AuthServiceModule } from "./modules/auth-service/auth-service.module";
 import { ClientsServiceModule } from "./modules/clients-service/clients-service.module";
+import { TransactionsServiceModule } from "./modules/transactions-service/transactions-service.module";
 
 @Module({
 	imports: [
 		AuthServiceModule,
 		ClientsServiceModule,
 		AccountsServiceModule,
+		TransactionsServiceModule,
 		RouterModule.register([
 			{
 				path: "auth",
@@ -24,6 +26,10 @@ import { ClientsServiceModule } from "./modules/clients-service/clients-service.
 			{
 				path: "accounts",
 				module: AccountsServiceModule,
+			},
+			{
+				path: "transactions",
+				module: TransactionsServiceModule,
 			},
 		]),
 	],
