@@ -1,12 +1,12 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
-import { HttpException } from "../../common/HttpException";
-import { ClientsService } from "./clients-service.service";
-import { CreateClientDto } from "./types/create-client.dto";
+import { HttpException } from "../../../common/HttpException";
+import { ClientsService } from "../clients-service.service";
+import { CreateClientDto } from "../types/request/create-client.dto";
 
-@Controller("clients")
-export class ClientsController {
+@Controller()
+export class ClientsRouteController {
 	constructor(private readonly clientsService: ClientsService) {}
 
 	@ApiOperation({ summary: "create user" })

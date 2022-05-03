@@ -4,7 +4,6 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 import { RequestService } from "src/common/request.service";
 import { ConfigService } from "src/config/config.service";
 
-import { AccountsController } from "./accounts-service.controller";
 import { AccountsService } from "./accounts-service.service";
 
 const config = new ConfigService();
@@ -28,7 +27,8 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 			},
 		]),
 	],
-	controllers: [AccountsController],
+	controllers: [],
 	providers: [AccountsService, RequestService],
+	exports: [AccountsService],
 })
 export class AccountsServiceModule {}

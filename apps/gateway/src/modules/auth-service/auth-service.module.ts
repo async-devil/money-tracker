@@ -3,7 +3,6 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 
 import { RequestService } from "../../common/request.service";
 import { ConfigService } from "../../config/config.service";
-import { AuthController } from "./auth-service.controller";
 import { AuthService } from "./auth-service.service";
 import { AuthRouteController } from "./routes/auth-route.controller";
 import { SessionRouteController } from "./routes/session-route.controller";
@@ -30,12 +29,8 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 			},
 		]),
 	],
-	controllers: [
-		AuthController,
-		AuthRouteController,
-		SessionRouteController,
-		SessionStorageRouteController,
-	],
+	controllers: [AuthRouteController, SessionRouteController, SessionStorageRouteController],
 	providers: [AuthService, RequestService],
+	exports: [AuthService],
 })
 export class AuthServiceModule {}

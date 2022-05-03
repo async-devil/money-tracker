@@ -3,8 +3,8 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 
 import { RequestService } from "../../common/request.service";
 import { ConfigService } from "../../config/config.service";
-import { ClientsController } from "./clients-service.controller";
 import { ClientsService } from "./clients-service.service";
+import { ClientsRouteController } from "./routes/clients-route.controller";
 
 const config = new ConfigService();
 const rmqConfig = config.get<{ host: string; user: string; password: string }>("rmq");
@@ -27,7 +27,8 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 			},
 		]),
 	],
-	controllers: [ClientsController],
+	controllers: [ClientsRouteController],
 	providers: [ClientsService, RequestService],
+	exports: [ClientsService],
 })
 export class ClientsServiceModule {}
