@@ -19,10 +19,32 @@ export class AuthService {
 		private readonly requestService: RequestService
 	) {}
 
+	public async ping(text: string): Promise<string> {
+		return await this.requestService.sendRequest<string>(this.authService, "ping", { text });
+	}
+
+	/**
+	 *	Create session by client id, ip and device
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: [
+	 * 		"clientId must be a UUID",
+	 * 		"tokenData.ip must be an ip address",
+	 * 		"tokenData.device must be a string"],
+	 * 		error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
 	public async createSession(dto: CreateSessionDto): Promise<Session> {
 		return await this.requestService.sendRequest<Session>(this.authService, "create-session", dto);
 	}
 
+	/**
+	 *	Delete session by it's token, would pass even if token is not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["refresh token must be valid"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
 	public async deleteSessionByToken(dto: DeleteSessionByTokenDto): Promise<Record<string, never>> {
 		return await this.requestService.sendRequest<Record<string, never>>(
 			this.authService,
@@ -31,6 +53,13 @@ export class AuthService {
 		);
 	}
 
+	/**
+	 *	Get all sessions by their client id, would pass even if tokens are not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["clientId must be a UUID"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
 	public async getAllSessionsByClientId(dto: GetSessionsByClientIdDto): Promise<Session[]> {
 		return await this.requestService.sendRequest<Session[]>(
 			this.authService,
@@ -39,6 +68,13 @@ export class AuthService {
 		);
 	}
 
+	/**
+	 *	Delete all sessions by their client id, would pass even if tokens are not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["clientId must be a UUID"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
 	public async deleteAllSessionsByClientId(
 		dto: DeleteSessionsByClientIdDto
 	): Promise<Record<string, never>> {
@@ -49,6 +85,13 @@ export class AuthService {
 		);
 	}
 
+	/**
+	 *	Validate access token for matching signature, if valid return true
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["accessToken must be a jwt string"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
 	public async validateAccessToken(
 		dto: ValidateAccessTokenDto
 	): Promise<ValidateAccessTokenResultDto> {
@@ -59,6 +102,21 @@ export class AuthService {
 		);
 	}
 
+	/**
+	 *	Generate access and refresh tokens if refresh token is valid and not expired
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: [
+	 * 		"refresh token must be valid",
+	 * 		"tokenData.clientId must be a UUID",
+	 * 		"tokenData.ip must be an ip address",
+	 * 		"tokenData.device must be a string"],
+	 * 		error: "Bad request" }
+	 * 	- { statusCode: 401, message: "Refresh token expired", error: "Unauthorized" }
+	 *  - { statusCode: 401, message: "Token data does not match previous one", error: "Unauthorized" }
+	 * 	- { statusCode: 404, message: "Session not found", error: "Not found"}
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
 	public async generateTokenPair(dto: GenerateTokenPairDto): Promise<TokenPairDto> {
 		return await this.requestService.sendRequest<TokenPairDto>(
 			this.authService,
