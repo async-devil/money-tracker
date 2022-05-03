@@ -13,8 +13,8 @@ export class AppController {
 	constructor(private readonly appService: AppService) {}
 
 	@MessagePattern({ cmd: "ping" })
-	public ping(): string {
-		return this.appService.ping();
+	public ping(@Payload() data: { text: string }): string {
+		return this.appService.ping(data.text);
 	}
 
 	/**

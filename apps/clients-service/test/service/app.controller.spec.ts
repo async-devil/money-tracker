@@ -28,8 +28,8 @@ describe("AppController", () => {
 	});
 
 	describe("root", () => {
-		it('should return pong"', () => {
-			expect(appController.ping()).toBe("pong");
+		test('should return pong"', () => {
+			expect(appController.ping({ text: "hi" })).toBe("clients-service sends hi");
 		});
 	});
 });

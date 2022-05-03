@@ -18,8 +18,8 @@ describe("AppController", () => {
 	});
 
 	describe("root", () => {
-		it('should return pong"', () => {
-			expect(appController.ping()).toBe("pong");
+		test('should return pong"', () => {
+			expect(appController.ping({ text: "hello" })).toBe("auth-service sends hello");
 		});
 	});
 });

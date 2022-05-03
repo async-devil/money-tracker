@@ -15,8 +15,8 @@ export class AppService {
 		private readonly clientsRepository: ClientsRepository
 	) {}
 
-	public ping(): string {
-		return "pong";
+	public ping(text: string): string {
+		return `clients-service sends ${text}`;
 	}
 
 	public async createClient(dto: CreateClientDto): Promise<Client> {
