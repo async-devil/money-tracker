@@ -7,8 +7,8 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { CreateClientDto } from "../dtos/create-client.dto";
-import { Client } from "../entities/client.entity";
+import { Client } from "../../entities/client.entity";
+import { CreateClientDto } from "./dtos/create-client.dto";
 
 @Injectable()
 export class ClientsRepository {

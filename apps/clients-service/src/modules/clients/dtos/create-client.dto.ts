@@ -1,6 +1,6 @@
 import { IsEmail, IsString, Length } from "class-validator";
 
-import { IsPassword } from "../decorators/isPassword.decorator";
+import { IsPassword } from "src/decorators/isPassword.decorator";
 
 export class CreateClientDto {
 	/** @example "test@email.com" */
