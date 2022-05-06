@@ -1,35 +1,29 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { getRepositoryToken } from "@nestjs/typeorm";
 
 import { AppController } from "src/app.controller";
 import { AppService } from "src/app.service";
-import { Client } from "src/entities/client.entity";
-import { ClientsRepository } from "src/repositories/clients.repository";
 
-import { ClientModel } from "../mocks/client.repository.mock";
-
-describe("AppController", () => {
-	let appController: AppController;
+describe("App controller", () => {
+	let controller: AppController;
 
 	beforeEach(async () => {
 		const app: TestingModule = await Test.createTestingModule({
 			controllers: [AppController],
-			providers: [
-				AppService,
-				ClientsRepository,
-				{
-					provide: getRepositoryToken(Client),
-					useValue: ClientModel,
-				},
-			],
+			providers: [AppService],
 		}).compile();
 
-		appController = app.get<AppController>(AppController);
+		controller = app.get<AppController>(AppController);
 	});
 
-	describe("root", () => {
-		test('should return pong"', () => {
-			expect(appController.ping({ text: "hi" })).toBe("clients-service sends hi");
-		});
+	afterEach(() => {
+		jest.restoreAllMocks();
+	});
+
+	test("should be defined", () => {
+		expect(controller).toBeDefined();
+	});
+
+	test('ping method should return pong"', () => {
+		expect(controller.ping({ text: "hi" })).toBe("clients-service sends hi");
 	});
 });

@@ -1,5 +1,5 @@
-import { CreateClientDto } from "src/dtos/create-client.dto";
 import { Client } from "src/entities/client.entity";
+import { CreateClientDto } from "src/modules/clients/dtos/create-client.dto";
 
 export const clientStub = (): Client => {
 	return {
