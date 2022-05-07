@@ -22,7 +22,9 @@ export class ClientsRepository {
 		let client: Client;
 
 		try {
-			client = await this.repository.findOne({ [`${credential.name}`]: credential.value });
+			client = await this.repository.findOne({
+				where: { [`${credential.name}`]: credential.value },
+			});
 		} catch (err) {
 			this.throwDefaultError();
 		}
