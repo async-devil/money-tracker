@@ -6,6 +6,7 @@ import { ClientsService } from "src/modules/clients-service/clients-service.serv
 import { AuthService } from "../auth-service.service";
 import { GenerateTokenPairDto } from "../types/request/generateTokenPair.dto";
 import { LoginDto } from "../types/request/login.dto";
+import { LogoutDto } from "../types/request/logout.dto";
 import { ValidateAccessTokenDto } from "../types/request/validateAccessToken.dto";
 import { TokenPairDto } from "../types/response/tokenPair.dto";
 import { ValidateAccessTokenResultDto } from "../types/response/validateAccessTokenResult.dto";
@@ -66,5 +67,10 @@ export class AuthRouteController {
 		});
 
 		return { result: session.refresh_token };
+	}
+
+	@Post("/logout")
+	public async logout(@Body() dto: LogoutDto) {
+		return await this.authService.deleteSessionByToken(dto);
 	}
 }
