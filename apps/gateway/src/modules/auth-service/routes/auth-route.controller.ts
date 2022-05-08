@@ -1,15 +1,21 @@
 import { HttpException, Post, Body, Controller } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
+import { ClientsService } from "src/modules/clients-service/clients-service.service";
+
 import { AuthService } from "../auth-service.service";
 import { GenerateTokenPairDto } from "../types/request/generateTokenPair.dto";
+import { LoginDto } from "../types/request/login.dto";
 import { ValidateAccessTokenDto } from "../types/request/validateAccessToken.dto";
 import { TokenPairDto } from "../types/response/tokenPair.dto";
 import { ValidateAccessTokenResultDto } from "../types/response/validateAccessTokenResult.dto";
 
 @Controller()
 export class AuthRouteController {
-	constructor(private readonly authService: AuthService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly clientsService: ClientsService
+	) {}
 
 	@ApiOperation({ summary: "validate access token" })
 	@ApiResponse({
@@ -42,5 +48,23 @@ export class AuthRouteController {
 	@Post("/refresh")
 	public async generateTokenPair(@Body() dto: GenerateTokenPairDto): Promise<TokenPairDto> {
 		return await this.authService.generateTokenPair(dto);
+	}
+
+	@Post("/login")
+	public async login(@Body() dto: LoginDto) {
+		await this.clientsService.validateClientCredentials({
+			email: dto.email,
+			password: dto.password,
+		});
+
+		const client = await this.clientsService.getClientByEmail(dto.email);
+
+		const session = await this.authService.createSession({
+			clientId: client.id,
+			ip: dto.ip,
+			device: dto.device,
+		});
+
+		return { result: session.refresh_token };
 	}
 }
