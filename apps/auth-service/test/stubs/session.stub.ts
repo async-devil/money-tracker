@@ -6,6 +6,7 @@ export const dateStub = 1649969640364;
 export const sessionStub = (properties: Partial<Session> = {}): Session => {
 	return Object.assign(
 		{
+			id: "123e4567-e89a-12d3-a456-426655440000",
 			refresh_token: "b4d72d7e7ca77bc8221f81083fc24c5ec11f3dfe446bf521",
 			client_id: "123e4567-e89b-12d3-a456-426655440000",
 			valid_until: new Date(dateStub + 1000),
@@ -21,6 +22,7 @@ export const sessionStub = (properties: Partial<Session> = {}): Session => {
 export const sessionStubSecondary = (properties: Partial<Session> = {}): Session => {
 	return Object.assign(
 		{
+			id: "123e4567-e89a-12d3-a456-426655440000",
 			refresh_token: "1ed72d7e7ca77bc8221f81083fc24c5ec11f3dfe446bf535",
 			client_id: "319e4567-e89b-12d3-a456-426655440000",
 			valid_until: new Date(dateStub + 1000),
