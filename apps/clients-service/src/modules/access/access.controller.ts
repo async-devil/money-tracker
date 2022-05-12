@@ -2,7 +2,7 @@ import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 
 import { AccessService } from "./access.service";
-import { ValidateClientCredentialsDto } from "./dtos/validateClientCredentials.dto";
+import { ValidateClientCredentialsDto } from "./dtos/validate-client-credentials.dto";
 
 @Controller()
 export class AccessController {

@@ -4,7 +4,7 @@ import * as bcrypt from "bcrypt";
 import { Client } from "src/entities/client.entity";
 import { ClientsService } from "src/modules/clients/clients.service";
 
-import { ValidateClientCredentialsDto } from "./dtos/validateClientCredentials.dto";
+import { ValidateClientCredentialsDto } from "./dtos/validate-client-credentials.dto";
 
 @Injectable()
 export class AccessService {
