@@ -5,7 +5,9 @@ import { RefreshTokenService } from "src/services/refreshToken.service";
 
 import { CreateSessionDto } from "./dtos/createSession.dto";
 import { DeleteSessionByTokenDto } from "./dtos/deleteSessionByToken.dto";
+import { DeleteSessionsByClientIdDto } from "./dtos/deleteSessionsByClientId.dto";
 import { GetSessionByTokenDto } from "./dtos/getSessionByToken.dto";
+import { GetSessionsByClientIdDto } from "./dtos/getSessionsByClientId.dto";
 import { SessionRepository } from "./session.repository";
 
 @Injectable()
@@ -45,6 +47,14 @@ export class SessionService {
 
 	public async deleteSessionByToken(dto: DeleteSessionByTokenDto) {
 		return await this.sessionRepository.delete(dto);
+	}
+
+	public async getAllSessionsByClientId(dto: GetSessionsByClientIdDto) {
+		return await this.sessionRepository.getAll(dto);
+	}
+
+	public async deleteAllSessionsByClientId(dto: DeleteSessionsByClientIdDto) {
+		return await this.sessionRepository.deleteAll(dto);
 	}
 
 	public checkIfTokenIsNotExpired(session: Session): boolean {

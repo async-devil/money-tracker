@@ -10,6 +10,8 @@ import { Repository } from "typeorm";
 import { Session } from "src/entities/session.entity";
 
 import { DeleteSessionByTokenDto } from "./dtos/deleteSessionByToken.dto";
+import { DeleteSessionsByClientIdDto } from "./dtos/deleteSessionsByClientId.dto";
+import { GetSessionsByClientIdDto } from "./dtos/getSessionsByClientId.dto";
 
 @Injectable()
 export class SessionRepository {
@@ -51,6 +53,28 @@ export class SessionRepository {
 	public async delete(dto: DeleteSessionByTokenDto) {
 		try {
 			await this.sessionRepository.delete({ refresh_token: dto.refreshToken });
+		} catch (err) {
+			this.throwDefaultError();
+		}
+
+		return {};
+	}
+
+	public async getAll(dto: GetSessionsByClientIdDto) {
+		let sessions: Session[] = [];
+
+		try {
+			sessions = await this.sessionRepository.find({ where: { client_id: dto.clientId } });
+		} catch (err) {
+			this.throwDefaultError();
+		}
+
+		return sessions;
+	}
+
+	public async deleteAll(dto: DeleteSessionsByClientIdDto) {
+		try {
+			await this.sessionRepository.delete({ client_id: dto.clientId });
 		} catch (err) {
 			this.throwDefaultError();
 		}

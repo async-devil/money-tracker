@@ -5,7 +5,9 @@ import { Session } from "src/entities/session.entity";
 
 import { CreateSessionDto } from "./dtos/createSession.dto";
 import { DeleteSessionByTokenDto } from "./dtos/deleteSessionByToken.dto";
+import { DeleteSessionsByClientIdDto } from "./dtos/deleteSessionsByClientId.dto";
 import { GetSessionByTokenDto } from "./dtos/getSessionByToken.dto";
+import { GetSessionsByClientIdDto } from "./dtos/getSessionsByClientId.dto";
 import { SessionService } from "./session.service";
 
 @Controller()
@@ -51,5 +53,29 @@ export class SessionController {
 	@MessagePattern({ cmd: "delete-session-by-token" })
 	public async deleteSessionByToken(@Body() dto: DeleteSessionByTokenDto) {
 		return await this.sessionService.deleteSessionByToken(dto);
+	}
+
+	/**
+	 *	Get all sessions by their client id, would pass even if tokens are not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["clientId must be a UUID"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	@MessagePattern({ cmd: "get-all-sessions-by-client-id" })
+	public async getAllSessionsByClientId(@Body() dto: GetSessionsByClientIdDto) {
+		return await this.sessionService.getAllSessionsByClientId(dto);
+	}
+
+	/**
+	 *	Delete all sessions by their client id, would pass even if tokens are not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["clientId must be a UUID"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	@MessagePattern({ cmd: "delete-all-sessions-by-client-id" })
+	public async deleteAllSessionsByClientId(@Body() dto: DeleteSessionsByClientIdDto) {
+		return await this.sessionService.deleteAllSessionsByClientId(dto);
 	}
 }
