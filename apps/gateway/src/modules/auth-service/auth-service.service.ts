@@ -3,7 +3,7 @@ import { ClientProxy } from "@nestjs/microservices";
 
 import { RequestService } from "../../common/request.service";
 import { CreateSessionDto } from "./types/request/createSession.dto";
-import { DeleteSessionByTokenDto } from "./types/request/deleteSessionByToken.dto";
+import { DeleteSessionByIdDto } from "./types/request/deleteSessionById.dto";
 import { DeleteSessionsByClientIdDto } from "./types/request/deleteSessionsByClientId.dto";
 import { GenerateTokenPairDto } from "./types/request/generateTokenPair.dto";
 import { GetSessionsByClientIdDto } from "./types/request/getSessionsByClientId.dto";
@@ -45,10 +45,10 @@ export class AuthService {
 	 * 	- { statusCode: 400, message: ["refresh token must be valid"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async deleteSessionByToken(dto: DeleteSessionByTokenDto): Promise<Record<string, never>> {
+	public async deleteSessionById(dto: DeleteSessionByIdDto): Promise<Record<string, never>> {
 		return await this.requestService.sendRequest<Record<string, never>>(
 			this.authService,
-			"delete-session-by-token",
+			"delete-session-by-id",
 			dto
 		);
 	}
