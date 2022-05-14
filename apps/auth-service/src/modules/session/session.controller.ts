@@ -4,9 +4,9 @@ import { MessagePattern } from "@nestjs/microservices";
 import { Session } from "src/entities/session.entity";
 
 import { CreateSessionDto } from "./dtos/createSession.dto";
-import { DeleteSessionByTokenDto } from "./dtos/deleteSessionByToken.dto";
+import { DeleteSessionByIdDto } from "./dtos/deleteSessionById.dto";
 import { DeleteSessionsByClientIdDto } from "./dtos/deleteSessionsByClientId.dto";
-import { GetSessionByTokenDto } from "./dtos/getSessionByToken.dto";
+import { GetSessionByIdDto } from "./dtos/getSessionById.dto";
 import { GetSessionsByClientIdDto } from "./dtos/getSessionsByClientId.dto";
 import { SessionService } from "./session.service";
 
@@ -31,28 +31,28 @@ export class SessionController {
 	}
 
 	/**
-	 *	Get session by it's token, even if expired
+	 *	Get session by it's id, even if expired
 	 *
 	 * 	Throws:
-	 * 	- { statusCode: 400, message: ["refresh token must be valid"], error: "Bad request" }
+	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 404, message: "Session not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
 	@MessagePattern({ cmd: "get-session-by-token" })
-	public async getSessionByToken(@Body() dto: GetSessionByTokenDto): Promise<Session> {
-		return await this.sessionService.getSessionByToken(dto);
+	public async getSessionById(@Body() dto: GetSessionByIdDto): Promise<Session> {
+		return await this.sessionService.getSessionById(dto);
 	}
 
 	/**
-	 *	Delete session by it's token, would pass even if token is not found
+	 *	Delete session by it's id, would pass even if session is not found
 	 *
 	 * 	Throws:
-	 * 	- { statusCode: 400, message: ["refresh token must be valid"], error: "Bad request" }
+	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
 	@MessagePattern({ cmd: "delete-session-by-token" })
-	public async deleteSessionByToken(@Body() dto: DeleteSessionByTokenDto) {
-		return await this.sessionService.deleteSessionByToken(dto);
+	public async deleteSessionById(@Body() dto: DeleteSessionByIdDto) {
+		return await this.sessionService.deleteSessionById(dto);
 	}
 
 	/**

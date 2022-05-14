@@ -85,6 +85,30 @@ describe("Session service", () => {
 		});
 	});
 
+	describe("getSessionById method tests", () => {
+		test("should get session by id", async () => {
+			jest.spyOn(repository, "findOne").mockResolvedValueOnce(sessionStub());
+
+			const session = await service.getSessionById({
+				id: sessionStub().id,
+			});
+
+			expect(session).toEqual(sessionStub());
+		});
+	});
+
+	describe("deleteSessionById method tests", () => {
+		test("should delete session by id", async () => {
+			jest.spyOn(repository, "delete").mockResolvedValueOnce({} as DeleteResult);
+
+			const session = await service.deleteSessionById({
+				id: sessionStub().id,
+			});
+
+			expect(session).toEqual({});
+		});
+	});
+
 	describe("checkIfTokenIsNotExpired method tests", () => {
 		test("should confirm that token is not expired", () => {
 			jest.useFakeTimers().setSystemTime(sessionStub().create_date_time);

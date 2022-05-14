@@ -51,24 +51,24 @@ describe("Session controller", () => {
 		});
 	});
 
-	describe("getSessionByToken method tests", () => {
+	describe("getSessionById method tests", () => {
 		test("should get session", async () => {
-			jest.spyOn(session, "getSessionByToken").mockResolvedValueOnce(sessionStub());
+			jest.spyOn(session, "getSessionById").mockResolvedValueOnce(sessionStub());
 
-			const result = await controller.getSessionByToken({
-				refreshToken: sessionStub().refresh_token,
+			const result = await controller.getSessionById({
+				id: sessionStub().id,
 			});
 
 			expect(result).toEqual(sessionStub());
 		});
 	});
 
-	describe("deleteSessionByToken method tests", () => {
+	describe("deleteSessionById method tests", () => {
 		test("should delete session", async () => {
-			jest.spyOn(session, "deleteSessionByToken").mockResolvedValueOnce({});
+			jest.spyOn(session, "deleteSessionById").mockResolvedValueOnce({});
 
-			const result = await controller.deleteSessionByToken({
-				refreshToken: sessionStub().refresh_token,
+			const result = await controller.deleteSessionById({
+				id: sessionStub().id,
 			});
 
 			expect(result).toEqual({});

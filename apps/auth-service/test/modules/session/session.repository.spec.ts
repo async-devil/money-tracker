@@ -133,7 +133,10 @@ describe("Session repository service", () => {
 		test("should successfully delete session", async () => {
 			jest.spyOn(repository, "delete").mockResolvedValueOnce({} as DeleteResult);
 
-			const result = await service.delete({ refreshToken: sessionStub().refresh_token });
+			const result = await service.deleteOneByCredential({
+				name: "refresh_token",
+				value: sessionStub().refresh_token,
+			});
 
 			expect(result).toStrictEqual({});
 		});
@@ -144,7 +147,10 @@ describe("Session repository service", () => {
 				.mockRejectedValueOnce(new Error("Database was but no longer"));
 
 			await expect(
-				service.delete({ refreshToken: sessionStub().refresh_token })
+				service.deleteOneByCredential({
+					name: "refresh_token",
+					value: sessionStub().refresh_token,
+				})
 			).rejects.toHaveProperty("name", "InternalServerErrorException");
 		});
 	});

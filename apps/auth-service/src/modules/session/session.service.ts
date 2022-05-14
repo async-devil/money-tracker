@@ -4,8 +4,10 @@ import { Session } from "src/entities/session.entity";
 import { RefreshTokenService } from "src/services/refreshToken.service";
 
 import { CreateSessionDto } from "./dtos/createSession.dto";
+import { DeleteSessionByIdDto } from "./dtos/deleteSessionById.dto";
 import { DeleteSessionByTokenDto } from "./dtos/deleteSessionByToken.dto";
 import { DeleteSessionsByClientIdDto } from "./dtos/deleteSessionsByClientId.dto";
+import { GetSessionByIdDto } from "./dtos/getSessionById.dto";
 import { GetSessionByTokenDto } from "./dtos/getSessionByToken.dto";
 import { GetSessionsByClientIdDto } from "./dtos/getSessionsByClientId.dto";
 import { SessionRepository } from "./session.repository";
@@ -46,7 +48,24 @@ export class SessionService {
 	}
 
 	public async deleteSessionByToken(dto: DeleteSessionByTokenDto) {
-		return await this.sessionRepository.delete(dto);
+		return await this.sessionRepository.deleteOneByCredential({
+			name: "refresh_token",
+			value: dto.refreshToken,
+		});
+	}
+
+	public async getSessionById(dto: GetSessionByIdDto) {
+		return await this.sessionRepository.getOneByCredential({
+			name: "id",
+			value: dto.id,
+		});
+	}
+
+	public async deleteSessionById(dto: DeleteSessionByIdDto) {
+		return await this.sessionRepository.deleteOneByCredential({
+			name: "id",
+			value: dto.id,
+		});
 	}
 
 	public async getAllSessionsByClientId(dto: GetSessionsByClientIdDto) {

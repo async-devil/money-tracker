@@ -9,7 +9,6 @@ import { Repository } from "typeorm";
 
 import { Session } from "src/entities/session.entity";
 
-import { DeleteSessionByTokenDto } from "./dtos/deleteSessionByToken.dto";
 import { DeleteSessionsByClientIdDto } from "./dtos/deleteSessionsByClientId.dto";
 import { GetSessionsByClientIdDto } from "./dtos/getSessionsByClientId.dto";
 
@@ -50,9 +49,11 @@ export class SessionRepository {
 		}
 	}
 
-	public async delete(dto: DeleteSessionByTokenDto) {
+	public async deleteOneByCredential(credential: { name: string; value: unknown }) {
 		try {
-			await this.sessionRepository.delete({ refresh_token: dto.refreshToken });
+			await this.sessionRepository.delete({
+				[`${credential.name}`]: credential.value,
+			});
 		} catch (err) {
 			this.throwDefaultError();
 		}
