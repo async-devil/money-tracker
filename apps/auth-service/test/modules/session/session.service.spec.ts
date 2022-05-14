@@ -98,4 +98,24 @@ describe("Session service", () => {
 			expect(service.checkIfTokenIsNotExpired(sessionStub())).toBe(false);
 		});
 	});
+
+	describe("getAllSessionsByClientId method tests", () => {
+		test("should get all sessions by valid client id", async () => {
+			jest.spyOn(repository, "find").mockResolvedValueOnce([sessionStub()]);
+
+			const result = await service.getAllSessionsByClientId({ clientId: sessionStub().client_id });
+
+			expect(result).toEqual([sessionStub()]);
+		});
+	});
+
+	describe("deleteAllSessionsByClientId method tests", () => {
+		test("should delete all sessions by valid client id", async () => {
+			const result = await service.deleteAllSessionsByClientId({
+				clientId: sessionStub().client_id,
+			});
+
+			expect(result).toEqual({});
+		});
+	});
 });

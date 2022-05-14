@@ -74,4 +74,28 @@ describe("Session controller", () => {
 			expect(result).toEqual({});
 		});
 	});
+
+	describe("getAllSessionsByClientId method tests", () => {
+		test("should get all sessions", async () => {
+			jest.spyOn(session, "getAllSessionsByClientId").mockResolvedValueOnce([sessionStub()]);
+
+			const result = await controller.getAllSessionsByClientId({
+				clientId: sessionStub().client_id,
+			});
+
+			expect(result).toEqual([sessionStub()]);
+		});
+	});
+
+	describe("deleteAllSessionsByClientId method tests", () => {
+		test("should delete all sessions", async () => {
+			jest.spyOn(session, "deleteAllSessionsByClientId").mockResolvedValueOnce({});
+
+			const result = await controller.deleteAllSessionsByClientId({
+				clientId: sessionStub().client_id,
+			});
+
+			expect(result).toEqual({});
+		});
+	});
 });

@@ -148,4 +148,50 @@ describe("Session repository service", () => {
 			).rejects.toHaveProperty("name", "InternalServerErrorException");
 		});
 	});
+
+	describe("getSessions method tests", () => {
+		test("should get sessions", async () => {
+			const testSessions = [
+				sessionStub(),
+				Object.assign(sessionStubSecondary()),
+				{ client_id: sessionStub().client_id },
+			];
+
+			jest.spyOn(repository, "find").mockResolvedValueOnce(testSessions);
+
+			const sessions = await service.getAll({ clientId: sessionStub().client_id });
+
+			expect(sessions).toEqual(testSessions);
+		});
+
+		test("should throw default error on unexpected error", async () => {
+			jest
+				.spyOn(repository, "find")
+				.mockRejectedValueOnce(new Error("Database was defeated by the professional book worm"));
+
+			await expect(service.getAll({ clientId: sessionStub().client_id })).rejects.toHaveProperty(
+				"name",
+				"InternalServerErrorException"
+			);
+		});
+	});
+
+	describe("deleteSessions method tests", () => {
+		test("should delete all sessions", async () => {
+			jest.spyOn(repository, "delete").mockResolvedValueOnce({} as DeleteResult);
+
+			const result = await service.deleteAll({ clientId: sessionStub().client_id });
+
+			expect(result).toStrictEqual({});
+		});
+
+		test("should throw default error on unexpected error", async () => {
+			jest.spyOn(repository, "delete").mockRejectedValueOnce(new Error("Database was here"));
+
+			await expect(service.deleteAll({ clientId: sessionStub().client_id })).rejects.toHaveProperty(
+				"name",
+				"InternalServerErrorException"
+			);
+		});
+	});
 });
