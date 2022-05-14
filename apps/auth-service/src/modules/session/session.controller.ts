@@ -38,7 +38,7 @@ export class SessionController {
 	 * 	- { statusCode: 404, message: "Session not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	@MessagePattern({ cmd: "get-session-by-token" })
+	@MessagePattern({ cmd: "get-session-by-id" })
 	public async getSessionById(@Body() dto: GetSessionByIdDto): Promise<Session> {
 		return await this.sessionService.getSessionById(dto);
 	}
@@ -50,7 +50,7 @@ export class SessionController {
 	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	@MessagePattern({ cmd: "delete-session-by-token" })
+	@MessagePattern({ cmd: "delete-session-by-id" })
 	public async deleteSessionById(@Body() dto: DeleteSessionByIdDto) {
 		return await this.sessionService.deleteSessionById(dto);
 	}
