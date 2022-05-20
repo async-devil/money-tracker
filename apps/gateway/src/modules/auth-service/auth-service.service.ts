@@ -4,8 +4,11 @@ import { ClientProxy } from "@nestjs/microservices";
 import { RequestService } from "../../common/request.service";
 import { CreateSessionDto } from "./types/request/createSession.dto";
 import { DeleteSessionByIdDto } from "./types/request/deleteSessionById.dto";
+import { DeleteSessionByTokenDto } from "./types/request/deleteSessionByToken.dto";
 import { DeleteSessionsByClientIdDto } from "./types/request/deleteSessionsByClientId.dto";
 import { GenerateTokenPairDto } from "./types/request/generateTokenPair.dto";
+import { GetSessionByIdDto } from "./types/request/getSessionById.dto";
+import { GetSessionByTokenDto } from "./types/request/getSessionByToken.dto";
 import { GetSessionsByClientIdDto } from "./types/request/getSessionsByClientId.dto";
 import { ValidateAccessTokenDto } from "./types/request/validateAccessToken.dto";
 import { Session } from "./types/response/session.entity";
@@ -39,16 +42,59 @@ export class AuthService {
 	}
 
 	/**
-	 *	Delete session by it's token, would pass even if token is not found
+	 *	Get session by it's id, even if expired
 	 *
 	 * 	Throws:
-	 * 	- { statusCode: 400, message: ["refresh token must be valid"], error: "Bad request" }
+	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
+	 * 	- { statusCode: 404, message: "Session not found", error: "Not found"}
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	public async getSessionById(dto: GetSessionByIdDto): Promise<Session> {
+		return await this.requestService.sendRequest<Session>(
+			this.authService,
+			"get-session-by-id",
+			dto
+		);
+	}
+
+	/**
+	 *	Delete session by it's id, would pass even if session is not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
 	public async deleteSessionById(dto: DeleteSessionByIdDto): Promise<Record<string, never>> {
 		return await this.requestService.sendRequest<Record<string, never>>(
 			this.authService,
 			"delete-session-by-id",
+			dto
+		);
+	}
+
+	/**
+	 *	Get session by it's token, even if expired
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["refresh token must be valid"], error: "Bad request" }
+	 * 	- { statusCode: 404, message: "Session not found", error: "Not found"}
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	public async getSessionByToken(dto: GetSessionByTokenDto): Promise<Session> {
+		return this.requestService.sendRequest(this.authService, "get-session-by-token", dto);
+	}
+
+	/**
+	 *	Delete session by it's token, would pass even if token is not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["refresh token must be valid"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	public async deleteSessionByToken(dto: DeleteSessionByTokenDto): Promise<Record<string, never>> {
+		return await this.requestService.sendRequest<Record<string, never>>(
+			this.authService,
+			"delete-session-by-token",
 			dto
 		);
 	}
