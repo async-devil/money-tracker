@@ -9,11 +9,11 @@ export class AccessController {
 	constructor(private readonly accessService: AccessService) {}
 
 	/**
-	 *	Validate client email and password, if unvalid throw
+	 *	Validate client email and password, if invalid throw
 	 *
 	 * 	Throws:
 	 * 	- { statusCode: 400, message: ["email must be email"], error: "Bad request" }
-	 * 	- { statusCode: 401, message: "Invalid client credentials", error: "Unathorized" }
+	 * 	- { statusCode: 401, message: "Invalid client credentials", error: "Unauthorized" }
 	 */
 	@MessagePattern({ cmd: "validate-client-credentials" })
 	public async validateClientCredentials(

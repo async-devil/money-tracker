@@ -21,10 +21,10 @@ export class AccessService {
 			throw new UnauthorizedException("Invalid client credentials");
 		}
 
-		const passwordMathes = await bcrypt.compare(dto.password, client.password);
+		const passwordMatches = await bcrypt.compare(dto.password, client.password);
 
-		if (!passwordMathes) throw new UnauthorizedException("Invalid client credentials");
+		if (!passwordMatches) throw new UnauthorizedException("Invalid client credentials");
 
-		return { result: passwordMathes };
+		return { result: passwordMatches };
 	}
 }
