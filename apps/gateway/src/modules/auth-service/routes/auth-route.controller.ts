@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { HttpException, Post, Body, Controller } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
@@ -7,9 +8,8 @@ import { AuthService } from "../auth-service.service";
 import { GenerateTokenPairDto } from "../types/request/generateTokenPair.dto";
 import { LoginDto } from "../types/request/login.dto";
 import { LogoutDto } from "../types/request/logout.dto";
-import { ValidateAccessTokenDto } from "../types/request/validateAccessToken.dto";
+import { RegisterDto } from "../types/request/register.dto";
 import { TokenPairDto } from "../types/response/tokenPair.dto";
-import { ValidateAccessTokenResultDto } from "../types/response/validateAccessTokenResult.dto";
 
 @Controller()
 export class AuthRouteController {
@@ -18,24 +18,11 @@ export class AuthRouteController {
 		private readonly clientsService: ClientsService
 	) {}
 
-	@ApiOperation({ summary: "validate access token" })
+	@ApiOperation({ summary: "generate token pair" })
 	@ApiResponse({
 		status: 201,
-		type: ValidateAccessTokenResultDto,
-		description: "Result of validation",
+		description: "Refresh and access tokens which would be stored in cookies",
 	})
-	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
-	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
-	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@Post("/validate")
-	public async validateAccessToken(
-		@Body() dto: ValidateAccessTokenDto
-	): Promise<ValidateAccessTokenResultDto> {
-		return await this.authService.validateAccessToken(dto);
-	}
-
-	@ApiOperation({ summary: "generate token pair" })
-	@ApiResponse({ status: 201, type: TokenPairDto, description: "Refresh and access tokens" })
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 401, type: HttpException, description: "Session expired" })
 	@ApiResponse({
@@ -51,6 +38,36 @@ export class AuthRouteController {
 		return await this.authService.generateTokenPair(dto);
 	}
 
+	@ApiOperation({ summary: "register client" })
+	@ApiResponse({ status: 201, description: "Refresh token which would be stored in cookies" })
+	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
+	@ApiResponse({ status: 400, type: HttpException, description: "Duplicate client" })
+	@ApiResponse({ status: 401, type: HttpException, description: "Session expired" })
+	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
+	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@Post("/register")
+	public async register(@Body() dto: RegisterDto) {
+		const client = await this.clientsService.createClient({
+			email: dto.email,
+			password: dto.password,
+		});
+
+		const session = await this.authService.createSession({
+			clientId: client.id,
+			ip: dto.ip,
+			device: dto.device,
+		});
+
+		return { result: session.refresh_token };
+	}
+
+	@ApiOperation({ summary: "client login" })
+	@ApiResponse({ status: 201, description: "Refresh token which would be stored in cookies" })
+	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
+	@ApiResponse({ status: 401, type: HttpException, description: "Invalid client credentials" })
+	@ApiResponse({ status: 404, type: HttpException, description: "Client not found" })
+	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
+	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@Post("/login")
 	public async login(@Body() dto: LoginDto) {
 		await this.clientsService.validateClientCredentials({
@@ -69,6 +86,14 @@ export class AuthRouteController {
 		return { result: session.refresh_token };
 	}
 
+	@ApiOperation({ summary: "client logout" })
+	@ApiResponse({
+		status: 201,
+		description: "Refresh and access token would be deleted from cookies",
+	})
+	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
+	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
+	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@Post("/logout")
 	public async logout(@Body() dto: LogoutDto) {
 		return await this.authService.deleteSessionByToken(dto);

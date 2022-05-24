@@ -7,7 +7,6 @@ import { ClientsServiceModule } from "../clients-service/clients-service.module"
 import { AuthService } from "./auth-service.service";
 import { AuthRouteController } from "./routes/auth-route.controller";
 import { SessionRouteController } from "./routes/session-route.controller";
-import { SessionStorageRouteController } from "./routes/sessionStorage-route.controller";
 
 const config = new ConfigService();
 const rmqConfig = config.get<{ host: string; user: string; password: string }>("rmq");
@@ -31,7 +30,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 			},
 		]),
 	],
-	controllers: [AuthRouteController, SessionRouteController, SessionStorageRouteController],
+	controllers: [AuthRouteController, SessionRouteController],
 	providers: [AuthService, RequestService],
 	exports: [AuthService],
 })
