@@ -3,6 +3,8 @@
 	"editor.formatOnSave": true,
 	"eslint.alwaysShowStatus": true,
 	"eslint.workingDirectories": [{ "mode": "auto" }],
+	"editor.bracketPairColorization.enabled": true,
+	"editor.guides.bracketPairs": "active",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
 	},
