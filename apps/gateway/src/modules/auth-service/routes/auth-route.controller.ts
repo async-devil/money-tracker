@@ -1,6 +1,15 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { HttpException, Post, Body, Controller } from "@nestjs/common";
+import {
+	HttpException,
+	Post,
+	Body,
+	Controller,
+	Res,
+	Req,
+	UnauthorizedException,
+} from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Response, Request, CookieOptions } from "express";
 
 import { ClientsService } from "src/modules/clients-service/clients-service.service";
 
@@ -9,7 +18,13 @@ import { GenerateTokenPairDto } from "../types/request/generateTokenPair.dto";
 import { LoginDto } from "../types/request/login.dto";
 import { LogoutDto } from "../types/request/logout.dto";
 import { RegisterDto } from "../types/request/register.dto";
-import { TokenPairDto } from "../types/response/tokenPair.dto";
+
+export const COOKIE_OPTIONS = (dueTo: Date): CookieOptions => {
+	return {
+		httpOnly: true,
+		expires: dueTo,
+	};
+};
 
 @Controller()
 export class AuthRouteController {
@@ -34,8 +49,35 @@ export class AuthRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@Post("/refresh")
-	public async generateTokenPair(@Body() dto: GenerateTokenPairDto): Promise<TokenPairDto> {
-		return await this.authService.generateTokenPair(dto);
+	public async generateTokenPair(
+		@Req() request: Request,
+		@Res({ passthrough: true }) response: Response,
+		@Body() dto: GenerateTokenPairDto
+	) {
+		const cookies = request.cookies as Record<string, string>;
+		const refreshToken = cookies["refresh_token"];
+
+		if (!refreshToken) throw new UnauthorizedException("No refresh token provided");
+
+		const tokenPair = await this.authService.generateTokenPair({
+			refreshToken,
+			tokenData: dto.tokenData,
+		});
+
+		const session = await this.authService.getSessionByToken({
+			refreshToken: tokenPair.refreshToken,
+		});
+
+		const accessTokenExpirationDate = await this.authService.getAccessTokenExpirationDate({
+			accessToken: tokenPair.accessToken,
+		});
+
+		response.cookie(
+			"access_token",
+			tokenPair.accessToken,
+			COOKIE_OPTIONS(accessTokenExpirationDate.result)
+		);
+		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
 	}
 
 	@ApiOperation({ summary: "register client" })
@@ -46,7 +88,7 @@ export class AuthRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@Post("/register")
-	public async register(@Body() dto: RegisterDto) {
+	public async register(@Res({ passthrough: true }) response: Response, @Body() dto: RegisterDto) {
 		const client = await this.clientsService.createClient({
 			email: dto.email,
 			password: dto.password,
@@ -58,7 +100,7 @@ export class AuthRouteController {
 			device: dto.device,
 		});
 
-		return { result: session.refresh_token };
+		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
 	}
 
 	@ApiOperation({ summary: "client login" })
@@ -69,7 +111,7 @@ export class AuthRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@Post("/login")
-	public async login(@Body() dto: LoginDto) {
+	public async login(@Res({ passthrough: true }) response: Response, @Body() dto: LoginDto) {
 		await this.clientsService.validateClientCredentials({
 			email: dto.email,
 			password: dto.password,
@@ -83,7 +125,7 @@ export class AuthRouteController {
 			device: dto.device,
 		});
 
-		return { result: session.refresh_token };
+		response.cookie("refresh_token", session.refresh_token), COOKIE_OPTIONS(session.valid_until);
 	}
 
 	@ApiOperation({ summary: "client logout" })
@@ -95,7 +137,10 @@ export class AuthRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@Post("/logout")
-	public async logout(@Body() dto: LogoutDto) {
-		return await this.authService.deleteSessionByToken(dto);
+	public async logout(@Res({ passthrough: true }) response: Response, @Body() dto: LogoutDto) {
+		await this.authService.deleteSessionByToken(dto);
+
+		response.cookie("refresh_token", undefined, { httpOnly: true });
+		response.cookie("access_token", undefined, { httpOnly: true });
 	}
 }
