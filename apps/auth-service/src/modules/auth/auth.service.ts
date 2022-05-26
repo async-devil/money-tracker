@@ -4,6 +4,7 @@ import { AccessTokenService } from "src/services/accessToken.service";
 
 import { SessionService } from "../session/session.service";
 import { GenerateTokenPairDto } from "./dtos/generateTokenPair.dto";
+import { GetAccessTokenExpirationDateDto } from "./dtos/get-access-token-expiration-date.dto";
 import { ValidateAccessTokenDto } from "./dtos/validateAccessToken.dto";
 
 @Injectable()
@@ -42,5 +43,12 @@ export class AuthService {
 		const result = await this.accessTokenService.isValidJwt(dto.accessToken);
 
 		return { result };
+	}
+
+	public async getAccessTokenExpirationDate(dto: GetAccessTokenExpirationDateDto) {
+		const tokenData = await this.accessTokenService.getJwtData(dto.accessToken);
+		const date = new Date(tokenData.payload.exp);
+
+		return { result: date };
 	}
 }
