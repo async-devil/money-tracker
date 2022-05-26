@@ -4,6 +4,10 @@ export class Session {
 	@ApiProperty({ example: "b4d72d7e7ca77bc8221f81083fc24c5ec11f3dfe446bf521" })
 	readonly refresh_token: string;
 
+	/** @example "2016-11-22 19:10:25-07" */
+	@ApiProperty({ example: "2016-11-22 19:10:25-07" })
+	valid_until: Date;
+
 	/** @example "123e4567-e89b-12d3-a456-426655440000" */
 	@ApiProperty({ example: "123e4567-e89b-12d3-a456-426655440000" })
 	readonly client_id: string;
