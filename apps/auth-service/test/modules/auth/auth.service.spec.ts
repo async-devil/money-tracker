@@ -126,4 +126,21 @@ describe("Auth service", () => {
 			expect(result).toEqual({ result: false });
 		});
 	});
+
+	describe("getAccessTokenExpirationDate method tests", () => {
+		test("should return valid date on valid access token", async () => {
+			const mockDate = new Date();
+
+			jest
+				.spyOn(accessTokenService, "getJwtData")
+				.mockResolvedValueOnce({
+					payload: { exp: mockDate.getTime() },
+					protectedHeader: { alg: "HS256" },
+				});
+
+			const { result } = await service.getAccessTokenExpirationDate({ accessToken: ACCESS_TOKEN });
+
+			expect(result).toEqual(mockDate);
+		});
+	});
 });
