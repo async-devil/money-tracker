@@ -47,7 +47,9 @@ export class AuthService {
 
 	public async getAccessTokenExpirationDate(dto: GetAccessTokenExpirationDateDto) {
 		const tokenData = await this.accessTokenService.getJwtData(dto.accessToken);
-		const date = new Date(tokenData.payload.exp);
+
+		//? JWT exp header gives expiration date in seconds
+		const date = new Date(tokenData.payload.exp * 1000);
 
 		return { result: date };
 	}
