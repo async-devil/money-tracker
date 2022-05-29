@@ -1,21 +1,23 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Controller, Get, Req, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
-import { HttpException } from "../../../common/HttpException";
+import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
+import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
+
 import { ClientsService } from "../clients-service.service";
-import { CreateClientDto } from "../types/request/create-client.dto";
 
 @Controller()
 export class ClientsRouteController {
 	constructor(private readonly clientsService: ClientsService) {}
 
-	@ApiOperation({ summary: "create user" })
-	@ApiResponse({ status: 201, description: "Created user" })
-	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
-	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
-	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@Post("/")
-	public createClient(@Body() dto: CreateClientDto) {
-		return this.clientsService.createClient(dto);
+	@ApiOperation({ summary: "Get current client by access token" })
+	@ApiResponse({
+		status: 200,
+		description: "Current client",
+	})
+	@UseGuards(AccessTokenGuard)
+	@Get("/me")
+	public async getCurrentClient(@Req() request: IRequest) {
+		return await this.clientsService.getClientById(request.clientId);
 	}
 }
