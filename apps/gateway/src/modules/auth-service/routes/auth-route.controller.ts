@@ -142,6 +142,8 @@ export class AuthRouteController {
 		const cookies = request.cookies as Record<string, string>;
 		const refreshToken = cookies["refresh_token"];
 
+		if (!refreshToken) throw new UnauthorizedException("No refresh token provided");
+
 		await this.authService.deleteSessionByToken({ refreshToken });
 
 		response.cookie("refresh_token", undefined, { httpOnly: true });
