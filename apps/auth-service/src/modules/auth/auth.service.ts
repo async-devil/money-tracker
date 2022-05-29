@@ -4,6 +4,7 @@ import { AccessTokenService } from "src/services/accessToken.service";
 
 import { SessionService } from "../session/session.service";
 import { GenerateTokenPairDto } from "./dtos/generateTokenPair.dto";
+import { GetAccessTokenClientIdDto } from "./dtos/get-access-token-client-id.dto";
 import { GetAccessTokenExpirationDateDto } from "./dtos/get-access-token-expiration-date.dto";
 import { ValidateAccessTokenDto } from "./dtos/validateAccessToken.dto";
 
@@ -54,5 +55,15 @@ export class AuthService {
 		const date = new Date(tokenData.payload.exp * 1000);
 
 		return { result: date };
+	}
+
+	public async getAccessTokenClientId(dto: GetAccessTokenClientIdDto) {
+		const tokenData = await this.accessTokenService.getJwtData(dto.accessToken);
+
+		const clientId = tokenData.payload.clientId as string;
+
+		if (!clientId) throw new UnauthorizedException("Invalid JWT token");
+
+		return { result: clientId };
 	}
 }

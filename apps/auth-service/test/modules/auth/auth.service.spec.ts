@@ -128,4 +128,17 @@ describe("Auth service", () => {
 			expect(result).toEqual(mockDate);
 		});
 	});
+
+	describe("getAccessTokenClientId method tests", () => {
+		test("should return valid client id from access token", async () => {
+			jest.spyOn(accessTokenService, "getJwtData").mockResolvedValueOnce({
+				payload: { clientId: sessionStub().client_id },
+				protectedHeader: { alg: "HS256" },
+			});
+
+			const { result } = await service.getAccessTokenClientId({ accessToken: ACCESS_TOKEN });
+
+			expect(result).toBe(sessionStub().client_id);
+		});
+	});
 });

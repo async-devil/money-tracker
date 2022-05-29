@@ -7,12 +7,14 @@ import { DeleteSessionByIdDto } from "./types/request/deleteSessionById.dto";
 import { DeleteSessionByTokenDto } from "./types/request/deleteSessionByToken.dto";
 import { DeleteSessionsByClientIdDto } from "./types/request/deleteSessionsByClientId.dto";
 import { GenerateTokenPairDto } from "./types/request/generateTokenPair.dto";
+import { GetAccessTokenClientIdDto } from "./types/request/get-access-token-client-id.dto";
+import { GetAccessTokenExpirationDateDto } from "./types/request/get-access-token-expiration-date.dto";
 import { GetSessionByIdDto } from "./types/request/getSessionById.dto";
 import { GetSessionByTokenDto } from "./types/request/getSessionByToken.dto";
 import { GetSessionsByClientIdDto } from "./types/request/getSessionsByClientId.dto";
 import { ValidateAccessTokenDto } from "./types/request/validateAccessToken.dto";
+import { GetAccessTokenClientIdResult } from "./types/response/get-access-token-client-id.result";
 import { GetAccessTokenExpirationDateResult } from "./types/response/get-access-token-expiration-date-result.dto";
-import { GetAccessTokenExpirationDateDto } from "./types/response/get-access-token-expiration-date.dto";
 import { Session } from "./types/response/session.entity";
 import { TokenPairDto } from "./types/response/tokenPair.dto";
 import { ValidateAccessTokenResultDto } from "./types/response/validateAccessTokenResult.dto";
@@ -183,6 +185,22 @@ export class AuthService {
 		return await this.requestService.sendRequest<GetAccessTokenExpirationDateResult>(
 			this.authService,
 			"get-access-token-expiration-date",
+			dto
+		);
+	}
+
+	/**
+	 *	Get access token client id which stored in it
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["accessToken must be a jwt string"], error: "Bad request" }
+	 *  - { statusCode: 401, message: "Invalid JWT token", error: "Unauthorized" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	public async getAccessTokenClientId(dto: GetAccessTokenClientIdDto) {
+		return await this.requestService.sendRequest<GetAccessTokenClientIdResult>(
+			this.authService,
+			"get-access-token-client-id",
 			dto
 		);
 	}
