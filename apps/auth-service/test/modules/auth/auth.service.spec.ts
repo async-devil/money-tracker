@@ -131,12 +131,10 @@ describe("Auth service", () => {
 		test("should return valid date on valid access token", async () => {
 			const mockDate = new Date();
 
-			jest
-				.spyOn(accessTokenService, "getJwtData")
-				.mockResolvedValueOnce({
-					payload: { exp: mockDate.getTime() },
-					protectedHeader: { alg: "HS256" },
-				});
+			jest.spyOn(accessTokenService, "getJwtData").mockResolvedValueOnce({
+				payload: { exp: mockDate.getTime() / 1000 },
+				protectedHeader: { alg: "HS256" },
+			});
 
 			const { result } = await service.getAccessTokenExpirationDate({ accessToken: ACCESS_TOKEN });
 
