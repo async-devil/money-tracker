@@ -1,16 +1,17 @@
-import { Type } from "class-transformer";
-import { ValidateNested } from "class-validator";
+import { IsIP, IsString } from "class-validator";
 
 import { IsRefreshToken } from "src/decorators/isRefreshToken.decorator";
-import { CreateSessionDto } from "src/modules/session/dtos/createSession.dto";
 
 export class GenerateTokenPairDto {
-	/** Information which will be used to generate new token*/
-	@ValidateNested()
-	@Type(() => CreateSessionDto)
-	readonly tokenData: CreateSessionDto;
-
 	/** @example "3d5b8d7035bd10bb4d32d95fdd272ceb8e6a2ddbbe79d966" */
 	@IsRefreshToken()
 	readonly refreshToken: string;
+
+	/** @example "57.37.103.24" */
+	@IsIP(4)
+	readonly ip: string;
+
+	/** @example "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0)"*/
+	@IsString()
+	readonly device: string;
 }

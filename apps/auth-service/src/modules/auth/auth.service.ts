@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 
 import { AccessTokenService } from "src/services/accessToken.service";
 
@@ -25,16 +25,18 @@ export class AuthService {
 
 		await this.sessionService.deleteSessionByToken({ refreshToken: dto.refreshToken });
 
-		if (currentSession.client_id !== dto.tokenData.clientId) {
-			throw new UnauthorizedException("Token data does not match previous one");
-		}
-
 		if (!tokenValidity) {
 			throw new UnauthorizedException("Refresh token expired");
 		}
 
-		const accessToken = await this.accessTokenService.signJwt({ clientId: dto.tokenData.clientId });
-		const session = await this.sessionService.createSession(dto.tokenData);
+		const accessToken = await this.accessTokenService.signJwt({
+			clientId: currentSession.client_id,
+		});
+		const session = await this.sessionService.createSession({
+			clientId: currentSession.client_id,
+			ip: dto.ip,
+			device: dto.device,
+		});
 
 		return { accessToken, refreshToken: session.refresh_token };
 	}

@@ -16,12 +16,10 @@ export class AuthController {
 	 * 	Throws:
 	 * 	- { statusCode: 400, message: [
 	 * 		"refresh token must be valid",
-	 * 		"tokenData.clientId must be a UUID",
 	 * 		"tokenData.ip must be an ip address",
 	 * 		"tokenData.device must be a string"],
 	 * 		error: "Bad request" }
 	 * 	- { statusCode: 401, message: "Refresh token expired", error: "Unauthorized" }
-	 *  - { statusCode: 401, message: "Token data does not match previous one", error: "Unauthorized" }
 	 * 	- { statusCode: 404, message: "Session not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */

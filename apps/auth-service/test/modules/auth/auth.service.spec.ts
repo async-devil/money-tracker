@@ -7,11 +7,7 @@ import { AccessTokenService } from "src/services/accessToken.service";
 
 import { AccessTokenServiceMock } from "../../mocks/accessToken.service.mock";
 import { SessionServiceMock } from "../../mocks/session.service.mock";
-import {
-	createSessionDtoStubSecondary,
-	sessionStub,
-	sessionStubSecondary,
-} from "../../stubs/session.stub";
+import { sessionStub, sessionStubSecondary } from "../../stubs/session.stub";
 
 const ACCESS_TOKEN =
 	"eyJhbGciOiJIUzI1NiJ9.eyJjbGllbnRJZCI6IjA5N2Y2MTNmLTkwYjctNDMyNi04MTIxLTkzYzZkNTE4NDVkNiIsImV4cCI6MTY1MDQ2MzAzOCwiaWF0IjoxNjUwNDYxMjM4fQ.wZ5w5ZiEuSUXm3h4MO7YCPPAdvnR8fZE9yzpwXMWn8w";
@@ -58,7 +54,8 @@ describe("Auth service", () => {
 
 			const tokens = await service.generateTokenPair({
 				refreshToken: sessionStub().refresh_token,
-				tokenData: createSessionDtoStubSecondary({ clientId: sessionStub().client_id }),
+				ip: sessionStubSecondary().ip,
+				device: sessionStubSecondary().device,
 			});
 
 			expect(tokens).toEqual({
@@ -75,7 +72,8 @@ describe("Auth service", () => {
 			await expect(
 				service.generateTokenPair({
 					refreshToken: sessionStub().refresh_token,
-					tokenData: createSessionDtoStubSecondary(),
+					ip: sessionStubSecondary().ip,
+					device: sessionStubSecondary().device,
 				})
 			).rejects.toHaveProperty("name", "NotFoundException");
 		});
@@ -87,19 +85,8 @@ describe("Auth service", () => {
 			await expect(
 				service.generateTokenPair({
 					refreshToken: sessionStub().refresh_token,
-					tokenData: createSessionDtoStubSecondary({ clientId: sessionStub().client_id }),
-				})
-			).rejects.toHaveProperty("name", "UnauthorizedException");
-		});
-
-		test("should throw not found error on non matching client id", async () => {
-			jest.spyOn(sessionService, "getSessionByToken").mockResolvedValue(sessionStub());
-			jest.spyOn(sessionService, "checkIfTokenIsNotExpired").mockReturnValueOnce(true);
-
-			await expect(
-				service.generateTokenPair({
-					refreshToken: sessionStub().refresh_token,
-					tokenData: createSessionDtoStubSecondary(),
+					ip: sessionStubSecondary().ip,
+					device: sessionStubSecondary().device,
 				})
 			).rejects.toHaveProperty("name", "UnauthorizedException");
 		});

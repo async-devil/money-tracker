@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable sonarjs/no-duplicate-string */
 import {
 	HttpException,
@@ -14,15 +15,14 @@ import { Response, Request, CookieOptions } from "express";
 import { ClientsService } from "src/modules/clients-service/clients-service.service";
 
 import { AuthService } from "../auth-service.service";
-import { GenerateTokenPairDto } from "../types/request/generateTokenPair.dto";
 import { LoginDto } from "../types/request/login.dto";
-import { LogoutDto } from "../types/request/logout.dto";
+import { RefreshTokenPairDto } from "../types/request/refresh-token-pair.dto";
 import { RegisterDto } from "../types/request/register.dto";
 
 export const COOKIE_OPTIONS = (dueTo: Date): CookieOptions => {
 	return {
 		httpOnly: true,
-		expires: dueTo,
+		expires: new Date(dueTo),
 	};
 };
 
@@ -49,10 +49,10 @@ export class AuthRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@Post("/refresh")
-	public async generateTokenPair(
+	public async refreshTokenPair(
 		@Req() request: Request,
 		@Res({ passthrough: true }) response: Response,
-		@Body() dto: GenerateTokenPairDto
+		@Body() dto: RefreshTokenPairDto
 	) {
 		const cookies = request.cookies as Record<string, string>;
 		const refreshToken = cookies["refresh_token"];
@@ -61,7 +61,8 @@ export class AuthRouteController {
 
 		const tokenPair = await this.authService.generateTokenPair({
 			refreshToken,
-			tokenData: dto.tokenData,
+			ip: dto.ip,
+			device: dto.device,
 		});
 
 		const session = await this.authService.getSessionByToken({
@@ -72,12 +73,12 @@ export class AuthRouteController {
 			accessToken: tokenPair.accessToken,
 		});
 
+		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
 		response.cookie(
 			"access_token",
 			tokenPair.accessToken,
 			COOKIE_OPTIONS(accessTokenExpirationDate.result)
 		);
-		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
 	}
 
 	@ApiOperation({ summary: "register client" })
@@ -125,7 +126,7 @@ export class AuthRouteController {
 			device: dto.device,
 		});
 
-		response.cookie("refresh_token", session.refresh_token), COOKIE_OPTIONS(session.valid_until);
+		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
 	}
 
 	@ApiOperation({ summary: "client logout" })
@@ -137,8 +138,11 @@ export class AuthRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@Post("/logout")
-	public async logout(@Res({ passthrough: true }) response: Response, @Body() dto: LogoutDto) {
-		await this.authService.deleteSessionByToken(dto);
+	public async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+		const cookies = request.cookies as Record<string, string>;
+		const refreshToken = cookies["refresh_token"];
+
+		await this.authService.deleteSessionByToken({ refreshToken });
 
 		response.cookie("refresh_token", undefined, { httpOnly: true });
 		response.cookie("access_token", undefined, { httpOnly: true });
