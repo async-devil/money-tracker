@@ -9,8 +9,8 @@ import { Repository } from "typeorm";
 
 import { Session } from "src/entities/session.entity";
 
-import { DeleteSessionsByClientIdDto } from "./dtos/deleteSessionsByClientId.dto";
-import { GetSessionsByClientIdDto } from "./dtos/getSessionsByClientId.dto";
+import { DeleteSessionsByClientIdDto } from "./dtos/delete-sessions-by-client-id.dto";
+import { GetSessionsByClientIdDto } from "./dtos/get-sessions-by-client-id.dto";
 
 @Injectable()
 export class SessionRepository {

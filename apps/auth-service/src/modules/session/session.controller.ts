@@ -3,13 +3,13 @@ import { MessagePattern } from "@nestjs/microservices";
 
 import { Session } from "src/entities/session.entity";
 
-import { CreateSessionDto } from "./dtos/createSession.dto";
-import { DeleteSessionByIdDto } from "./dtos/deleteSessionById.dto";
-import { DeleteSessionByTokenDto } from "./dtos/deleteSessionByToken.dto";
-import { DeleteSessionsByClientIdDto } from "./dtos/deleteSessionsByClientId.dto";
-import { GetSessionByIdDto } from "./dtos/getSessionById.dto";
-import { GetSessionByTokenDto } from "./dtos/getSessionByToken.dto";
-import { GetSessionsByClientIdDto } from "./dtos/getSessionsByClientId.dto";
+import { CreateSessionDto } from "./dtos/create-session.dto";
+import { DeleteSessionByIdDto } from "./dtos/delete-session-by-id.dto";
+import { DeleteSessionByTokenDto } from "./dtos/delete-session-by-token.dto";
+import { DeleteSessionsByClientIdDto } from "./dtos/delete-sessions-by-client-id.dto";
+import { GetSessionByIdDto } from "./dtos/get-session-by-id.dto";
+import { GetSessionByTokenDto } from "./dtos/get-session-by-token.dto";
+import { GetSessionsByClientIdDto } from "./dtos/get-sessions-by-client-id.dto";
 import { SessionService } from "./session.service";
 
 @Controller()

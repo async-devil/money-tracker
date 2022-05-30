@@ -1,5 +1,5 @@
 import { Session } from "src/entities/session.entity";
-import { CreateSessionDto } from "src/modules/session/dtos/createSession.dto";
+import { CreateSessionDto } from "src/modules/session/dtos/create-session.dto";
 
 export const dateStub = 1649969640364;
 
