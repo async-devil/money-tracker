@@ -2,22 +2,22 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 
 import { RequestService } from "../../common/request.service";
-import { CreateSessionDto } from "./types/request/createSession.dto";
-import { DeleteSessionByIdDto } from "./types/request/deleteSessionById.dto";
-import { DeleteSessionByTokenDto } from "./types/request/deleteSessionByToken.dto";
-import { DeleteSessionsByClientIdDto } from "./types/request/deleteSessionsByClientId.dto";
-import { GenerateTokenPairDto } from "./types/request/generateTokenPair.dto";
+import { CreateSessionDto } from "./types/request/create-session.dto";
+import { DeleteSessionByIdDto } from "./types/request/delete-session-by-id.dto";
+import { DeleteSessionByTokenDto } from "./types/request/delete-session-by-token.dto";
+import { DeleteSessionsByClientIdDto } from "./types/request/delete-sessions-by-client-id.dto";
+import { GenerateTokenPairDto } from "./types/request/generate-token-pair.dto";
 import { GetAccessTokenClientIdDto } from "./types/request/get-access-token-client-id.dto";
 import { GetAccessTokenExpirationDateDto } from "./types/request/get-access-token-expiration-date.dto";
-import { GetSessionByIdDto } from "./types/request/getSessionById.dto";
-import { GetSessionByTokenDto } from "./types/request/getSessionByToken.dto";
-import { GetSessionsByClientIdDto } from "./types/request/getSessionsByClientId.dto";
-import { ValidateAccessTokenDto } from "./types/request/validateAccessToken.dto";
+import { GetSessionByIdDto } from "./types/request/get-session-by-id.dto";
+import { GetSessionByTokenDto } from "./types/request/get-session-by-token.dto";
+import { GetSessionsByClientIdDto } from "./types/request/get-sessions-by-client-id.dto";
+import { ValidateAccessTokenDto } from "./types/request/validate-access-token.dto";
 import { GetAccessTokenClientIdResult } from "./types/response/get-access-token-client-id.result";
 import { GetAccessTokenExpirationDateResult } from "./types/response/get-access-token-expiration-date-result.dto";
 import { Session } from "./types/response/session.entity";
-import { TokenPairDto } from "./types/response/tokenPair.dto";
-import { ValidateAccessTokenResultDto } from "./types/response/validateAccessTokenResult.dto";
+import { TokenPairDto } from "./types/response/token-pair.dto";
+import { ValidateAccessTokenResultDto } from "./types/response/validate-access-token-result.dto";
 
 @Injectable()
 export class AuthService {
