@@ -1,16 +1,21 @@
-import { Body, Controller, Get, Put, Req, UseGuards } from "@nestjs/common";
+/* eslint-disable sonarjs/no-duplicate-string */
+import { Body, Controller, Delete, Get, Put, Req, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
+import { AuthService } from "src/modules/auth-service/auth-service.service";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
 import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
 
 import { ClientsService } from "../clients-service.service";
-import { ClientData, UpdateClientByIdDto } from "../types/request/update-client-by-id.dto";
+import { ClientData } from "../types/request/update-client-by-id.dto";
 
 @Controller()
 export class ClientsRouteController {
-	constructor(private readonly clientsService: ClientsService) {}
+	constructor(
+		private readonly clientsService: ClientsService,
+		private readonly authService: AuthService
+	) {}
 
 	@ApiOperation({ summary: "Get current client by access token" })
 	@ApiResponse({
@@ -29,7 +34,7 @@ export class ClientsRouteController {
 		return await this.clientsService.getClientById(request.clientId);
 	}
 
-	@ApiOperation({ summary: "Get current client by access token" })
+	@ApiOperation({ summary: "Update current client by access token" })
 	@ApiResponse({
 		status: 201,
 		description: "Updated current client",
@@ -47,5 +52,21 @@ export class ClientsRouteController {
 			id: request.clientId,
 			data: dto,
 		});
+	}
+
+	@ApiOperation({ summary: "Delete current client by access token" })
+	@ApiResponse({
+		status: 200,
+	})
+	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
+	@ApiResponse({ status: 401, type: HttpException, description: "No access token provided" })
+	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
+	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
+	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@UseGuards(AccessTokenGuard)
+	@Delete("/me")
+	public async deleteCurrentClient(@Req() request: IRequest) {
+		await this.clientsService.deleteClientById(request.clientId);
+		return await this.authService.deleteAllSessionsByClientId({ clientId: request.clientId });
 	}
 }

@@ -48,7 +48,7 @@ export class ClientsService {
 	 *	Get client by its email and return it if found
 	 *
 	 * 	Throws:
-	 *  - { statusCode: 400, message: ["email must be email"], error: "Bad request" }
+	 * 	- { statusCode: 400, message: ["email must be email"], error: "Bad request" }
 	 * 	- { statusCode: 404, message: "Client not found", error: "Not found" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
@@ -63,10 +63,27 @@ export class ClientsService {
 	}
 
 	/**
+	 *	Delete client by its id, would pass even if client is not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["id must be UUID"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	public async deleteClientById(id: string) {
+		return await this.requestService.sendRequest<Client>(
+			this.clientsService,
+			"delete-client-by-id",
+			{
+				id,
+			}
+		);
+	}
+
+	/**
 	 *	Update client credentials by its id and return it if update successfully
 	 *
 	 * 	Throws:
-	 *  - { statusCode: 400, message: ["id must be UUID"], error: "Bad request" }
+	 * 	- { statusCode: 400, message: ["id must be UUID"], error: "Bad request" }
 	 * 	- { statusCode: 404, message: "Client not found", error: "Not found" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
