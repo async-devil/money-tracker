@@ -7,11 +7,7 @@ import { AccessTokenService } from "src/services/accessToken.service";
 
 import { AuthServiceMock } from "../../mocks/auth.service.mock";
 import { SessionServiceMock } from "../../mocks/session.service.mock";
-import {
-	createSessionDtoStubSecondary,
-	sessionStub,
-	sessionStubSecondary,
-} from "../../stubs/session.stub";
+import { sessionStub, sessionStubSecondary } from "../../stubs/session.stub";
 
 const ACCESS_TOKEN =
 	"eyJhbGciOiJIUzI1NiJ9.eyJjbGllbnRJZCI6IjA5N2Y2MTNmLTkwYjctNDMyNi04MTIxLTkzYzZkNTE4NDVkNiIsImV4cCI6MTY1MDQ2MzAzOCwiaWF0IjoxNjUwNDYxMjM4fQ.wZ5w5ZiEuSUXm3h4MO7YCPPAdvnR8fZE9yzpwXMWn8w";
@@ -51,7 +47,8 @@ describe("Auth controller", () => {
 
 			const result = await controller.generateTokenPair({
 				refreshToken: sessionStub().refresh_token,
-				tokenData: createSessionDtoStubSecondary(),
+				device: sessionStubSecondary().device,
+				ip: sessionStubSecondary().ip,
 			});
 
 			expect(result).toEqual({
