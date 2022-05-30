@@ -33,6 +33,18 @@ export class ClientsRepository {
 		return client;
 	}
 
+	public async deleteOneByCredential(credential: { name: string; value: unknown }) {
+		try {
+			await this.repository.delete({
+				[`${credential.name}`]: credential.value,
+			});
+		} catch (err) {
+			this.throwDefaultError();
+		}
+
+		return {};
+	}
+
 	public async save(entity: CreateClientDto | Client): Promise<Client> {
 		try {
 			return await this.repository.save(entity);

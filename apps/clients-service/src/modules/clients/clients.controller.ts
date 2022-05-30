@@ -4,6 +4,7 @@ import { MessagePattern, Payload } from "@nestjs/microservices";
 import { Client } from "../../entities/client.entity";
 import { ClientsService } from "./clients.service";
 import { CreateClientDto } from "./dtos/create-client.dto";
+import { DeleteClientByIdDto } from "./dtos/delete-client-by-id.dto";
 import { GetClientByEmailDto } from "./dtos/get-client-by-email.dto";
 import { GetClientByIdDto } from "./dtos/get-client-by-id.dto";
 import { UpdateClientByIdDto } from "./dtos/update-client-by-id.dto";
@@ -49,6 +50,18 @@ export class ClientsController {
 	@MessagePattern({ cmd: "get-client-by-email" })
 	public async getClientByEmail(@Payload() dto: GetClientByEmailDto) {
 		return await this.clientsService.getClientByEmail(dto.email);
+	}
+
+	/**
+	 *	Delete client by its id, would pass even if client is not found
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["id must be UUID"], error: "Bad request" }
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	@MessagePattern({ cmd: "delete-client-by-id" })
+	public async deleteClientById(@Payload() dto: DeleteClientByIdDto) {
+		return await this.clientsService.deleteClientById(dto.id);
 	}
 
 	/**

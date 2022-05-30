@@ -23,6 +23,10 @@ export class ClientsService {
 		return this.clientsRepository.getOneByCredential({ name: "email", value: email });
 	}
 
+	public async deleteClientById(id: string) {
+		return this.clientsRepository.deleteOneByCredential({ name: "id", value: id });
+	}
+
 	public async updateClientById(dto: UpdateClientByIdDto): Promise<Client> {
 		const client = await this.getClientById(dto.id);
 
