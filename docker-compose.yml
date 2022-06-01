@@ -129,6 +129,13 @@ services:
       RMQ_USER: ${RMQ_USER}
       RMQ_PASS: ${RMQ_PASS}
 
+      TYPEORM_HOST: postgres
+      TYPEORM_PORT: 5432
+
+      TYPEORM_USERNAME: ${POSTGRES_USER}
+      TYPEORM_PASSWORD: ${POSTGRES_PASS}
+      TYPEORM_DATABASE: ${POSTGRES_DB}
+
     depends_on:
       - rabbitmq
       - postgres
@@ -151,6 +158,13 @@ services:
     environment:
       RMQ_USER: ${RMQ_USER}
       RMQ_PASS: ${RMQ_PASS}
+
+      TYPEORM_HOST: postgres
+      TYPEORM_PORT: 5432
+
+      TYPEORM_USERNAME: ${POSTGRES_USER}
+      TYPEORM_PASSWORD: ${POSTGRES_PASS}
+      TYPEORM_DATABASE: ${POSTGRES_DB}
 
     depends_on:
       - rabbitmq
