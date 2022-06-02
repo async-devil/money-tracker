@@ -14,8 +14,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "typeorm": "ts-node ./scripts/typeOrmCli.ts -d ./src/database/ormconfig.ts",
-    "migration:generate": "yarn run typeorm migration:generate -n",
-    "migration:blank": "yarn run typeorm migration:create -n",
+    "migration:generate": "yarn typeorm migration:generate --dr",
     "migration:run": "yarn run typeorm migration:run"
   },
   "dependencies": {
