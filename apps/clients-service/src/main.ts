@@ -24,7 +24,11 @@ async function bootstrap() {
 		},
 	});
 
-	app.useGlobalPipes(new ValidationPipe());
+	app.useGlobalPipes(
+		new ValidationPipe({
+			whitelist: true,
+		})
+	);
 	app.useGlobalFilters(new RpcValidationFilter());
 
 	await app.listen();
