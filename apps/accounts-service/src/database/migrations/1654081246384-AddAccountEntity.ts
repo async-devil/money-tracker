@@ -19,7 +19,7 @@ export class AddAccountEntity1654081246384 implements MigrationInterface {
 				"type"                   "account_type_enum" NOT NULL, 
 				"name"                   character varying NOT NULL, 
 				"currency"               character varying NOT NULL, 
-				"balance"                numeric(12, 2) NOT NULL, 
+				"balance"                numeric(18, 8) NOT NULL, 
 				"notes"                  character varying, 
 				"icon_name"              character varying NOT NULL DEFAULT 'MoreHoriz', 
 				"icon_color"             character varying NOT NULL DEFAULT 'A6A6A6', 

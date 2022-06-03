@@ -29,7 +29,7 @@ export class Account extends BaseEntity {
 	public currency: string;
 
 	/** @example "1.35" */
-	@Column({ type: "numeric", precision: 12, scale: 2 })
+	@Column({ type: "numeric", precision: 18, scale: 8 })
 	public balance: number;
 
 	/** @example "My personal bank card" */
