@@ -72,9 +72,9 @@ export class AccountsRepository {
 		return {};
 	}
 
-	public async deleteAll(ownerId: string) {
+	public async deleteManyByProperties(properties: { [key: string]: unknown }) {
 		try {
-			await this.accountsRepository.delete({ owner: ownerId });
+			await this.accountsRepository.delete(properties);
 		} catch (err) {
 			this.throwDefaultError();
 		}

@@ -43,6 +43,6 @@ export class AccountsService {
 	}
 
 	public async deleteAllAccountsByOwnerId(dto: DeleteAllAccountsByOwnerIdDto) {
-		return await this.accountsRepository.getManyByProperties({ ...dto });
+		return await this.accountsRepository.deleteManyByProperties({ ...dto });
 	}
 }
