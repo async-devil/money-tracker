@@ -3,6 +3,7 @@ import { Body, Controller, Delete, Get, Put, Req, UseGuards } from "@nestjs/comm
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
+import { AccountsService } from "src/modules/accounts-service/accounts-service.service";
 import { AuthService } from "src/modules/auth-service/auth-service.service";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
 import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
@@ -14,6 +15,7 @@ import { ClientData } from "../types/request/update-client-by-id.dto";
 export class ClientsRouteController {
 	constructor(
 		private readonly clientsService: ClientsService,
+		private readonly accountsService: AccountsService,
 		private readonly authService: AuthService
 	) {}
 
@@ -54,7 +56,7 @@ export class ClientsRouteController {
 		});
 	}
 
-	@ApiOperation({ summary: "Delete current client by access token" })
+	@ApiOperation({ summary: "Delete current client by access token and all related entities" })
 	@ApiResponse({
 		status: 200,
 	})
@@ -66,7 +68,9 @@ export class ClientsRouteController {
 	@UseGuards(AccessTokenGuard)
 	@Delete("/me")
 	public async deleteCurrentClient(@Req() request: IRequest) {
-		await this.clientsService.deleteClientById(request.clientId);
-		return await this.authService.deleteAllSessionsByClientId({ clientId: request.clientId });
+		await this.authService.deleteAllSessionsByClientId({ clientId: request.clientId });
+		await this.accountsService.deleteAllAccountsByOwnerId({ owner: request.clientId });
+
+		return await this.clientsService.deleteClientById(request.clientId);
 	}
 }

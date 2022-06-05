@@ -1,6 +1,7 @@
 import { forwardRef, Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 
+import { AccountsServiceModule } from "src/modules/accounts-service/accounts-service.module";
 import { AuthServiceModule } from "src/modules/auth-service/auth-service.module";
 
 import { RequestService } from "../../common/request.service";
@@ -18,6 +19,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 @Module({
 	imports: [
 		forwardRef(() => AuthServiceModule),
+		forwardRef(() => AccountsServiceModule),
 		ClientsModule.register([
 			{
 				name: "CLIENTS_SERVICE",
