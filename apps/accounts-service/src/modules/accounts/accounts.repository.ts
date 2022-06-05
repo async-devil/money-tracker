@@ -58,6 +58,10 @@ export class AccountsRepository {
 				throw new BadRequestException("Duplicate account");
 			}
 
+			if (error.message.includes("numeric field overflow")) {
+				throw new BadRequestException("Invalid balance value");
+			}
+
 			this.throwDefaultError();
 		}
 	}
