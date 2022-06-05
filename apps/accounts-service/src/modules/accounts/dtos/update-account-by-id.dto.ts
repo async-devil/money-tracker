@@ -27,12 +27,12 @@ export class UpdateProperties {
 	@Length(1, 50)
 	readonly name?: string;
 
-	/** ISO 4217 currency code. Could be any 3 uppercase characters
+	/** ISO 4217 currency code. Could be any 3-4 uppercase characters
 	 * @example "USD"
 	 */
 	@IsOptional()
 	@IsUppercase()
-	@Length(3, 3)
+	@Length(3, 4)
 	readonly currency?: string;
 
 	/** Balance of the account. 18 numbers in total, 8 numbers after dot

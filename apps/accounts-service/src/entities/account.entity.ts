@@ -24,10 +24,10 @@ export class Account extends BaseEntity {
 	@Column({ type: "varchar", length: 50 })
 	public name: string;
 
-	/** ISO 4217 currency code. Could be any 3 uppercase characters
+	/** ISO 4217 currency code. Could be any 3-4 uppercase characters
 	 * @example "USD"
 	 */
-	@Column({ type: "varchar", length: 3 })
+	@Column({ type: "varchar", length: 4 })
 	public currency: string;
 
 	/** Balance of the account. 18 numbers in total, 8 numbers after dot

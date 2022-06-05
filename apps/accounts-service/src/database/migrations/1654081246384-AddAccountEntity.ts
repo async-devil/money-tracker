@@ -6,7 +6,7 @@ export class AddAccountEntity1654081246384 implements MigrationInterface {
 	public async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(
 			`
-			CREATE TYPE "account_type_enum" AS ENUM (
+			CREATE TYPE account_type_enum AS ENUM (
 				'regular',
 				'savings',
 				'debt'
@@ -14,12 +14,12 @@ export class AddAccountEntity1654081246384 implements MigrationInterface {
 		);
 		await queryRunner.query(
 			`
-			CREATE TABLE "account" (
+			CREATE TABLE account (
 				"id"                     uuid NOT NULL DEFAULT uuid_generate_v4(),
 				"owner"                  uuid NOT NULL,
-				"type"                   "account_type_enum" NOT NULL,
+				"type"                   account_type_enum NOT NULL,
 				"name"                   character varying(50) NOT NULL, 
-				"currency"               character varying(3) NOT NULL, 
+				"currency"               character varying(4) NOT NULL, 
 				"balance"                numeric(18, 8) NOT NULL DEFAULT '0', 
 				"notes"                  character varying(200), 
 				"icon_name"              character varying(50) NOT NULL DEFAULT 'MoreHoriz', 
@@ -34,7 +34,7 @@ export class AddAccountEntity1654081246384 implements MigrationInterface {
 	}
 
 	public async down(queryRunner: QueryRunner): Promise<void> {
-		await queryRunner.query(`DROP TABLE "account"`);
-		await queryRunner.query(`DROP TYPE "account_type_enum"`);
+		await queryRunner.query(`DROP TABLE account`);
+		await queryRunner.query(`DROP TYPE account_type_enum`);
 	}
 }
