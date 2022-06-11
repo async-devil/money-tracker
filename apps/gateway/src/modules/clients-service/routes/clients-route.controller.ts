@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Body, Controller, Delete, Get, Put, Req, UseGuards } from "@nestjs/common";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
 import { AccountsService } from "src/modules/accounts-service/accounts-service.service";
@@ -11,6 +11,7 @@ import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
 import { ClientsService } from "../clients-service.service";
 import { ClientData } from "../types/request/update-client-by-id.dto";
 
+@ApiTags("Clients service")
 @Controller()
 export class ClientsRouteController {
 	constructor(

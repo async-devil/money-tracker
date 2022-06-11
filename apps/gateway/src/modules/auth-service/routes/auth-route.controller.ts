@@ -1,17 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable sonarjs/no-duplicate-string */
-import {
-	HttpException,
-	Post,
-	Body,
-	Controller,
-	Res,
-	Req,
-	UnauthorizedException,
-} from "@nestjs/common";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Post, Body, Controller, Res, Req, UnauthorizedException } from "@nestjs/common";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response, Request, CookieOptions } from "express";
 
+import { HttpException } from "src/common/HttpException";
 import { ClientsService } from "src/modules/clients-service/clients-service.service";
 
 import { AuthService } from "../auth-service.service";
@@ -26,6 +19,7 @@ export const COOKIE_OPTIONS = (dueTo: Date): CookieOptions => {
 	};
 };
 
+@ApiTags("Auth service")
 @Controller()
 export class AuthRouteController {
 	constructor(
