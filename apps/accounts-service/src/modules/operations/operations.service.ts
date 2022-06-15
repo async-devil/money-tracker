@@ -9,8 +9,8 @@ import { OperateAccountDto, TransactionType } from "./dtos/operate-account.dto";
 export class OperationsService {
 	constructor(private readonly accountsService: AccountsService) {}
 
-	private operateByType(balance: number, ammount: number, type: TransactionType): number {
-		const parsedBalance = parseFloat(balance.toString());
+	private operateByType(balance: string, ammount: number, type: TransactionType): number {
+		const parsedBalance = parseFloat(balance);
 
 		switch (type) {
 			case TransactionType.RECHARGE:
@@ -29,8 +29,11 @@ export class OperationsService {
 
 		Logger.log(dto, account);
 
-		const balance = this.operateByType(account.balance, dto.ammount, dto.type);
+		const balance = this.operateByType(account.balance, dto.ammount, dto.type).toFixed(8);
 
-		return await this.accountsService.updateAccountById({ id: dto.accountId, data: { balance } });
+		return await this.accountsService.updateAccountById({
+			id: dto.accountId,
+			data: { balance: parseFloat(balance) },
+		});
 	}
 }

@@ -31,11 +31,11 @@ export class Account extends BaseEntity {
 	public currency: string;
 
 	/** Balance of the account. 18 numbers in total, 8 numbers after dot
-	 * @default 0
-	 * @example 11.35065001
+	 * @default "0.00000000"
+	 * @example "11.35065001"
 	 */
 	@Column({ type: "numeric", precision: 18, scale: 8, default: 0 })
-	public balance: number;
+	public balance: string;
 
 	/** Notes about account. From 1 to 200 characters
 	 * @optional

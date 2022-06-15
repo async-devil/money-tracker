@@ -1,7 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { TestingModule, Test } from "@nestjs/testing";
 
-import { AccountsModule } from "src/modules/accounts/accounts.module";
 import { AccountsService } from "src/modules/accounts/accounts.service";
 import { TransactionType } from "src/modules/operations/dtos/operate-account.dto";
 import { OperationsService } from "src/modules/operations/operations.service";
@@ -45,7 +44,9 @@ describe("Operations service tests", () => {
 			jest.spyOn(accountsService, "getAccountById").mockResolvedValueOnce(accountStub());
 			jest
 				.spyOn(accountsService, "updateAccountById")
-				.mockResolvedValue(accountStub({ balance: accountStub().balance - 10 }));
+				.mockResolvedValue(
+					accountStub({ balance: String(parseFloat(accountStub().balance) - 10) })
+				);
 
 			const updatedAccount = await service.operateAccount({
 				accountId: accountStub().id,
@@ -53,14 +54,18 @@ describe("Operations service tests", () => {
 				type: TransactionType.WITHDRAW,
 			});
 
-			expect(updatedAccount).toEqual(accountStub({ balance: accountStub().balance - 10 }));
+			expect(updatedAccount).toEqual(
+				accountStub({ balance: String(parseFloat(accountStub().balance) - 10) })
+			);
 		});
 
 		test("should raise account balance", async () => {
 			jest.spyOn(accountsService, "getAccountById").mockResolvedValueOnce(accountStub());
 			jest
 				.spyOn(accountsService, "updateAccountById")
-				.mockResolvedValue(accountStub({ balance: accountStub().balance + 10 }));
+				.mockResolvedValue(
+					accountStub({ balance: String(parseFloat(accountStub().balance) + 10) })
+				);
 
 			const updatedAccount = await service.operateAccount({
 				accountId: accountStub().id,
@@ -68,7 +73,9 @@ describe("Operations service tests", () => {
 				type: TransactionType.RECHARGE,
 			});
 
-			expect(updatedAccount).toEqual(accountStub({ balance: accountStub().balance + 10 }));
+			expect(updatedAccount).toEqual(
+				accountStub({ balance: String(parseFloat(accountStub().balance) + 10) })
+			);
 		});
 	});
 });

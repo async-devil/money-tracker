@@ -35,15 +35,15 @@ export class Account {
 	readonly currency: string;
 
 	/** Balance of the account. 18 numbers in total, 8 numbers after dot
-	 * @default 0
-	 * @example 11.35065001
+	 * @default "0.00000000"
+	 * @example "11.35065001"
 	 */
 	@ApiProperty({
-		example: 11.35065001,
-		default: 0,
+		example: "11.35065001",
+		default: "0.00000000",
 		description: "Balance of the account. 18 numbers in total, 8 numbers after dot",
 	})
-	readonly balance: number;
+	readonly balance: string;
 
 	/** Notes about account from 1 to 200 characters
 	 * @optional
