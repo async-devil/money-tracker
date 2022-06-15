@@ -7,6 +7,7 @@ import { AuthServiceModule } from "src/modules/auth-service/auth-service.module"
 
 import { AccountsService } from "./accounts-service.service";
 import { AccountsRouteController } from "./routes/accounts-route.controller";
+import { OperationsRouteController } from "./routes/operations-route.controller";
 
 const config = new ConfigService();
 const rmqConfig = config.get<{ host: string; user: string; password: string }>("rmq");
@@ -30,7 +31,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 			},
 		]),
 	],
-	controllers: [AccountsRouteController],
+	controllers: [AccountsRouteController, OperationsRouteController],
 	providers: [AccountsService, RequestService],
 	exports: [AccountsService],
 })

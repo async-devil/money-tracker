@@ -8,6 +8,7 @@ import { DeleteAccountByIdDto } from "./types/request/delete-account-by-id.dto";
 import { DeleteAllAccountsByOwnerIdDto } from "./types/request/delete-all-accounts-by-owner-id.dto";
 import { GetAccountByIdDto } from "./types/request/get-account-by-id.dto";
 import { GetAccountsByPropertiesDto } from "./types/request/get-accounts-by-properties.dto";
+import { OperateAccountDto } from "./types/request/operate-account-dto";
 import { UpdateAccountByIdDto } from "./types/request/update-account-by-id.dto";
 import { Account } from "./types/response/account.entity";
 
@@ -110,5 +111,18 @@ export class AccountsService {
 			"delete-all-accounts-by-owner-id",
 			dto
 		);
+	}
+
+	/**
+	 *	Operate account balance by id
+	 *
+	 * 	Throws:
+	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
+	 * 	- { statusCode: 400, message: "Duplicate error", error: "Bad request" }
+	 * 	- { statusCode: 404, message: "Account not found", error: "Not found"}
+	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
+	 */
+	public async operateAccount(dto: OperateAccountDto): Promise<Account> {
+		return await this.requestService.sendRequest(this.accountsService, "operate-account", dto);
 	}
 }
