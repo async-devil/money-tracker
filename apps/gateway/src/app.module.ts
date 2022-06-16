@@ -5,6 +5,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AccountsServiceModule } from "./modules/accounts-service/accounts-service.module";
 import { AuthServiceModule } from "./modules/auth-service/auth-service.module";
+import { CategoriesServiceModule } from "./modules/categories-service/categories-service.module";
 import { ClientsServiceModule } from "./modules/clients-service/clients-service.module";
 import { TransactionsServiceModule } from "./modules/transactions-service/transactions-service.module";
 
@@ -13,6 +14,7 @@ import { TransactionsServiceModule } from "./modules/transactions-service/transa
 		AuthServiceModule,
 		ClientsServiceModule,
 		AccountsServiceModule,
+		CategoriesServiceModule,
 		TransactionsServiceModule,
 		RouterModule.register([
 			{
@@ -26,6 +28,10 @@ import { TransactionsServiceModule } from "./modules/transactions-service/transa
 			{
 				path: "accounts",
 				module: AccountsServiceModule,
+			},
+			{
+				path: "categories",
+				module: CategoriesServiceModule,
 			},
 			{
 				path: "transactions",

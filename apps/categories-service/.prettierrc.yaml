@@ -1,0 +1,24 @@
+useTabs: true
+tabWidth: 2
+
+printWidth: 100
+
+singleQuote: false
+trailingComma: es5
+semi: true
+jsxBracketSameLine: false
+
+parser: babel-ts
+
+overrides:
+  - files: "*.{yaml,yml}"
+    options:
+      parser: yaml
+
+  - files: "*.md"
+    options:
+      parser: markdown
+
+  - files: "*.json"
+    options:
+      parser: json

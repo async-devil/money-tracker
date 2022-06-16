@@ -3,6 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { AccountsService } from "./modules/accounts-service/accounts-service.service";
 import { AuthService } from "./modules/auth-service/auth-service.service";
+import { CategoriesService } from "./modules/categories-service/categories-service.service";
 import { ClientsService } from "./modules/clients-service/clients-service.service";
 import { TransactionsService } from "./modules/transactions-service/transactions-service.service";
 
@@ -23,6 +24,7 @@ export class AppService {
 		private readonly authService: AuthService,
 		private readonly clientsService: ClientsService,
 		private readonly accountsService: AccountsService,
+		private readonly categoriesService: CategoriesService,
 		private readonly transactionsService: TransactionsService
 	) {}
 
@@ -31,6 +33,7 @@ export class AppService {
 			this.authService,
 			this.clientsService,
 			this.accountsService,
+			this.categoriesService,
 			this.transactionsService,
 		];
 		const results: PingResult[] = [];

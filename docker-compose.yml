@@ -145,6 +145,35 @@ services:
 
     restart: unless-stopped
 
+  categories-service:
+    image: categories-service
+    container_name: categories-service
+
+    build:
+      context: ./apps/categories-service
+
+    env_file:
+      - .env
+
+    environment:
+      RMQ_USER: ${RMQ_USER}
+      RMQ_PASS: ${RMQ_PASS}
+
+      TYPEORM_HOST: postgres
+      TYPEORM_PORT: 5432
+
+      TYPEORM_USERNAME: ${POSTGRES_USER}
+      TYPEORM_PASSWORD: ${POSTGRES_PASS}
+      TYPEORM_DATABASE: ${POSTGRES_DB}
+
+    depends_on:
+      - rabbitmq
+      - postgres
+    networks:
+      - rabbitmq_network
+      - postgres_network
+
+    restart: unless-stopped
   transactions-service:
     image: transactions-service
     container_name: transactions-service

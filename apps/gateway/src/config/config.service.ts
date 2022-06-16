@@ -25,6 +25,16 @@ export class ConfigService {
 				},
 			},
 
+			categoriesService: {
+				queue: process.env.CATEGORIES_SERVICE_QUEUE || "categories_queue",
+				options: {
+					durable: true,
+					arguments: {
+						"x-message-ttl": 2000,
+					},
+				},
+			},
+
 			transactionsService: {
 				queue: process.env.TRANSACTIONS_SERVICE_QUEUE || "transactions_queue",
 				options: {
