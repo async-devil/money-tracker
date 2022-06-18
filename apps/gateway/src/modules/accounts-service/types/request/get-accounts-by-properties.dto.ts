@@ -1,10 +1,26 @@
-import { OmitType, PartialType } from "@nestjs/swagger";
+import { ApiProperty, OmitType } from "@nestjs/swagger";
 
-import { Account } from "../response/account.entity";
+import { AccountType } from "../response/account.entity";
 
-export class GetAccountsByPropertiesDto extends PartialType(
-	OmitType(Account, ["last_changed_date_time", "create_date_time"])
-) {}
+export class GetAccountsByPropertiesDto {
+	/** @example "123e4567-e89b-12d3-a456-426655440000" */
+	@ApiProperty({ example: "123e4567-e89b-12d3-a456-426655440000", nullable: true })
+	readonly owner?: string;
+
+	/** @example "regular" */
+	@ApiProperty({ example: "regular", enum: AccountType, nullable: true })
+	readonly type?: AccountType;
+
+	/** ISO 4217 currency code. Could be any 3-4 uppercase characters
+	 * @example "USD"
+	 */
+	@ApiProperty({
+		example: "USD",
+		description: "ISO 4217 currency code. Could be any 3-4 uppercase characters",
+		nullable: true,
+	})
+	readonly currency?: string;
+}
 
 /** Version of get account by properties dto for controller where owner id comes from cookie */
 export class GetAccountsByPropertiesControllerDto extends OmitType(GetAccountsByPropertiesDto, [
