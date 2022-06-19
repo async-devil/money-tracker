@@ -4,7 +4,9 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 import { RequestService } from "src/common/request.service";
 import { ConfigService } from "src/config/config.service";
 
+import { AuthServiceModule } from "../auth-service/auth-service.module";
 import { CategoriesService } from "./categories-service.service";
+import { CategoriesRouteController } from "./routes/categories-route.controller";
 
 const config = new ConfigService();
 const rmqConfig = config.get<{ host: string; user: string; password: string }>("rmq");
@@ -17,6 +19,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 
 @Module({
 	imports: [
+		AuthServiceModule,
 		ClientsModule.register([
 			{
 				name: "CATEGORIES_SERVICE",
@@ -29,7 +32,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 			},
 		]),
 	],
-	controllers: [],
+	controllers: [CategoriesRouteController],
 	providers: [CategoriesService, RequestService],
 	exports: [CategoriesService],
 })
