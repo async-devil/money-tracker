@@ -1,6 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable sonarjs/no-duplicate-string */
-import { Body, Controller, Delete, Get, Put, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Put, Req, Res, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Response } from "express";
 
 import { HttpException } from "src/common/HttpException";
 import { AccountsService } from "src/modules/accounts-service/accounts-service.service";
@@ -70,11 +72,17 @@ export class ClientsRouteController {
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@UseGuards(AccessTokenGuard)
 	@Delete("/me")
-	public async deleteCurrentClient(@Req() request: IRequest) {
+	public async deleteCurrentClient(
+		@Req() request: IRequest,
+		@Res({ passthrough: true }) response: Response
+	) {
 		await this.authService.deleteAllSessionsByClientId({ clientId: request.clientId });
 		await this.accountsService.deleteAllAccountsByOwnerId({ owner: request.clientId });
 		await this.categoriesService.deleteAllCategoriesByOwnerId({ owner: request.clientId });
 
-		return await this.clientsService.deleteClientById(request.clientId);
+		await this.clientsService.deleteClientById(request.clientId);
+
+		response.cookie("refresh_token", undefined, { httpOnly: true });
+		response.cookie("access_token", undefined, { httpOnly: true });
 	}
 }
