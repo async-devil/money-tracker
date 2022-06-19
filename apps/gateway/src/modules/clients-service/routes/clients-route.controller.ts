@@ -7,6 +7,7 @@ import { AccountsService } from "src/modules/accounts-service/accounts-service.s
 import { AuthService } from "src/modules/auth-service/auth-service.service";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
 import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
+import { CategoriesService } from "src/modules/categories-service/categories-service.service";
 
 import { ClientsService } from "../clients-service.service";
 import { ClientData } from "../types/request/update-client-by-id.dto";
@@ -17,6 +18,7 @@ export class ClientsRouteController {
 	constructor(
 		private readonly clientsService: ClientsService,
 		private readonly accountsService: AccountsService,
+		private readonly categoriesService: CategoriesService,
 		private readonly authService: AuthService
 	) {}
 
@@ -71,6 +73,7 @@ export class ClientsRouteController {
 	public async deleteCurrentClient(@Req() request: IRequest) {
 		await this.authService.deleteAllSessionsByClientId({ clientId: request.clientId });
 		await this.accountsService.deleteAllAccountsByOwnerId({ owner: request.clientId });
+		await this.categoriesService.deleteAllCategoriesByOwnerId({ owner: request.clientId });
 
 		return await this.clientsService.deleteClientById(request.clientId);
 	}
