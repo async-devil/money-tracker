@@ -117,7 +117,7 @@ export class CategoriesRouteController {
 		return await this.categoriesService.updateCategoryById({ id, data: dto });
 	}
 
-	@ApiOperation({ summary: "Delete category by id" })
+	@ApiOperation({ summary: "Delete category and its sub categories by its id" })
 	@ApiResponse({ status: 200 })
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 401, type: HttpException, description: "No access token provided" })

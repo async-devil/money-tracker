@@ -39,6 +39,13 @@ export class CategoriesService {
 	}
 
 	public async deleteCategoryById(dto: DeleteCategoryByIdDto) {
+		const category = await this.getCategoryById(dto);
+
+		await this.categoriesRepository.deleteManyByProperties({
+			owner: category.owner,
+			sub: category.id,
+		});
+
 		return await this.categoriesRepository.deleteOneByProperty({ ...dto });
 	}
 

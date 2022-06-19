@@ -66,10 +66,11 @@ export class CategoriesController {
 	}
 
 	/**
-	 *	Delete category by it's id, would pass even if category not found
+	 *	Delete category and its sub categories by its id
 	 *
 	 * 	Throws:
 	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
+	 * 	- { statusCode: 404, message: "Category not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
 	@MessagePattern({ cmd: "delete-category-by-id" })
