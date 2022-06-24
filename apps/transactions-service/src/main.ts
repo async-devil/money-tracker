@@ -1,8 +1,10 @@
+import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 
 import { AppModule } from "./app.module";
 import { ConfigService } from "./config/config.service";
+import { RpcValidationFilter } from "./filters/RpcValidation.filter";
 
 async function bootstrap() {
 	const config = new ConfigService();
@@ -21,6 +23,13 @@ async function bootstrap() {
 			queueOptions: options,
 		},
 	});
+
+	app.useGlobalPipes(
+		new ValidationPipe({
+			whitelist: true,
+		})
+	);
+	app.useGlobalFilters(new RpcValidationFilter());
 
 	await app.listen();
 }
