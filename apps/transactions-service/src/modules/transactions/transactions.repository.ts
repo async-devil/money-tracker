@@ -5,9 +5,11 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Brackets, Repository } from "typeorm";
 
 import { Transaction } from "src/entities/transaction.entity";
+
+import { GetTransactionsByQueryDto } from "./dtos/get-transactions-by-query.dto";
 
 @Injectable()
 export class TransactionsRepository {
@@ -34,13 +36,38 @@ export class TransactionsRepository {
 		return transaction;
 	}
 
-	public async getManyByProperties(properties: { [key: string]: unknown }): Promise<Transaction[]> {
+	public async getManyByQuery(dto: GetTransactionsByQueryDto): Promise<Transaction[]> {
 		let transactions: Transaction[];
 
-		try {
-			transactions = await this.transactionsRepository.find({
-				where: properties,
+		const query = this.transactionsRepository.createQueryBuilder("transaction");
+
+		if (dto.filters) {
+			const queries = [];
+
+			Object.keys(dto.filters).forEach((key) => {
+				queries.push(`transaction.${key} = :${key}`);
 			});
+
+			query.andWhere(queries.join(" AND "), dto.filters);
+		}
+
+		if (dto.range) {
+			query.andWhere("transaction.date BETWEEN :dateStart AND :dateEnd", dto.range);
+		}
+
+		if (dto.query) {
+			query.andWhere(
+				new Brackets((qb) => {
+					qb.where("transaction.notes ILIKE :query1", { query1: `%${dto.query}%` }).orWhere(
+						"transaction.location ILIKE :query2",
+						{ query2: `%${dto.query}%` }
+					);
+				})
+			);
+		}
+
+		try {
+			transactions = await query.getMany();
 		} catch (err) {
 			this.throwDefaultError();
 		}
