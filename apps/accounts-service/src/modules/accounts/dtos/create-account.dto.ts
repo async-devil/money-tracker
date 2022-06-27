@@ -5,10 +5,10 @@ import {
 	IsString,
 	Length,
 	IsUppercase,
-	IsNumber,
 	IsHexadecimal,
 } from "class-validator";
 
+import { IsBalance } from "src/decorators/isBalance.decorator";
 import { AccountType } from "src/entities/account.entity";
 
 export class CreateAccountDto {
@@ -20,11 +20,11 @@ export class CreateAccountDto {
 	@IsEnum(AccountType)
 	readonly type: AccountType;
 
-	/** Account name from 1 to 50 characters
+	/** Account name
 	 * @example "Personal card"
 	 */
 	@IsString()
-	@Length(1, 50)
+	@Length(1, 255)
 	readonly name: string;
 
 	/** ISO 4217 currency code. Could be any 3-4 uppercase characters
@@ -35,28 +35,29 @@ export class CreateAccountDto {
 	readonly currency: string;
 
 	/** Balance of the account. 18 numbers in total, 8 numbers after dot
-	 * @default 0
-	 * @example 11.35065001
+	 * @default "0"
+	 * @example "11.35065001"
 	 */
 	@IsOptional()
-	@IsNumber()
-	readonly balance?: number;
+	@IsString()
+	@IsBalance()
+	readonly balance?: string;
 
-	/** Notes about account from 1 to 200 characters
+	/** Notes about account
 	 * @optional
 	 * @example "My personal bank card"
 	 */
 	@IsOptional()
 	@IsString()
-	@Length(1, 200)
+	@Length(1, 255)
 	readonly notes?: string;
 
-	/** Name of icon for frontend. From 1 to 50 characters
+	/** Name of icon for frontend
 	 * @default "MoreHoriz"
 	 */
 	@IsOptional()
 	@IsString()
-	@Length(1, 50)
+	@Length(1, 255)
 	readonly icon_name?: string;
 
 	/** Hex icon color for frontend. 6 characters without #

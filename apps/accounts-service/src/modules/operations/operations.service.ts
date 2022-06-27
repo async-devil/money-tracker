@@ -33,7 +33,7 @@ export class OperationsService {
 
 		return await this.accountsService.updateAccountById({
 			id: dto.accountId,
-			data: { balance: parseFloat(balance) },
+			data: { balance },
 		});
 	}
 }
