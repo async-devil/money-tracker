@@ -1,6 +1,4 @@
-import { Column, Entity } from "typeorm";
-
-import { BaseEntity } from "./base.entity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum AccountType {
 	REGULAR = "regular",
@@ -9,7 +7,11 @@ export enum AccountType {
 }
 
 @Entity({ name: "account" })
-export class Account extends BaseEntity {
+export class Account {
+	/** @example "123e4567-e89b-12d3-a456-426655440000"*/
+	@PrimaryGeneratedColumn("uuid")
+	public id: string;
+
 	/** @example "123e4567-e89b-12d3-a456-426655440000" */
 	@Column({ type: "uuid" })
 	public owner: string;
@@ -18,10 +20,8 @@ export class Account extends BaseEntity {
 	@Column({ type: "enum", enum: AccountType })
 	public type: AccountType;
 
-	/** Account name from 1 to 50 characters
-	 * @example "Personal card"
-	 */
-	@Column({ type: "varchar", length: 50 })
+	/** @example "Personal card" */
+	@Column({ type: "text" })
 	public name: string;
 
 	/** ISO 4217 currency code. Could be any 3-4 uppercase characters
@@ -37,22 +37,22 @@ export class Account extends BaseEntity {
 	@Column({ type: "numeric", precision: 18, scale: 8, default: 0 })
 	public balance: string;
 
-	/** Notes about account. From 1 to 200 characters
+	/** Notes about account
 	 * @optional
 	 * @example "My personal bank card"
 	 */
-	@Column({ type: "varchar", length: 200, nullable: true })
+	@Column({ type: "text", nullable: true })
 	public notes?: string;
 
-	/** Name of icon for frontend. From 1 to 50 characters
+	/** Name of icon for frontend
 	 * @default "MoreHoriz"
 	 */
-	@Column({ type: "varchar", length: 50, default: "MoreHoriz" })
+	@Column({ type: "text", default: "MoreHoriz" })
 	public icon_name: string;
 
 	/** Hex icon color for frontend. 6 characters without #
 	 * @default "A6A6A6"
 	 */
-	@Column({ type: "varchar", length: 6, default: "A6A6A6" })
+	@Column({ type: "char", length: 6, default: "A6A6A6" })
 	public icon_color: string;
 }
