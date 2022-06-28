@@ -1,6 +1,4 @@
-import { Column, Entity } from "typeorm";
-
-import { BaseEntity } from "./base.entity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum CategoryType {
 	INCOME = "income",
@@ -8,7 +6,11 @@ export enum CategoryType {
 }
 
 @Entity({ name: "category" })
-export class Category extends BaseEntity {
+export class Category {
+	/** @example "123e4567-e89b-12d3-a456-426655440000"*/
+	@PrimaryGeneratedColumn("uuid")
+	public id: string;
+
 	/** @example "123e4567-e89b-12d3-a456-426655440000" */
 	@Column({ type: "uuid" })
 	public owner: string;
@@ -17,10 +19,8 @@ export class Category extends BaseEntity {
 	@Column({ type: "enum", enum: CategoryType })
 	public type: CategoryType;
 
-	/** Category name from 1 to 50 characters
-	 * @example "Salary"
-	 */
-	@Column({ type: "varchar", length: 50 })
+	/** @example "Salary" */
+	@Column({ type: "text" })
 	public name: string;
 
 	/** Id of parent category, if not provided this category is the parent one
@@ -44,22 +44,22 @@ export class Category extends BaseEntity {
 	@Column({ type: "boolean", default: false })
 	public mandatory: boolean;
 
-	/** Notes about category from 1 to 200 characters
+	/** Notes about category
 	 * @optional
 	 * @example "Company salary"
 	 */
-	@Column({ type: "varchar", length: 200, nullable: true })
+	@Column({ type: "text", nullable: true })
 	public notes?: string;
 
-	/** Name of icon for frontend. From 1 to 50 characters
+	/** Name of icon for frontend
 	 * @default "MoreHoriz"
 	 */
-	@Column({ type: "varchar", length: 50, default: "MoreHoriz" })
+	@Column({ type: "text", default: "MoreHoriz" })
 	public icon_name: string;
 
 	/** Hex icon color for frontend. 6 characters without #
 	 * @default "A6A6A6"
 	 */
-	@Column({ type: "varchar", length: 6, default: "A6A6A6" })
+	@Column({ type: "char", length: 6, default: "A6A6A6" })
 	public icon_color: string;
 }
