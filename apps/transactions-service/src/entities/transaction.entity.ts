@@ -1,6 +1,4 @@
-import { Column, Entity } from "typeorm";
-
-import { BaseEntity } from "./base.entity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum TransactionType {
 	RECHARGE = "recharge",
@@ -9,7 +7,11 @@ export enum TransactionType {
 }
 
 @Entity({ name: "transaction" })
-export class Transaction extends BaseEntity {
+export class Transaction {
+	/** @example "123e4567-e89b-12d3-a456-426655440000"*/
+	@PrimaryGeneratedColumn("uuid")
+	public id: string;
+
 	/** @example "123e4567-e89b-12d3-a456-426655440000" */
 	@Column({ type: "uuid" })
 	public owner: string;
@@ -17,6 +19,10 @@ export class Transaction extends BaseEntity {
 	/** @example "recharge" */
 	@Column({ type: "enum", enum: TransactionType })
 	public type: TransactionType;
+
+	/** @example "2022-06-27T06:34:59.882Z" */
+	@Column({ type: "timestamp with time zone" })
+	public date: Date;
 
 	/** Category or account id which was used to create the transaction
 	 * @example "123e4567-e89b-12d3-a456-426655440000"
@@ -54,17 +60,17 @@ export class Transaction extends BaseEntity {
 	@Column({ type: "varchar", length: 4 })
 	public currency_to: string;
 
-	/** Location where transaction was made. From 1 to 100 characters
+	/** Location where transaction was made
 	 * @optional
 	 * @example "My favorite local shop"
 	 */
-	@Column({ type: "varchar", length: 100, nullable: true })
+	@Column({ type: "text", nullable: true })
 	public location?: string;
 
-	/** Notes about category from 1 to 200 characters
+	/** Notes about transaction
 	 * @optional
 	 * @example "Company salary"
 	 */
-	@Column({ type: "varchar", length: 200, nullable: true })
+	@Column({ type: "text", nullable: true })
 	public notes?: string;
 }
