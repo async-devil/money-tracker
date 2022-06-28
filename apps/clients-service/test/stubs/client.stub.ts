@@ -7,7 +7,6 @@ export const clientStub = (): Client => {
 		email: "client@example.com",
 		password: "Password5@1",
 		create_date_time: new Date(1),
-		last_changed_date_time: new Date(1),
 	};
 };
 
@@ -24,7 +23,6 @@ export const clientStubSecondary = (): Client => {
 		email: "client@test.com",
 		password: "NotPassword5@1",
 		create_date_time: new Date(1),
-		last_changed_date_time: new Date(1),
 	};
 };
 

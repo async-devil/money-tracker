@@ -13,8 +13,6 @@ export const accountStub = (properties: Partial<Account> = {}): Account => {
 			notes: "This is an account",
 			icon_name: "MoreHoriz",
 			icon_color: "A6A6A6",
-			create_date_time: new Date(dateStub),
-			last_changed_date_time: new Date(dateStub),
 		},
 		properties
 	);
@@ -31,8 +29,6 @@ export const accountStubSecondary = (properties: Partial<Account> = {}): Account
 			balance: "-353.45000000",
 			icon_name: "MoreVert",
 			icon_color: "A3A5A3",
-			create_date_time: new Date(dateStub),
-			last_changed_date_time: new Date(dateStub),
 		},
 		properties
 	);
@@ -45,7 +41,7 @@ export const createAccountStub = () => {
 			type: AccountType.REGULAR,
 			name: "Regular account",
 			currency: "USD",
-			balance: 1.35,
+			balance: "1.35",
 			notes: "This is an account",
 		},
 		{}
@@ -59,7 +55,7 @@ export const createAccountStubSecondary = () => {
 			type: AccountType.DEBT,
 			name: "Bank debt",
 			currency: "EUR",
-			balance: -353.45,
+			balance: "-353.45",
 			icon_name: "MoreVert",
 			icon_color: "A3A5A3",
 		},

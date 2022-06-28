@@ -19,11 +19,11 @@ export class CreateCategoryDto {
 	@IsEnum(CategoryType)
 	readonly type: CategoryType;
 
-	/** Category name from 1 to 50 characters
+	/** Category name
 	 * @example "Salary"
 	 */
 	@IsString()
-	@Length(1, 50)
+	@Length(1, 255)
 	readonly name: string;
 
 	/** Id of parent category, if not provided this category is the parent one
@@ -50,21 +50,21 @@ export class CreateCategoryDto {
 	@IsBoolean()
 	readonly mandatory?: boolean;
 
-	/** Notes about category from 1 to 200 characters
+	/** Notes about category
 	 * @optional
 	 * @example "Company salary"
 	 */
 	@IsOptional()
 	@IsString()
-	@Length(1, 200)
+	@Length(1, 255)
 	readonly notes?: string;
 
-	/** Name of icon for frontend. From 1 to 50 characters
+	/** Name of icon for frontend
 	 * @default "MoreHoriz"
 	 */
 	@IsOptional()
 	@IsString()
-	@Length(1, 50)
+	@Length(1, 255)
 	readonly icon_name?: string;
 
 	/** Hex icon color for frontend. 6 characters without #

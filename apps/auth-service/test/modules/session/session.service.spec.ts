@@ -111,7 +111,7 @@ describe("Session service", () => {
 
 	describe("checkIfTokenIsNotExpired method tests", () => {
 		test("should confirm that token is not expired", () => {
-			jest.useFakeTimers().setSystemTime(sessionStub().create_date_time);
+			jest.useFakeTimers().setSystemTime(sessionStub().valid_until.getTime() - 1000);
 
 			expect(service.checkIfTokenIsNotExpired(sessionStub())).toBe(true);
 		});

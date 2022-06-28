@@ -12,8 +12,6 @@ export const sessionStub = (properties: Partial<Session> = {}): Session => {
 			valid_until: new Date(dateStub + 1000),
 			ip: "57.37.103.24",
 			device: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0)",
-			create_date_time: new Date(dateStub),
-			last_changed_date_time: new Date(dateStub),
 		},
 		properties
 	);
@@ -28,8 +26,6 @@ export const sessionStubSecondary = (properties: Partial<Session> = {}): Session
 			valid_until: new Date(dateStub + 1000),
 			ip: "157.37.13.2",
 			device: "Chrome/5.0 (Windows NT 10.0; Win64; x64; rv:99.0)",
-			create_date_time: new Date(dateStub),
-			last_changed_date_time: new Date(dateStub),
 		},
 		properties
 	);

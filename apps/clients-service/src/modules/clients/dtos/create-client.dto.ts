@@ -8,9 +8,17 @@ export class CreateClientDto {
 	@IsEmail()
 	readonly email: string;
 
-	/** @example "Password5@1" */
+	/**
+	 * Password properties:
+	 * - At least one capital letter
+	 * - At least one number
+	 * - At least one special character like [!@#$&*.,?%^]
+	 * - Minimum 6 characters
+	 *
+	 * @example "Password5@1"
+	 */
 	@IsString()
-	@Length(6, 20)
+	@Length(6, 255)
 	@IsPassword()
 	readonly password: string;
 }
