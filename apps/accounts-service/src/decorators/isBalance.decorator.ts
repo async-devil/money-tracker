@@ -7,9 +7,9 @@ import {
 
 /** Is balance amount validator.
  * 18 numbers in total, 8 numbers after dot
-  @example ["1234567890.12345678", "12.34", "1"]
+  @example ["1234567890.12345678", "12.34", "1", "-1"]
  */
-export const balanceRegEx = new RegExp(/^\d{1,10}(\.\d{0,8})?$/);
+export const balanceRegEx = new RegExp(/^-?\d{1,10}(\.\d{0,8})?$/);
 
 @ValidatorConstraint({ name: "IsBalance", async: false })
 export class MatchConstraint implements ValidatorConstraintInterface {
@@ -24,7 +24,7 @@ export class MatchConstraint implements ValidatorConstraintInterface {
 
 /** Is balance amount validator.
  * 18 numbers in total, 8 numbers after dot
-  @example ["1234567890.12345678", "12.34", "1"]
+  @example ["1234567890.12345678", "12.34", "1", "-1"]
  */
 export function IsBalance(validationOptions?: ValidationOptions) {
 	return (object: unknown, propertyName: string) => {
