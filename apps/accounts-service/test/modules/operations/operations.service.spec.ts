@@ -50,7 +50,7 @@ describe("Operations service tests", () => {
 
 			const updatedAccount = await service.operateAccount({
 				accountId: accountStub().id,
-				ammount: 10,
+				amount: "10",
 				type: TransactionType.WITHDRAW,
 			});
 
@@ -69,7 +69,7 @@ describe("Operations service tests", () => {
 
 			const updatedAccount = await service.operateAccount({
 				accountId: accountStub().id,
-				ammount: 10,
+				amount: "10",
 				type: TransactionType.RECHARGE,
 			});
 

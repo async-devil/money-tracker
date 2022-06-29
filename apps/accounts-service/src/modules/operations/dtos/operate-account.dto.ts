@@ -1,4 +1,6 @@
-import { IsEnum, IsNumber, IsUUID } from "class-validator";
+import { IsEnum, IsString, IsUUID } from "class-validator";
+
+import { IsBalance } from "src/decorators/isBalance.decorator";
 
 export enum TransactionType {
 	RECHARGE = "recharge",
@@ -11,10 +13,11 @@ export class OperateAccountDto {
 	readonly accountId: string;
 
 	/** 8 numbers in total, 8 numbers after dot
-	 * @example 11.35065001
+	 * @example "11.35065001"
 	 */
-	@IsNumber()
-	readonly ammount: number;
+	@IsString()
+	@IsBalance()
+	readonly amount: string;
 
 	@IsEnum(TransactionType)
 	readonly type: TransactionType;
