@@ -1,5 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	Delete,
@@ -8,10 +9,11 @@ import {
 	Param,
 	Post,
 	Put,
+	Query,
 	Req,
 	UseGuards,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiCookieAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
@@ -19,7 +21,10 @@ import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
 
 import { CategoriesService } from "../categories-service.service";
 import { CreateCategoryControllerDto } from "../types/request/create-category.dto";
-import { GetCategoriesByPropertiesControllerDto } from "../types/request/get-categories-by-properties.dto";
+import {
+	GetCategoriesByQueryControllerDto,
+	GetCategoriesByQueryTypeDto,
+} from "../types/request/get-categories-by-properties.dto";
 import { UpdateProperties } from "../types/request/update-category-by-id.dto";
 import { Category } from "../types/response/category.entity";
 
@@ -39,6 +44,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Post("/")
 	public async createCategory(
@@ -59,6 +65,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Category not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/:id")
 	public async getCategoryById(
@@ -82,13 +89,29 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiExtraModels(GetCategoriesByQueryControllerDto)
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/")
-	public async getCategoriesByProperties(
+	public async getCategoriesByQuery(
 		@Req() req: IRequest,
-		@Body() dto: GetCategoriesByPropertiesControllerDto
+		@Query() dto: GetCategoriesByQueryControllerDto
 	): Promise<Category[]> {
-		return await this.categoriesService.getCategoriesByProperties({ owner: req.clientId, ...dto });
+		//? "e30" - "{}" in base64
+		const json = Buffer.from(dto.query || "e30", "base64url").toString("utf-8");
+
+		let query: GetCategoriesByQueryTypeDto;
+
+		try {
+			query = JSON.parse(json) as GetCategoriesByQueryTypeDto;
+		} catch (err) {
+			throw new BadRequestException("Invalid JSON");
+		}
+
+		return await this.categoriesService.getCategoriesByProperties({
+			owner: req.clientId,
+			...query,
+		});
 	}
 
 	@ApiOperation({ summary: "Update category by id" })
@@ -103,6 +126,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Category not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Put("/:id")
 	public async updateCategoryById(
@@ -125,6 +149,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Category not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Delete("/:id")
 	public async deleteCategoryById(@Req() request: IRequest, @Param("id") id: string) {

@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from "@nestjs/swagger";
+import { ApiExtraModels, ApiProperty, getSchemaPath, OmitType } from "@nestjs/swagger";
 
 import { CategoryType } from "../response/category.entity";
 
@@ -47,6 +47,16 @@ export class GetCategoriesByPropertiesDto {
 	readonly mandatory?: boolean;
 }
 
-export class GetCategoriesByPropertiesControllerDto extends OmitType(GetCategoriesByPropertiesDto, [
+export class GetCategoriesByQueryTypeDto extends OmitType(GetCategoriesByPropertiesDto, [
 	"owner",
 ]) {}
+
+@ApiExtraModels(GetCategoriesByQueryTypeDto)
+export class GetCategoriesByQueryControllerDto {
+	@ApiProperty({
+		description: "Base64url encoded json",
+		example: "eyJ0eXBlIjogImluY29tZSJ9",
+		oneOf: [{ type: "string" }, { $ref: getSchemaPath(GetCategoriesByQueryTypeDto) }],
+	})
+	readonly query: string;
+}

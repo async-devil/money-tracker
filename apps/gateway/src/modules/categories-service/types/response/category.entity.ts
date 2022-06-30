@@ -18,10 +18,10 @@ export class Category {
 	@ApiProperty({ example: "income", enum: CategoryType })
 	readonly type: CategoryType;
 
-	/** Category name from 1 to 50 characters
+	/** Category name
 	 * @example "Salary"
 	 */
-	@ApiProperty({ example: "Salary", description: "Category name from 1 to 50 characters" })
+	@ApiProperty({ example: "Salary", description: "Category name" })
 	readonly name: string;
 
 	/** Id of parent category, if not provided this category is the parent one
@@ -59,24 +59,24 @@ export class Category {
 	})
 	readonly mandatory: boolean;
 
-	/** Notes about category from 1 to 200 characters
+	/** Notes about category
 	 * @optional
 	 * @example "Company salary"
 	 */
 	@ApiProperty({
 		example: "Company salary",
 		nullable: true,
-		description: "Notes about category from 1 to 200 characters",
+		description: "Notes about category",
 	})
 	readonly notes?: string;
 
-	/** Name of icon for frontend. From 1 to 50 characters
+	/** Name of icon for frontend
 	 * @default "MoreHoriz"
 	 */
 	@ApiProperty({
 		example: "MoreHoriz",
 		default: "MoreHoriz",
-		description: "Name of icon for frontend. From 1 to 50 characters",
+		description: "Name of icon for frontend",
 	})
 	readonly icon_name: string;
 
@@ -89,12 +89,4 @@ export class Category {
 		description: "Hex icon color for frontend. 6 characters without #",
 	})
 	readonly icon_color: string;
-
-	/** @example "2016-06-22 19:10:25-07" */
-	@ApiProperty({ example: "2016-06-22 19:10:25-07" })
-	readonly create_date_time: Date;
-
-	/** @example "2016-06-22 19:10:25-07" */
-	@ApiProperty({ example: "2016-06-22 19:10:25-07" })
-	readonly last_changed_date_time: Date;
 }
