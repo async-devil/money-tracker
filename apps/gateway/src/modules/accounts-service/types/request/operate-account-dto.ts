@@ -11,13 +11,13 @@ export class OperateAccountDto {
 	readonly accountId: string;
 
 	/** 8 numbers in total, 8 numbers after dot
-	 * @example 11.35065001
+	 * @example "11.35065001"
 	 */
 	@ApiProperty({
-		example: 11.35065001,
+		example: "11.35065001",
 		description: "18 numbers in total, 8 numbers after dot",
 	})
-	readonly ammount: number;
+	readonly amount: string;
 
 	@ApiProperty({ example: "withdraw", enum: TransactionType })
 	readonly type: TransactionType;

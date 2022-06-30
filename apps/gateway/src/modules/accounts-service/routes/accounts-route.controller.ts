@@ -1,5 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	Delete,
@@ -12,7 +13,7 @@ import {
 	Req,
 	UseGuards,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiCookieAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
@@ -20,7 +21,10 @@ import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
 
 import { AccountsService } from "../accounts-service.service";
 import { CreateAccountControllerDto } from "../types/request/create-account.dto";
-import { GetAccountsByPropertiesControllerDto } from "../types/request/get-accounts-by-properties.dto";
+import {
+	GetAccountsByPropertiesTypeDto,
+	GetAccountsByQuery,
+} from "../types/request/get-accounts-by-properties.dto";
 import { UpdateProperties } from "../types/request/update-account-by-id.dto";
 import { Account } from "../types/response/account.entity";
 
@@ -40,6 +44,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Account not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/:id")
 	public async getAccountById(@Req() request: IRequest, @Param("id") id: string): Promise<Account> {
@@ -60,13 +65,26 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiExtraModels(GetAccountsByQuery)
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/")
-	public async getAccountsByProperties(
+	public async getAccountsByQuery(
 		@Req() req: IRequest,
-		@Query() dto: GetAccountsByPropertiesControllerDto
+		@Query() dto: GetAccountsByQuery
 	): Promise<Account[]> {
-		return await this.accountsService.getAccountsByProperties({ owner: req.clientId, ...dto });
+		//? "e30" - "{}" in base64
+		const json = Buffer.from(dto.query || "e30", "base64url").toString("utf-8");
+
+		let query: GetAccountsByPropertiesTypeDto;
+
+		try {
+			query = JSON.parse(json) as GetAccountsByPropertiesTypeDto;
+		} catch (err) {
+			throw new BadRequestException("Invalid JSON");
+		}
+
+		return await this.accountsService.getAccountsByProperties({ owner: req.clientId, ...query });
 	}
 
 	@ApiOperation({ summary: "Create account using current client id" })
@@ -80,6 +98,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Post("/")
 	public async createAccount(
@@ -97,6 +116,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Account not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Delete("/:id")
 	public async deleteAccountById(@Req() request: IRequest, @Param("id") id: string) {
@@ -116,6 +136,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Account not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Put("/:id")
 	public async updateAccountById(

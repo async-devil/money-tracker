@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from "@nestjs/swagger";
+import { ApiExtraModels, ApiProperty, getSchemaPath, OmitType } from "@nestjs/swagger";
 
 import { AccountType } from "../response/account.entity";
 
@@ -23,6 +23,16 @@ export class GetAccountsByPropertiesDto {
 }
 
 /** Version of get account by properties dto for controller where owner id comes from cookie */
-export class GetAccountsByPropertiesControllerDto extends OmitType(GetAccountsByPropertiesDto, [
+export class GetAccountsByPropertiesTypeDto extends OmitType(GetAccountsByPropertiesDto, [
 	"owner",
 ]) {}
+
+@ApiExtraModels(GetAccountsByPropertiesTypeDto)
+export class GetAccountsByQuery {
+	@ApiProperty({
+		description: "Base64url encoded json",
+		example: "eyJ0eXBlIjogInJlZ3VsYXIifQ",
+		oneOf: [{ type: "string" }, { $ref: getSchemaPath(GetAccountsByPropertiesTypeDto) }],
+	})
+	public query: string;
+}

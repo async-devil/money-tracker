@@ -1,5 +1,5 @@
 import { Body, Controller, NotFoundException, Param, Post, Req, UseGuards } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiCookieAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
@@ -26,6 +26,7 @@ export class OperationsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Account not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Post("/operate/:id")
 	public async operateAccount(
@@ -39,7 +40,7 @@ export class OperationsRouteController {
 
 		return await this.accountsService.operateAccount({
 			accountId: id,
-			ammount: dto.ammount,
+			amount: dto.amount,
 			type: dto.type,
 		});
 	}

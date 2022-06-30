@@ -11,10 +11,10 @@ export class CreateAccountDto {
 	@ApiProperty({ example: "regular", enum: AccountType })
 	readonly type: AccountType;
 
-	/** Account name from 1 to 50 characters
+	/** Account name
 	 * @example "Personal card"
 	 */
-	@ApiProperty({ example: "Personal card", description: "Account name from 1 to 50 characters" })
+	@ApiProperty({ example: "Personal card", description: "Account name" })
 	readonly name: string;
 
 	/** ISO 4217 currency code. Could be any 3-4 uppercase characters
@@ -27,34 +27,34 @@ export class CreateAccountDto {
 	readonly currency: string;
 
 	/** Balance of the account. 18 numbers in total, 8 numbers after dot
-	 * @default 0
-	 * @example 11.35065001
+	 * @default "0"
+	 * @example "11.35065001"
 	 */
 	@ApiProperty({
-		example: 11.35065001,
-		default: 0,
+		example: "11.35065001",
+		default: "0",
 		description: "Balance of the account. 18 numbers in total, 8 numbers after dot",
 	})
-	readonly balance?: number;
+	readonly balance?: string;
 
-	/** Notes about account from 1 to 200 characters
+	/** Notes about account
 	 * @optional
 	 * @example "My personal bank card"
 	 */
 	@ApiProperty({
 		example: "My personal bank card",
 		nullable: true,
-		description: "Notes about account from 1 to 200 characters",
+		description: "Notes about account",
 	})
 	readonly notes?: string;
 
-	/** Name of icon for frontend. From 1 to 50 characters
+	/** Name of icon for frontend
 	 * @default "MoreHoriz"
 	 */
 	@ApiProperty({
 		example: "MoreHoriz",
 		default: "MoreHoriz",
-		description: "Name of icon for frontend. From 1 to 50 characters",
+		description: "Name of icon for frontend",
 	})
 	readonly icon_name?: string;
 
