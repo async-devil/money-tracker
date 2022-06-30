@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Body, Controller, Delete, Get, Put, Req, Res, UseGuards } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiCookieAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 
 import { HttpException } from "src/common/HttpException";
@@ -13,6 +13,7 @@ import { CategoriesService } from "src/modules/categories-service/categories-ser
 
 import { ClientsService } from "../clients-service.service";
 import { ClientData } from "../types/request/update-client-by-id.dto";
+import { Client } from "../types/response/client.entity";
 
 @ApiTags("Clients service")
 @Controller()
@@ -28,6 +29,7 @@ export class ClientsRouteController {
 	@ApiResponse({
 		status: 200,
 		description: "Current client",
+		type: Client,
 	})
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 401, type: HttpException, description: "No access token provided" })
@@ -35,6 +37,7 @@ export class ClientsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Client not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/me")
 	public async getCurrentClient(@Req() request: IRequest) {
@@ -45,6 +48,7 @@ export class ClientsRouteController {
 	@ApiResponse({
 		status: 201,
 		description: "Updated current client",
+		type: Client,
 	})
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 401, type: HttpException, description: "No access token provided" })
@@ -52,6 +56,7 @@ export class ClientsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Client not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Put("/me")
 	public async updateCurrentClient(@Req() request: IRequest, @Body() dto: ClientData) {
@@ -70,6 +75,7 @@ export class ClientsRouteController {
 	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@UseGuards(AccessTokenGuard)
 	@Delete("/me")
 	public async deleteCurrentClient(

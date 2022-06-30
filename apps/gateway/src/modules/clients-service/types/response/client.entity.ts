@@ -9,15 +9,22 @@ export class Client {
 	@ApiProperty({ example: "test@email.com" })
 	readonly email: string;
 
-	/** @example "Password5@1" */
-	@ApiProperty({ example: "Password5@1" })
+	/**
+	 * Password properties:
+	 * - At least one capital letter
+	 * - At least one number
+	 * - At least one special character like [!@#$&*.,?%^]
+	 * - Minimum 6 characters
+	 *
+	 * @example "Password5@1"
+	 */
+	@ApiProperty({
+		example: "Password5@1",
+		description: `Password properties: - At least one capital letter - At least one number - At least one special character like [!@#$&*.,?%^] - Minimum 6 characters`,
+	})
 	readonly password: string;
 
-	/** @example "2016-06-22 19:10:25-07" */
-	@ApiProperty({ example: "2016-06-22 19:10:25-07" })
+	/** @example "2022-06-27T06:34:59.882Z" */
+	@ApiProperty({ example: "2022-06-27T06:34:59.882Z" })
 	readonly create_date_time: Date;
-
-	/** @example "2016-06-22 19:10:25-07" */
-	@ApiProperty({ example: "2016-06-22 19:10:25-07" })
-	readonly last_changed_date_time: Date;
 }
