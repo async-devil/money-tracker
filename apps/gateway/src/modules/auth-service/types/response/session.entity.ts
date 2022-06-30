@@ -4,9 +4,9 @@ export class Session {
 	@ApiProperty({ example: "b4d72d7e7ca77bc8221f81083fc24c5ec11f3dfe446bf521" })
 	readonly refresh_token: string;
 
-	/** @example "2016-11-22 19:10:25-07" */
-	@ApiProperty({ example: "2016-11-22 19:10:25-07" })
-	valid_until: Date;
+	/** @example "2022-06-27T06:34:59.882Z" */
+	@ApiProperty({ example: "2022-06-27T06:34:59.882Z" })
+	valid_until: string;
 
 	/** @example "123e4567-e89b-12d3-a456-426655440000" */
 	@ApiProperty({ example: "123e4567-e89b-12d3-a456-426655440000" })
@@ -19,12 +19,4 @@ export class Session {
 	/** @example "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0)"*/
 	@ApiProperty({ example: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0)" })
 	readonly device: string;
-
-	/** @example "2016-06-22 19:10:25-07" */
-	@ApiProperty({ example: "2016-06-22 19:10:25-07" })
-	readonly create_date_time: Date;
-
-	/** @example "2016-06-22 19:10:25-07" */
-	@ApiProperty({ example: "2016-06-22 19:10:25-07" })
-	readonly last_changed_date_time: Date;
 }

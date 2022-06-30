@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable sonarjs/no-duplicate-string */
-import { Post, Body, Controller, Res, Req, UnauthorizedException, Ip } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Post, Body, Controller, Res, Req, UnauthorizedException } from "@nestjs/common";
+import { ApiCookieAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response, Request, CookieOptions } from "express";
 
 import { HttpException } from "src/common/HttpException";
@@ -11,7 +11,7 @@ import { AuthService } from "../auth-service.service";
 import { LoginDto } from "../types/request/login.dto";
 import { RegisterDto } from "../types/request/register.dto";
 
-export const COOKIE_OPTIONS = (dueTo: Date): CookieOptions => {
+export const COOKIE_OPTIONS = (dueTo: string): CookieOptions => {
 	return {
 		httpOnly: true,
 		expires: new Date(dueTo),
@@ -25,6 +25,23 @@ export class AuthRouteController {
 		private readonly authService: AuthService,
 		private readonly clientsService: ClientsService
 	) {}
+
+	private getRefreshToken(request: Request) {
+		const cookies = request.cookies as Record<string, string>;
+		const refreshToken = cookies["refresh_token"];
+
+		if (!refreshToken) throw new UnauthorizedException("No refresh token provided");
+
+		return refreshToken;
+	}
+
+	private getUserAgent(request: Request) {
+		return request.get("user-agent") || "Unknown device";
+	}
+
+	private getIP(request: Request) {
+		return request.ip.split(":").slice(-1)[0]; //? In case of ::ffff:*.*.*.*
+	}
 
 	@ApiOperation({ summary: "generate token pair" })
 	@ApiResponse({
@@ -41,21 +58,16 @@ export class AuthRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Session not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@Post("/refresh")
 	public async refreshTokenPair(
 		@Req() request: Request,
-		@Res({ passthrough: true }) response: Response,
-		@Ip() ip: string
+		@Res({ passthrough: true }) response: Response
 	) {
-		const cookies = request.cookies as Record<string, string>;
-		const refreshToken = cookies["refresh_token"];
-
-		if (!refreshToken) throw new UnauthorizedException("No refresh token provided");
-
 		const tokenPair = await this.authService.generateTokenPair({
-			refreshToken,
-			ip: ip.split(":").slice(-1)[0], //? In case of ::ffff:*.*.*.*
-			device: request.get("user-agent") || "Unknown device",
+			refreshToken: this.getRefreshToken(request),
+			ip: this.getIP(request),
+			device: this.getUserAgent(request),
 		});
 
 		const session = await this.authService.getSessionByToken({
@@ -85,8 +97,7 @@ export class AuthRouteController {
 	public async register(
 		@Req() request: Request,
 		@Res({ passthrough: true }) response: Response,
-		@Body() dto: RegisterDto,
-		@Ip() ip: string
+		@Body() dto: RegisterDto
 	) {
 		const client = await this.clientsService.createClient({
 			email: dto.email,
@@ -95,8 +106,8 @@ export class AuthRouteController {
 
 		const session = await this.authService.createSession({
 			clientId: client.id,
-			ip: ip.split(":").slice(-1)[0], //? In case of ::ffff:*.*.*.*
-			device: request.get("user-agent") || "Unknown device",
+			ip: this.getIP(request),
+			device: this.getUserAgent(request),
 		});
 
 		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
@@ -113,8 +124,7 @@ export class AuthRouteController {
 	public async login(
 		@Req() request: Request,
 		@Res({ passthrough: true }) response: Response,
-		@Body() dto: LoginDto,
-		@Ip() ip: string
+		@Body() dto: LoginDto
 	) {
 		await this.clientsService.validateClientCredentials({
 			email: dto.email,
@@ -125,8 +135,8 @@ export class AuthRouteController {
 
 		const session = await this.authService.createSession({
 			clientId: client.id,
-			ip: ip.split(":").slice(-1)[0], //? In case of ::ffff:*.*.*.*
-			device: request.get("user-agent") || "Unknown device",
+			ip: this.getIP(request),
+			device: this.getUserAgent(request),
 		});
 
 		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
@@ -140,14 +150,10 @@ export class AuthRouteController {
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@ApiCookieAuth()
 	@Post("/logout")
 	public async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
-		const cookies = request.cookies as Record<string, string>;
-		const refreshToken = cookies["refresh_token"];
-
-		if (!refreshToken) throw new UnauthorizedException("No refresh token provided");
-
-		await this.authService.deleteSessionByToken({ refreshToken });
+		await this.authService.deleteSessionByToken({ refreshToken: this.getRefreshToken(request) });
 
 		response.cookie("refresh_token", undefined, { httpOnly: true });
 		response.cookie("access_token", undefined, { httpOnly: true });
