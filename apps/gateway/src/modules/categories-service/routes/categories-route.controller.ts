@@ -117,7 +117,7 @@ export class CategoriesRouteController {
 	@ApiOperation({ summary: "Update category by id" })
 	@ApiResponse({
 		status: 200,
-		type: [Category],
+		type: Category,
 	})
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 400, type: HttpException, description: "Duplicate error" })
