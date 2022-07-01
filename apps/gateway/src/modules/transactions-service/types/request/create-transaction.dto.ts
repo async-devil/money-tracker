@@ -19,7 +19,7 @@ export class CreateTransactionDto {
 		example: "2022-06-25T05:47:53.590Z",
 		description: "Could be created with Date.toISOString()",
 	})
-	readonly date: Date;
+	readonly date: string;
 
 	/** Category or account id which was used to create the transaction
 	 * @example "123e4567-e89b-12d3-a456-426655440000"

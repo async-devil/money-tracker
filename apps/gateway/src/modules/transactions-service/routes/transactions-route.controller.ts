@@ -19,6 +19,7 @@ import { HttpException } from "src/common/HttpException";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
 import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
 
+import { TransactionsOperationsService } from "../services/transactions-operations.service";
 import { TransactionsService } from "../transactions-service.service";
 import { CreateTransactionControllerDto } from "../types/request/create-transaction.dto";
 import {
@@ -26,13 +27,16 @@ import {
 	GetTransactionsByQueryDto,
 	GetTransactionsByQueryTypeDto,
 } from "../types/request/get-transactions-by-query.dto";
-import { UpdateProperties } from "../types/request/update-transaction-by-id.dto";
+import { UpdateTransactionProperties } from "../types/request/update-transaction-by-id.dto";
 import { Transaction } from "../types/response/transaction.entity";
 
 @ApiTags("Transactions service")
 @Controller()
 export class TransactionsRouteController {
-	constructor(private readonly transactionsService: TransactionsService) {}
+	constructor(
+		private readonly transactionsService: TransactionsService,
+		private readonly transactionsOperationsService: TransactionsOperationsService
+	) {}
 
 	@ApiOperation({ summary: "Create transaction using current client id" })
 	@ApiResponse({
@@ -52,7 +56,10 @@ export class TransactionsRouteController {
 		@Req() request: IRequest,
 		@Body() dto: CreateTransactionControllerDto
 	) {
-		return await this.transactionsService.createTransaction({ owner: request.clientId, ...dto });
+		return await this.transactionsOperationsService.createTransaction({
+			owner: request.clientId,
+			...dto,
+		});
 	}
 
 	@ApiOperation({ summary: "Get transactions by properties or just all" })
@@ -86,9 +93,7 @@ export class TransactionsRouteController {
 
 		query.filters = Object.assign(query.filters || {}, { owner: request.clientId });
 
-		return await this.transactionsService.getTransactionsByQuery(
-			query as GetTransactionsByQueryDto
-		);
+		return await this.transactionsService.getByQuery(query as GetTransactionsByQueryDto);
 	}
 
 	@ApiOperation({ summary: "Get transaction by id" })
@@ -100,7 +105,7 @@ export class TransactionsRouteController {
 	@UseGuards(AccessTokenGuard)
 	@Get("/:id")
 	public async getTransactionById(@Req() request: IRequest, @Param("id") id: string) {
-		const transaction = await this.transactionsService.getTransactionById({ id });
+		const transaction = await this.transactionsService.getById({ id });
 
 		if (transaction.owner !== request.clientId)
 			throw new NotFoundException("Transaction not found");
@@ -126,14 +131,14 @@ export class TransactionsRouteController {
 	public async updateTransactionById(
 		@Req() request: IRequest,
 		@Param("id") id: string,
-		@Body() dto: UpdateProperties
+		@Body() dto: UpdateTransactionProperties
 	) {
-		const transaction = await this.transactionsService.getTransactionById({ id });
+		const transaction = await this.transactionsService.getById({ id });
 
 		if (transaction.owner !== request.clientId)
 			throw new NotFoundException("Transaction not found");
 
-		return await this.transactionsService.updateTransactionById({ id, data: dto });
+		return await this.transactionsOperationsService.updateTransaction({ id, data: dto });
 	}
 
 	@ApiOperation({ summary: "Delete transaction by id" })
@@ -148,11 +153,11 @@ export class TransactionsRouteController {
 	@UseGuards(AccessTokenGuard)
 	@Delete("/:id")
 	public async deleteCategoryById(@Req() request: IRequest, @Param("id") id: string) {
-		const transaction = await this.transactionsService.getTransactionById({ id });
+		const transaction = await this.transactionsService.getById({ id });
 
 		if (transaction.owner !== request.clientId)
 			throw new NotFoundException("Transaction not found");
 
-		return await this.transactionsService.deleteTransactionById({ id });
+		return await this.transactionsOperationsService.deleteTransaction({ id });
 	}
 }

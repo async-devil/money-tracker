@@ -1,6 +1,10 @@
 import { ApiProperty, OmitType } from "@nestjs/swagger";
 
-export enum TransactionType {
+import { TransactionType } from "src/modules/transactions-service/types/response/transaction.entity";
+
+export type TransactionOperationType = Exclude<TransactionType, TransactionType.TRANSFER>;
+
+enum TransactionOperationEnum {
 	RECHARGE = "recharge",
 	WITHDRAW = "withdraw",
 }
@@ -19,8 +23,8 @@ export class OperateAccountDto {
 	})
 	readonly amount: string;
 
-	@ApiProperty({ example: "withdraw", enum: TransactionType })
-	readonly type: TransactionType;
+	@ApiProperty({ example: "withdraw", type: TransactionOperationEnum })
+	readonly type: TransactionOperationType;
 }
 
 export class OperateAccountControllerDto extends OmitType(OperateAccountDto, ["accountId"]) {}
