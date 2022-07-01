@@ -32,7 +32,7 @@ export class TransactionsService {
 	 * 	- { statusCode: 400, message: "Duplicate error", error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async createTransaction(dto: CreateTransactionDto): Promise<Transaction> {
+	public async create(dto: CreateTransactionDto): Promise<Transaction> {
 		return await this.requestService.sendRequest<Transaction>(
 			this.transactionsService,
 			"create-transaction",
@@ -48,7 +48,7 @@ export class TransactionsService {
 	 * 	- { statusCode: 404, message: "Transaction not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async getTransactionById(dto: GetTransactionByIdDto): Promise<Transaction> {
+	public async getById(dto: GetTransactionByIdDto): Promise<Transaction> {
 		return await this.requestService.sendRequest<Transaction>(
 			this.transactionsService,
 			"get-transaction-by-id",
@@ -63,7 +63,7 @@ export class TransactionsService {
 	 * 	- { statusCode: 400, message: ["owner must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async getTransactionsByQuery(dto: GetTransactionsByQueryDto): Promise<Transaction[]> {
+	public async getByQuery(dto: GetTransactionsByQueryDto): Promise<Transaction[]> {
 		return await this.requestService.sendRequest<Transaction[]>(
 			this.transactionsService,
 			"get-transactions-by-query",
@@ -80,7 +80,7 @@ export class TransactionsService {
 	 * 	- { statusCode: 404, message: "Transaction not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async updateTransactionById(dto: UpdateTransactionByIdDto): Promise<Transaction> {
+	public async updateById(dto: UpdateTransactionByIdDto): Promise<Transaction> {
 		return await this.requestService.sendRequest<Transaction>(
 			this.transactionsService,
 			"update-transaction-by-id",
@@ -95,7 +95,7 @@ export class TransactionsService {
 	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async deleteTransactionById(dto: DeleteTransactionByIdDto) {
+	public async deleteById(dto: DeleteTransactionByIdDto) {
 		return await this.requestService.sendRequest(
 			this.transactionsService,
 			"delete-transaction-by-id",
@@ -110,7 +110,7 @@ export class TransactionsService {
 	 * 	- { statusCode: 400, message: ["owner must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async deleteAllTransactionsByOwnerId(dto: DeleteAllTransactionsByOwnerIdDto) {
+	public async deleteAllByOwnerId(dto: DeleteAllTransactionsByOwnerIdDto) {
 		return await this.requestService.sendRequest(
 			this.transactionsService,
 			"delete-all-transactions-by-owner-id",

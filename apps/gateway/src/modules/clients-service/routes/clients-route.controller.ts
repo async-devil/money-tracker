@@ -10,6 +10,7 @@ import { AuthService } from "src/modules/auth-service/auth-service.service";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
 import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
 import { CategoriesService } from "src/modules/categories-service/categories-service.service";
+import { TransactionsService } from "src/modules/transactions-service/transactions-service.service";
 
 import { ClientsService } from "../clients-service.service";
 import { ClientData } from "../types/request/update-client-by-id.dto";
@@ -22,6 +23,7 @@ export class ClientsRouteController {
 		private readonly clientsService: ClientsService,
 		private readonly accountsService: AccountsService,
 		private readonly categoriesService: CategoriesService,
+		private readonly transactionsService: TransactionsService,
 		private readonly authService: AuthService
 	) {}
 
@@ -41,7 +43,7 @@ export class ClientsRouteController {
 	@UseGuards(AccessTokenGuard)
 	@Get("/me")
 	public async getCurrentClient(@Req() request: IRequest) {
-		return await this.clientsService.getClientById(request.clientId);
+		return await this.clientsService.getById(request.clientId);
 	}
 
 	@ApiOperation({ summary: "Update current client by access token" })
@@ -60,7 +62,7 @@ export class ClientsRouteController {
 	@UseGuards(AccessTokenGuard)
 	@Put("/me")
 	public async updateCurrentClient(@Req() request: IRequest, @Body() dto: ClientData) {
-		return await this.clientsService.updateClientById({
+		return await this.clientsService.updateById({
 			id: request.clientId,
 			data: dto,
 		});
@@ -83,10 +85,11 @@ export class ClientsRouteController {
 		@Res({ passthrough: true }) response: Response
 	) {
 		await this.authService.deleteAllSessionsByClientId({ clientId: request.clientId });
-		await this.accountsService.deleteAllAccountsByOwnerId({ owner: request.clientId });
-		await this.categoriesService.deleteAllCategoriesByOwnerId({ owner: request.clientId });
+		await this.accountsService.deleteAllByOwnerId({ owner: request.clientId });
+		await this.categoriesService.deleteAllByOwnerId({ owner: request.clientId });
+		await this.transactionsService.deleteAllByOwnerId({ owner: request.clientId });
 
-		await this.clientsService.deleteClientById(request.clientId);
+		await this.clientsService.deleteById(request.clientId);
 
 		response.cookie("refresh_token", undefined, { httpOnly: true });
 		response.cookie("access_token", undefined, { httpOnly: true });

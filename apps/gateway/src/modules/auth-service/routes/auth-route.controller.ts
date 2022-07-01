@@ -99,7 +99,7 @@ export class AuthRouteController {
 		@Res({ passthrough: true }) response: Response,
 		@Body() dto: RegisterDto
 	) {
-		const client = await this.clientsService.createClient({
+		const client = await this.clientsService.create({
 			email: dto.email,
 			password: dto.password,
 		});
@@ -126,12 +126,12 @@ export class AuthRouteController {
 		@Res({ passthrough: true }) response: Response,
 		@Body() dto: LoginDto
 	) {
-		await this.clientsService.validateClientCredentials({
+		await this.clientsService.validateCredentials({
 			email: dto.email,
 			password: dto.password,
 		});
 
-		const client = await this.clientsService.getClientByEmail(dto.email);
+		const client = await this.clientsService.getByEmail(dto.email);
 
 		const session = await this.authService.createSession({
 			clientId: client.id,

@@ -26,7 +26,7 @@ export class ClientsService {
 	 * 	- { statusCode: 400, message: "Duplicate error", error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async createClient(dto: CreateClientDto) {
+	public async create(dto: CreateClientDto) {
 		return await this.requestService.sendRequest<Client>(this.clientsService, "create-client", dto);
 	}
 
@@ -38,7 +38,7 @@ export class ClientsService {
 	 * 	- { statusCode: 404, message: "Client not found", error: "Not found" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async getClientById(id: string) {
+	public async getById(id: string) {
 		return await this.requestService.sendRequest<Client>(this.clientsService, "get-client-by-id", {
 			id,
 		});
@@ -52,7 +52,7 @@ export class ClientsService {
 	 * 	- { statusCode: 404, message: "Client not found", error: "Not found" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async getClientByEmail(email: string) {
+	public async getByEmail(email: string) {
 		return await this.requestService.sendRequest<Client>(
 			this.clientsService,
 			"get-client-by-email",
@@ -69,7 +69,7 @@ export class ClientsService {
 	 * 	- { statusCode: 400, message: ["id must be UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async deleteClientById(id: string) {
+	public async deleteById(id: string) {
 		return await this.requestService.sendRequest<Client>(
 			this.clientsService,
 			"delete-client-by-id",
@@ -87,7 +87,7 @@ export class ClientsService {
 	 * 	- { statusCode: 404, message: "Client not found", error: "Not found" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async updateClientById(dto: UpdateClientByIdDto) {
+	public async updateById(dto: UpdateClientByIdDto) {
 		return await this.requestService.sendRequest<Client>(
 			this.clientsService,
 			"update-client-by-id",
@@ -102,7 +102,7 @@ export class ClientsService {
 	 * 	- { statusCode: 400, message: ["email must be email"], error: "Bad request" }
 	 * 	- { statusCode: 401, message: "Invalid client credentials", error: "Unauthorized" }
 	 */
-	public async validateClientCredentials(dto: ValidateClientCredentialsDto) {
+	public async validateCredentials(dto: ValidateClientCredentialsDto) {
 		return await this.requestService.sendRequest(
 			this.clientsService,
 			"validate-client-credentials",

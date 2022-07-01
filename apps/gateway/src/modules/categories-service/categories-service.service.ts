@@ -32,7 +32,7 @@ export class CategoriesService {
 	 * 	- { statusCode: 400, message: "Duplicate error", error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async createCategory(dto: CreateCategoryDto): Promise<Category> {
+	public async create(dto: CreateCategoryDto): Promise<Category> {
 		return await this.requestService.sendRequest<Category>(
 			this.categoriesService,
 			"create-category",
@@ -48,7 +48,7 @@ export class CategoriesService {
 	 * 	- { statusCode: 404, message: "Category not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async getCategoryById(dto: GetCategoryByIdDto): Promise<Category> {
+	public async getById(dto: GetCategoryByIdDto): Promise<Category> {
 		return await this.requestService.sendRequest<Category>(
 			this.categoriesService,
 			"get-category-by-id",
@@ -63,7 +63,7 @@ export class CategoriesService {
 	 * 	- { statusCode: 400, message: ["owner must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async getCategoriesByProperties(dto: GetCategoriesByPropertiesDto): Promise<Category[]> {
+	public async getByProperties(dto: GetCategoriesByPropertiesDto): Promise<Category[]> {
 		return await this.requestService.sendRequest<Category[]>(
 			this.categoriesService,
 			"get-categories-by-properties",
@@ -80,7 +80,7 @@ export class CategoriesService {
 	 * 	- { statusCode: 404, message: "Category not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async updateCategoryById(dto: UpdateCategoryByIdDto): Promise<Category> {
+	public async updateById(dto: UpdateCategoryByIdDto): Promise<Category> {
 		return await this.requestService.sendRequest<Category>(
 			this.categoriesService,
 			"update-category-by-id",
@@ -96,7 +96,7 @@ export class CategoriesService {
 	 * 	- { statusCode: 404, message: "Category not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async deleteCategoryById(dto: DeleteCategoryByIdDto) {
+	public async deleteById(dto: DeleteCategoryByIdDto) {
 		return await this.requestService.sendRequest(
 			this.categoriesService,
 			"delete-category-by-id",
@@ -111,7 +111,7 @@ export class CategoriesService {
 	 * 	- { statusCode: 400, message: ["owner must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async deleteAllCategoriesByOwnerId(dto: DeleteAllCategoriesByOwnerIdDto) {
+	public async deleteAllByOwnerId(dto: DeleteAllCategoriesByOwnerIdDto) {
 		return await this.requestService.sendRequest(
 			this.categoriesService,
 			"delete-all-categories-by-owner-id",

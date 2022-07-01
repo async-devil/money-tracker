@@ -51,7 +51,7 @@ export class CategoriesRouteController {
 		@Req() request: IRequest,
 		@Body() dto: CreateCategoryControllerDto
 	): Promise<Category> {
-		return await this.categoriesService.createCategory({ owner: request.clientId, ...dto });
+		return await this.categoriesService.create({ owner: request.clientId, ...dto });
 	}
 
 	@ApiOperation({ summary: "Get category by id" })
@@ -72,7 +72,7 @@ export class CategoriesRouteController {
 		@Req() request: IRequest,
 		@Param("id") id: string
 	): Promise<Category> {
-		const category = await this.categoriesService.getCategoryById({ id });
+		const category = await this.categoriesService.getById({ id });
 
 		if (category.owner !== request.clientId) throw new NotFoundException("Category not found");
 
@@ -108,7 +108,7 @@ export class CategoriesRouteController {
 			throw new BadRequestException("Invalid JSON");
 		}
 
-		return await this.categoriesService.getCategoriesByProperties({
+		return await this.categoriesService.getByProperties({
 			owner: req.clientId,
 			...query,
 		});
@@ -134,11 +134,11 @@ export class CategoriesRouteController {
 		@Param("id") id: string,
 		@Body() dto: UpdateProperties
 	): Promise<Category> {
-		const category = await this.categoriesService.getCategoryById({ id });
+		const category = await this.categoriesService.getById({ id });
 
 		if (category.owner !== request.clientId) throw new NotFoundException("Category not found");
 
-		return await this.categoriesService.updateCategoryById({ id, data: dto });
+		return await this.categoriesService.updateById({ id, data: dto });
 	}
 
 	@ApiOperation({ summary: "Delete category and its sub categories by its id" })
@@ -153,10 +153,10 @@ export class CategoriesRouteController {
 	@UseGuards(AccessTokenGuard)
 	@Delete("/:id")
 	public async deleteCategoryById(@Req() request: IRequest, @Param("id") id: string) {
-		const category = await this.categoriesService.getCategoryById({ id });
+		const category = await this.categoriesService.getById({ id });
 
 		if (category.owner !== request.clientId) throw new NotFoundException("Category not found");
 
-		return await this.categoriesService.deleteCategoryById({ id });
+		return await this.categoriesService.deleteById({ id });
 	}
 }

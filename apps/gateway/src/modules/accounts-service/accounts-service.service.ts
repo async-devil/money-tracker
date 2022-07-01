@@ -31,7 +31,7 @@ export class AccountsService {
 	 * 	- { statusCode: 400, message: "Duplicate error", error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async createAccount(dto: CreateAccountDto): Promise<Account> {
+	public async create(dto: CreateAccountDto): Promise<Account> {
 		return await this.requestService.sendRequest<Account>(
 			this.accountsService,
 			"create-account",
@@ -47,7 +47,7 @@ export class AccountsService {
 	 * 	- { statusCode: 404, message: "Account not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async getAccountById(dto: GetAccountByIdDto): Promise<Account> {
+	public async getById(dto: GetAccountByIdDto): Promise<Account> {
 		return await this.requestService.sendRequest<Account>(
 			this.accountsService,
 			"get-account-by-id",
@@ -62,7 +62,7 @@ export class AccountsService {
 	 * 	- { statusCode: 400, message: ["owner must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async getAccountsByProperties(dto: GetAccountsByPropertiesDto): Promise<Account[]> {
+	public async getByProperties(dto: GetAccountsByPropertiesDto): Promise<Account[]> {
 		return await this.requestService.sendRequest<Account[]>(
 			this.accountsService,
 			"get-accounts-by-properties",
@@ -79,7 +79,7 @@ export class AccountsService {
 	 * 	- { statusCode: 404, message: "Account not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async updateAccountById(dto: UpdateAccountByIdDto): Promise<Account> {
+	public async updateById(dto: UpdateAccountByIdDto): Promise<Account> {
 		return await this.requestService.sendRequest<Account>(
 			this.accountsService,
 			"update-account-by-id",
@@ -94,7 +94,7 @@ export class AccountsService {
 	 * 	- { statusCode: 400, message: ["id must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async deleteAccountById(dto: DeleteAccountByIdDto) {
+	public async deleteById(dto: DeleteAccountByIdDto) {
 		return await this.requestService.sendRequest(this.accountsService, "delete-account-by-id", dto);
 	}
 
@@ -105,7 +105,7 @@ export class AccountsService {
 	 * 	- { statusCode: 400, message: ["owner must be a UUID"], error: "Bad request" }
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async deleteAllAccountsByOwnerId(dto: DeleteAllAccountsByOwnerIdDto) {
+	public async deleteAllByOwnerId(dto: DeleteAllAccountsByOwnerIdDto) {
 		return await this.requestService.sendRequest(
 			this.accountsService,
 			"delete-all-accounts-by-owner-id",
@@ -122,7 +122,7 @@ export class AccountsService {
 	 * 	- { statusCode: 404, message: "Account not found", error: "Not found"}
 	 * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
 	 */
-	public async operateAccount(dto: OperateAccountDto): Promise<Account> {
+	public async operate(dto: OperateAccountDto): Promise<Account> {
 		return await this.requestService.sendRequest(this.accountsService, "operate-account", dto);
 	}
 }

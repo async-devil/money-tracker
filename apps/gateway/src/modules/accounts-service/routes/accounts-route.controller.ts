@@ -48,7 +48,7 @@ export class AccountsRouteController {
 	@UseGuards(AccessTokenGuard)
 	@Get("/:id")
 	public async getAccountById(@Req() request: IRequest, @Param("id") id: string): Promise<Account> {
-		const account = await this.accountsService.getAccountById({ id });
+		const account = await this.accountsService.getById({ id });
 
 		if (account.owner !== request.clientId) throw new NotFoundException("Account not found");
 
@@ -84,7 +84,7 @@ export class AccountsRouteController {
 			throw new BadRequestException("Invalid JSON");
 		}
 
-		return await this.accountsService.getAccountsByProperties({ owner: req.clientId, ...query });
+		return await this.accountsService.getByProperties({ owner: req.clientId, ...query });
 	}
 
 	@ApiOperation({ summary: "Create account using current client id" })
@@ -105,7 +105,7 @@ export class AccountsRouteController {
 		@Req() request: IRequest,
 		@Body() dto: CreateAccountControllerDto
 	): Promise<Account> {
-		return await this.accountsService.createAccount({ owner: request.clientId, ...dto });
+		return await this.accountsService.create({ owner: request.clientId, ...dto });
 	}
 
 	@ApiOperation({ summary: "Delete account by id" })
@@ -120,11 +120,11 @@ export class AccountsRouteController {
 	@UseGuards(AccessTokenGuard)
 	@Delete("/:id")
 	public async deleteAccountById(@Req() request: IRequest, @Param("id") id: string) {
-		const account = await this.accountsService.getAccountById({ id });
+		const account = await this.accountsService.getById({ id });
 
 		if (account.owner !== request.clientId) throw new NotFoundException("Account not found");
 
-		return await this.accountsService.deleteAccountById({ id });
+		return await this.accountsService.deleteById({ id });
 	}
 
 	@ApiOperation({ summary: "Update account by id" })
@@ -144,10 +144,10 @@ export class AccountsRouteController {
 		@Param("id") id: string,
 		@Body() dto: UpdateProperties
 	): Promise<Account> {
-		const account = await this.accountsService.getAccountById({ id });
+		const account = await this.accountsService.getById({ id });
 
 		if (account.owner !== request.clientId) throw new NotFoundException("Account not found");
 
-		return await this.accountsService.updateAccountById({ id, data: dto });
+		return await this.accountsService.updateById({ id, data: dto });
 	}
 }
