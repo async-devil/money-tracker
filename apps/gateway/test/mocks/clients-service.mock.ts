@@ -1,6 +1,6 @@
 export const ClientsServiceMock = {
 	ping: jest.fn(),
-	createClient: jest.fn(),
-	getClientById: jest.fn(),
-	updateClientById: jest.fn(),
+	create: jest.fn(),
+	getById: jest.fn(),
+	updateById: jest.fn(),
 };

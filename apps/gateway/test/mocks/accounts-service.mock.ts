@@ -1,9 +1,10 @@
 export const AccountsServiceMock = {
 	ping: jest.fn(),
-	createAccount: jest.fn(),
-	getAccountById: jest.fn(),
-	getAccountsByProperties: jest.fn(),
-	updateAccountById: jest.fn(),
-	deleteAccountById: jest.fn(),
-	deleteAllAccountsByOwnerId: jest.fn(),
+	create: jest.fn(),
+	getById: jest.fn(),
+	getByProperties: jest.fn(),
+	updateById: jest.fn(),
+	deleteById: jest.fn(),
+	deleteAllByOwnerId: jest.fn(),
+	operate: jest.fn(),
 };
