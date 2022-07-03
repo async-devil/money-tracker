@@ -18,6 +18,7 @@ import { ApiCookieAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } fro
 import { HttpException } from "src/common/HttpException";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
 import { IRequest } from "src/modules/auth-service/types/interfaces/IRequest";
+import { TransactionsOperationsService } from "src/modules/transactions-service/services/transactions-operations.service";
 
 import { CategoriesService } from "../categories-service.service";
 import { CreateCategoryControllerDto } from "../types/request/create-category.dto";
@@ -25,13 +26,16 @@ import {
 	GetCategoriesByQueryControllerDto,
 	GetCategoriesByQueryTypeDto,
 } from "../types/request/get-categories-by-properties.dto";
-import { UpdateProperties } from "../types/request/update-category-by-id.dto";
+import { UpdateCategoryProperties } from "../types/request/update-category-by-id.dto";
 import { Category } from "../types/response/category.entity";
 
 @ApiTags("Categories service")
 @Controller()
 export class CategoriesRouteController {
-	constructor(private readonly categoriesService: CategoriesService) {}
+	constructor(
+		private readonly categoriesService: CategoriesService,
+		private readonly transactionsOperationsService: TransactionsOperationsService
+	) {}
 
 	@ApiOperation({ summary: "Create account using current client id" })
 	@ApiResponse({
@@ -132,7 +136,7 @@ export class CategoriesRouteController {
 	public async updateCategoryById(
 		@Req() request: IRequest,
 		@Param("id") id: string,
-		@Body() dto: UpdateProperties
+		@Body() dto: UpdateCategoryProperties
 	): Promise<Category> {
 		const category = await this.categoriesService.getById({ id });
 
@@ -156,6 +160,11 @@ export class CategoriesRouteController {
 		const category = await this.categoriesService.getById({ id });
 
 		if (category.owner !== request.clientId) throw new NotFoundException("Category not found");
+
+		await this.transactionsOperationsService.deleteAllTransactionsByCategoryId({
+			owner: request.clientId,
+			categoryId: id,
+		});
 
 		return await this.categoriesService.deleteById({ id });
 	}

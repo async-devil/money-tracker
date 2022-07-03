@@ -1,13 +1,13 @@
-import { Module } from "@nestjs/common";
+import { Module, forwardRef } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 
 import { RequestService } from "src/common/request.service";
 import { ConfigService } from "src/config/config.service";
 import { AuthServiceModule } from "src/modules/auth-service/auth-service.module";
 
+import { TransactionsServiceModule } from "../transactions-service/transactions-service.module";
 import { AccountsService } from "./accounts-service.service";
 import { AccountsRouteController } from "./routes/accounts-route.controller";
-import { OperationsRouteController } from "./routes/operations-route.controller";
 
 const config = new ConfigService();
 const rmqConfig = config.get<{ host: string; user: string; password: string }>("rmq");
@@ -19,6 +19,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 @Module({
 	imports: [
 		AuthServiceModule,
+		forwardRef(() => TransactionsServiceModule),
 		ClientsModule.register([
 			{
 				name: "ACCOUNTS_SERVICE",
@@ -31,7 +32,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 			},
 		]),
 	],
-	controllers: [AccountsRouteController, OperationsRouteController],
+	controllers: [AccountsRouteController],
 	providers: [AccountsService, RequestService],
 	exports: [AccountsService],
 })

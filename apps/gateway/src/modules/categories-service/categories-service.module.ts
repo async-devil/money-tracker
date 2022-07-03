@@ -5,6 +5,7 @@ import { RequestService } from "src/common/request.service";
 import { ConfigService } from "src/config/config.service";
 
 import { AuthServiceModule } from "../auth-service/auth-service.module";
+import { TransactionsServiceModule } from "../transactions-service/transactions-service.module";
 import { CategoriesService } from "./categories-service.service";
 import { CategoriesRouteController } from "./routes/categories-route.controller";
 
@@ -20,6 +21,7 @@ const url = `amqp://${rmqConfig.user}:${rmqConfig.password}@${rmqConfig.host}:56
 @Module({
 	imports: [
 		forwardRef(() => AuthServiceModule),
+		forwardRef(() => TransactionsServiceModule),
 		ClientsModule.register([
 			{
 				name: "CATEGORIES_SERVICE",

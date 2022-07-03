@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { AccountType } from "../response/account.entity";
 
-export class UpdateProperties {
+export class UpdateAccountProperties {
 	/** @example "regular" */
 	@ApiProperty({ example: "regular", enum: AccountType, nullable: true })
 	readonly type?: AccountType;
@@ -75,6 +75,6 @@ export class UpdateAccountByIdDto {
 	@ApiProperty({ example: "123e4567-e89b-12d3-a456-426655440000" })
 	readonly id: string;
 
-	@ApiProperty({ type: UpdateProperties })
-	readonly data: UpdateProperties;
+	@ApiProperty({ type: UpdateAccountProperties })
+	readonly data: UpdateAccountProperties;
 }

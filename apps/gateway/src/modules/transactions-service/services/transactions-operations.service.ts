@@ -6,6 +6,8 @@ import { CategoriesService } from "src/modules/categories-service/categories-ser
 
 import { TransactionsService } from "../transactions-service.service";
 import { CreateTransactionDto } from "../types/request/create-transaction.dto";
+import { DeleteAllTransactionsByAccountIdDto } from "../types/request/delete-all-transactions-by-account-id.dto";
+import { DeleteAllTransactionsByCategoryIdDto } from "../types/request/delete-all-transactions-by-category-id.dto";
 import { DeleteTransactionByIdDto } from "../types/request/delete-transaction-by-id.dto";
 import { UpdateTransactionByIdDto } from "../types/request/update-transaction-by-id.dto";
 import { Transaction, TransactionType } from "../types/response/transaction.entity";
@@ -301,5 +303,35 @@ export class TransactionsOperationsService {
 		}
 
 		return await this.transactionsService.deleteById(dto);
+	}
+
+	public async deleteAllTransactionsByAccountId(dto: DeleteAllTransactionsByAccountIdDto) {
+		const accountFromTransactions = await this.transactionsService.getByQuery({
+			filters: { owner: dto.owner, from: dto.accountId },
+		});
+		const accountToTransactions = await this.transactionsService.getByQuery({
+			filters: { owner: dto.owner, to: dto.accountId },
+		});
+
+		const transactions = [...accountFromTransactions, ...accountToTransactions];
+
+		for (const transaction of transactions) {
+			await this.deleteTransaction({ id: transaction.id });
+		}
+	}
+
+	public async deleteAllTransactionsByCategoryId(dto: DeleteAllTransactionsByCategoryIdDto) {
+		const categoryFromTransactions = await this.transactionsService.getByQuery({
+			filters: { owner: dto.owner, from: dto.categoryId },
+		});
+		const categoryToTransactions = await this.transactionsService.getByQuery({
+			filters: { owner: dto.owner, to: dto.categoryId },
+		});
+
+		const transactions = [...categoryFromTransactions, ...categoryToTransactions];
+
+		for (const transaction of transactions) {
+			await this.deleteTransaction({ id: transaction.id });
+		}
 	}
 }
