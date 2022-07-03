@@ -3,9 +3,11 @@ import { TestingModule, Test } from "@nestjs/testing";
 import { AuthService } from "src/modules/auth-service/auth-service.service";
 import { CategoriesService } from "src/modules/categories-service/categories-service.service";
 import { CategoriesRouteController } from "src/modules/categories-service/routes/categories-route.controller";
+import { TransactionsOperationsService } from "src/modules/transactions-service/services/transactions-operations.service";
 
 import { AuthServiceMock } from "../../../mocks/auth-service.mock";
 import { CategoriesServiceMock } from "../../../mocks/categories-service.mock";
+import { TransactionsOperationsServiceMock } from "../../../mocks/transactions-operations.service.mock";
 
 describe("Categories route controller tests", () => {
 	let service: CategoriesService;
@@ -22,6 +24,10 @@ describe("Categories route controller tests", () => {
 				{
 					provide: AuthService,
 					useValue: AuthServiceMock,
+				},
+				{
+					provide: TransactionsOperationsService,
+					useValue: TransactionsOperationsServiceMock,
 				},
 			],
 		}).compile();

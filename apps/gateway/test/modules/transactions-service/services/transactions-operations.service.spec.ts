@@ -85,12 +85,12 @@ describe("TransactionsService service", () => {
 			});
 
 			test("withdraw type", async () => {
-				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStub());
+				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStubSecondary());
 				jest.spyOn(categoriesService, "getById").mockResolvedValueOnce(categoryStubSecondary());
 
 				jest.spyOn(transactionsService, "create").mockResolvedValueOnce(transactionStubSecondary());
 
-				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStub());
+				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStubSecondary());
 
 				const result = await service.createTransaction(createTransactionStubSecondary());
 
@@ -104,13 +104,7 @@ describe("TransactionsService service", () => {
 			});
 
 			test("transfer type", async () => {
-				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStubSecondary());
-				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStub());
-
 				jest.spyOn(transactionsService, "create").mockResolvedValueOnce(transactionStubTertiary());
-
-				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStubSecondary());
-				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStub());
 
 				const result = await service.createTransaction(createTransactionStubTertiary());
 
@@ -166,6 +160,9 @@ describe("TransactionsService service", () => {
 
 				jest.spyOn(transactionsService, "getById").mockResolvedValueOnce(transactionStub());
 
+				jest.spyOn(categoriesService, "getById").mockResolvedValueOnce(categoryStub());
+				jest.spyOn(accountsService, "getById").mockResolvedValue(accountStub());
+
 				jest
 					.spyOn(transactionsService, "updateById")
 					.mockResolvedValueOnce(transactionStub(updateProperties));
@@ -194,12 +191,14 @@ describe("TransactionsService service", () => {
 				const updateProperties: UpdateTransactionProperties = {
 					from: accountStub().id,
 					amount_to: "330",
-					currency_to: "UAH",
 				};
 
 				jest
 					.spyOn(transactionsService, "getById")
 					.mockResolvedValueOnce(transactionStubSecondary());
+
+				jest.spyOn(accountsService, "getById").mockResolvedValueOnce(accountStubSecondary());
+				jest.spyOn(categoriesService, "getById").mockResolvedValueOnce(categoryStubSecondary());
 
 				jest
 					.spyOn(transactionsService, "updateById")
@@ -338,6 +337,58 @@ describe("TransactionsService service", () => {
 					type: TransactionType.WITHDRAW,
 				});
 			});
+		});
+	});
+
+	describe("deleteAllTransactionsByAccountId method tests", () => {
+		test("should be defined", () => {
+			expect(service.deleteAllTransactionsByAccountId).toBeDefined();
+		});
+
+		test("should call deleteTransaction 3 times", async () => {
+			jest.spyOn(transactionsService, "getByQuery").mockResolvedValueOnce([transactionStub()]);
+			jest
+				.spyOn(transactionsService, "getByQuery")
+				.mockResolvedValueOnce([transactionStubSecondary(), transactionStubTertiary()]);
+
+			jest.spyOn(transactionsService, "getById").mockResolvedValue(transactionStub());
+
+			const deleteTransactionMethod = jest
+				.spyOn(service, "deleteTransaction")
+				.mockResolvedValue({});
+
+			await service.deleteAllTransactionsByAccountId({
+				owner: transactionStub().id,
+				accountId: transactionStub().from,
+			});
+
+			expect(deleteTransactionMethod).toBeCalledTimes(3);
+		});
+	});
+
+	describe("deleteAllTransactionsByCategoryId method tests", () => {
+		test("should be defined", () => {
+			expect(service.deleteAllTransactionsByCategoryId).toBeDefined();
+		});
+
+		test("should call deleteTransaction 3 times", async () => {
+			jest.spyOn(transactionsService, "getByQuery").mockResolvedValueOnce([transactionStub()]);
+			jest
+				.spyOn(transactionsService, "getByQuery")
+				.mockResolvedValueOnce([transactionStubSecondary(), transactionStubTertiary()]);
+
+			jest.spyOn(transactionsService, "getById").mockResolvedValue(transactionStub());
+
+			const deleteTransactionMethod = jest
+				.spyOn(service, "deleteTransaction")
+				.mockResolvedValue({});
+
+			await service.deleteAllTransactionsByCategoryId({
+				owner: transactionStub().id,
+				categoryId: transactionStub().from,
+			});
+
+			expect(deleteTransactionMethod).toBeCalledTimes(3);
 		});
 	});
 });
