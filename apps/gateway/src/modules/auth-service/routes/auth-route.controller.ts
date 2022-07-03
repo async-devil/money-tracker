@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Post, Body, Controller, Res, Req, UnauthorizedException } from "@nestjs/common";
-import { ApiCookieAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiCookieAuth, ApiOperation, ApiResponse, ApiTags, OmitType } from "@nestjs/swagger";
 import { Response, Request, CookieOptions } from "express";
 
 import { HttpException } from "src/common/HttpException";
@@ -10,6 +10,7 @@ import { ClientsService } from "src/modules/clients-service/clients-service.serv
 import { AuthService } from "../auth-service.service";
 import { LoginDto } from "../types/request/login.dto";
 import { RegisterDto } from "../types/request/register.dto";
+import { TokenPairDto } from "../types/response/token-pair.dto";
 
 export const COOKIE_OPTIONS = (dueTo: string): CookieOptions => {
 	return {
@@ -43,9 +44,74 @@ export class AuthRouteController {
 		return request.ip.split(":").slice(-1)[0]; //? In case of ::ffff:*.*.*.*
 	}
 
-	@ApiOperation({ summary: "generate token pair" })
+	@ApiOperation({ summary: "Register client" })
 	@ApiResponse({
 		status: 201,
+		type: OmitType(TokenPairDto, ["accessToken"]),
+		description: "Refresh token which would be stored in cookies",
+	})
+	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
+	@ApiResponse({ status: 400, type: HttpException, description: "Duplicate client" })
+	@ApiResponse({ status: 401, type: HttpException, description: "Session expired" })
+	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
+	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@Post("/register")
+	public async register(
+		@Req() request: Request,
+		@Res({ passthrough: true }) response: Response,
+		@Body() dto: RegisterDto
+	) {
+		const client = await this.clientsService.create({
+			email: dto.email,
+			password: dto.password,
+		});
+
+		const session = await this.authService.createSession({
+			clientId: client.id,
+			ip: this.getIP(request),
+			device: this.getUserAgent(request),
+		});
+
+		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
+	}
+
+	@ApiOperation({ summary: "Login client" })
+	@ApiResponse({
+		status: 201,
+		type: OmitType(TokenPairDto, ["accessToken"]),
+		description: "Refresh token which would be stored in cookies",
+	})
+	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
+	@ApiResponse({ status: 401, type: HttpException, description: "Invalid client credentials" })
+	@ApiResponse({ status: 404, type: HttpException, description: "Client not found" })
+	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
+	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
+	@Post("/login")
+	public async login(
+		@Req() request: Request,
+		@Res({ passthrough: true }) response: Response,
+		@Body() dto: LoginDto
+	) {
+		await this.clientsService.validateCredentials({
+			email: dto.email,
+			password: dto.password,
+		});
+
+		const client = await this.clientsService.getByEmail(dto.email);
+
+		const session = await this.authService.createSession({
+			clientId: client.id,
+			ip: this.getIP(request),
+			device: this.getUserAgent(request),
+		});
+
+		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
+	}
+
+	@ApiOperation({ summary: "Generate token pair" })
+	@ApiResponse({
+		status: 201,
+		type: TokenPairDto,
 		description: "Refresh and access tokens which would be stored in cookies",
 	})
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
@@ -86,63 +152,7 @@ export class AuthRouteController {
 		);
 	}
 
-	@ApiOperation({ summary: "register client" })
-	@ApiResponse({ status: 201, description: "Refresh token which would be stored in cookies" })
-	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
-	@ApiResponse({ status: 400, type: HttpException, description: "Duplicate client" })
-	@ApiResponse({ status: 401, type: HttpException, description: "Session expired" })
-	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
-	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@Post("/register")
-	public async register(
-		@Req() request: Request,
-		@Res({ passthrough: true }) response: Response,
-		@Body() dto: RegisterDto
-	) {
-		const client = await this.clientsService.create({
-			email: dto.email,
-			password: dto.password,
-		});
-
-		const session = await this.authService.createSession({
-			clientId: client.id,
-			ip: this.getIP(request),
-			device: this.getUserAgent(request),
-		});
-
-		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
-	}
-
-	@ApiOperation({ summary: "client login" })
-	@ApiResponse({ status: 201, description: "Refresh token which would be stored in cookies" })
-	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
-	@ApiResponse({ status: 401, type: HttpException, description: "Invalid client credentials" })
-	@ApiResponse({ status: 404, type: HttpException, description: "Client not found" })
-	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
-	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@Post("/login")
-	public async login(
-		@Req() request: Request,
-		@Res({ passthrough: true }) response: Response,
-		@Body() dto: LoginDto
-	) {
-		await this.clientsService.validateCredentials({
-			email: dto.email,
-			password: dto.password,
-		});
-
-		const client = await this.clientsService.getByEmail(dto.email);
-
-		const session = await this.authService.createSession({
-			clientId: client.id,
-			ip: this.getIP(request),
-			device: this.getUserAgent(request),
-		});
-
-		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
-	}
-
-	@ApiOperation({ summary: "client logout" })
+	@ApiOperation({ summary: "Logout client" })
 	@ApiResponse({
 		status: 201,
 		description: "Refresh and access token would be deleted from cookies",
