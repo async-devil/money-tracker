@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 
 import { Account } from "src/entities/account.entity";
 import { AccountsService } from "src/modules/accounts/accounts.service";
@@ -27,8 +27,6 @@ export class OperationsService {
 
 	public async operateAccount(dto: OperateAccountDto): Promise<Account> {
 		const account = await this.accountsService.getAccountById({ id: dto.accountId });
-
-		Logger.log(dto, account);
 
 		const balance = this.operateByType(account.balance, dto.amount, dto.type).toFixed(8);
 
