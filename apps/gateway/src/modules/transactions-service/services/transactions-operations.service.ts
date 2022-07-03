@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 
 import { AccountsService } from "src/modules/accounts-service/accounts-service.service";
 import { TransactionOperationType } from "src/modules/accounts-service/types/request/operate-account-dto";
+import { Account } from "src/modules/accounts-service/types/response/account.entity";
 import { CategoriesService } from "src/modules/categories-service/categories-service.service";
 
 import { TransactionsService } from "../transactions-service.service";
@@ -48,31 +49,34 @@ export class TransactionsOperationsService {
 
 	private async checkIfSenderAndRecipientExist(
 		type: TransactionType,
-		ids: { from?: string; to?: string }
+		ids: { from?: string; to?: string },
+		currencies: { currency_from?: string; currency_to?: string }
 	): Promise<void> {
 		const services = this.getSenderAndRecipientServices(type);
 
 		const { from, to } = ids;
+		const { currency_from, currency_to } = currencies;
 
-		if (from) await services[0].getById({ id: from });
-		if (to) await services[1].getById({ id: to });
-	}
+		if (from) {
+			const sender = (await services[0].getById({ id: from })) as Account;
 
-	private async checkIfCurrencyMatchAccountOne(accountId: string, currency: string): Promise<void> {
-		const account = await this.accountsService.getById({ id: accountId });
+			if (sender.type && currency_from && sender?.currency !== currency_from)
+				throw new BadRequestException("Currency does not mactch account one");
+		}
 
-		if (account.currency !== currency)
-			throw new BadRequestException("Currency does not mactch account one");
+		if (to) {
+			const recipient = (await services[1].getById({ id: to })) as Account;
+
+			if (recipient.type && currency_to && recipient?.currency !== currency_to)
+				throw new BadRequestException("Currency does not mactch account one");
+		}
 	}
 
 	private async operateAccount(
 		destination: string,
 		amount: string,
-		currency: string,
 		type: TransactionOperationType
 	) {
-		await this.checkIfCurrencyMatchAccountOne(destination, currency);
-
 		await this.accountsService.operate({
 			accountId: destination,
 			amount: amount,
@@ -96,25 +100,23 @@ export class TransactionsOperationsService {
 	 * 		"Create -> Withdraw.from -> Recharge.to"
 	 */
 	public async createTransaction(dto: CreateTransactionDto): Promise<Transaction> {
-		await this.checkIfSenderAndRecipientExist(dto.type, { from: dto.from, to: dto.to });
+		await this.checkIfSenderAndRecipientExist(
+			dto.type,
+			{ from: dto.from, to: dto.to },
+			{ currency_from: dto.currency_from, currency_to: dto.currency_to }
+		);
 
 		const transaction = await this.transactionsService.create(dto);
 
 		switch (transaction.type) {
 			case TransactionType.RECHARGE:
-				await this.operateAccount(
-					transaction.to,
-					transaction.amount_to,
-					transaction.currency_to,
-					TransactionType.RECHARGE
-				);
+				await this.operateAccount(transaction.to, transaction.amount_to, TransactionType.RECHARGE);
 				break;
 
 			case TransactionType.WITHDRAW:
 				await this.operateAccount(
 					transaction.from,
 					transaction.amount_from,
-					transaction.currency_from,
 					TransactionType.WITHDRAW
 				);
 				break;
@@ -123,16 +125,10 @@ export class TransactionsOperationsService {
 				await this.operateAccount(
 					transaction.from,
 					transaction.amount_from,
-					transaction.currency_from,
 					TransactionType.WITHDRAW
 				);
 
-				await this.operateAccount(
-					transaction.to,
-					transaction.amount_to,
-					transaction.currency_to,
-					TransactionType.RECHARGE
-				);
+				await this.operateAccount(transaction.to, transaction.amount_to, TransactionType.RECHARGE);
 				break;
 
 			default:
@@ -171,24 +167,29 @@ export class TransactionsOperationsService {
 				"to"
 			)
 		) {
-			await this.checkIfSenderAndRecipientExist(transaction.type, {
-				from: dto.data.from,
-				to: dto.data.to,
-			});
+			await this.checkIfSenderAndRecipientExist(
+				transaction.type,
+				{
+					from: dto.data.from || transaction.from,
+					to: dto.data.to || transaction.to,
+				},
+				{
+					currency_from: dto.data.currency_from || transaction.currency_from,
+					currency_to: dto.data.currency_to || transaction.currency_to,
+				}
+			);
 
 			switch (transaction.type) {
 				case TransactionType.RECHARGE:
 					await this.operateAccount(
 						transaction.to,
 						transaction.amount_to,
-						transaction.currency_to,
 						TransactionType.WITHDRAW
 					);
 
 					await this.operateAccount(
 						dto.data.to || transaction.to,
 						dto.data.amount_to || transaction.amount_to,
-						dto.data.currency_to || transaction.currency_to,
 						TransactionType.RECHARGE
 					);
 					break;
@@ -197,14 +198,12 @@ export class TransactionsOperationsService {
 					await this.operateAccount(
 						transaction.from,
 						transaction.amount_from,
-						transaction.currency_from,
 						TransactionType.RECHARGE
 					);
 
 					await this.operateAccount(
 						dto.data.from || transaction.from,
 						dto.data.amount_from || transaction.amount_from,
-						dto.data.currency_from || transaction.currency_from,
 						TransactionType.WITHDRAW
 					);
 
@@ -214,28 +213,24 @@ export class TransactionsOperationsService {
 					await this.operateAccount(
 						transaction.from,
 						transaction.amount_from,
-						transaction.currency_from,
 						TransactionType.RECHARGE
 					);
 
 					await this.operateAccount(
 						transaction.to,
 						transaction.amount_to,
-						transaction.currency_to,
 						TransactionType.WITHDRAW
 					);
 
 					await this.operateAccount(
 						dto.data.from || transaction.from,
 						dto.data.amount_from || transaction.amount_from,
-						dto.data.currency_from || transaction.currency_from,
 						TransactionType.WITHDRAW
 					);
 
 					await this.operateAccount(
 						dto.data.to || transaction.to,
 						dto.data.amount_to || transaction.amount_to,
-						dto.data.currency_to || transaction.currency_to,
 						TransactionType.RECHARGE
 					);
 					break;
@@ -268,19 +263,13 @@ export class TransactionsOperationsService {
 
 		switch (transaction.type) {
 			case TransactionType.RECHARGE:
-				await this.operateAccount(
-					transaction.to,
-					transaction.amount_to,
-					transaction.currency_to,
-					TransactionType.WITHDRAW
-				);
+				await this.operateAccount(transaction.to, transaction.amount_to, TransactionType.WITHDRAW);
 				break;
 
 			case TransactionType.WITHDRAW:
 				await this.operateAccount(
 					transaction.from,
 					transaction.amount_from,
-					transaction.currency_from,
 					TransactionType.RECHARGE
 				);
 				break;
@@ -289,16 +278,10 @@ export class TransactionsOperationsService {
 				await this.operateAccount(
 					transaction.from,
 					transaction.amount_from,
-					transaction.currency_from,
 					TransactionType.RECHARGE
 				);
 
-				await this.operateAccount(
-					transaction.to,
-					transaction.amount_to,
-					transaction.currency_to,
-					TransactionType.WITHDRAW
-				);
+				await this.operateAccount(transaction.to, transaction.amount_to, TransactionType.WITHDRAW);
 				break;
 		}
 
