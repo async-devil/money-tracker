@@ -60,14 +60,19 @@ export class TransactionsOperationsService {
 		if (from) {
 			const sender = (await services[0].getById({ id: from })) as Account;
 
-			if (sender.type && currency_from && sender?.currency !== currency_from)
+			if (sender.type && currency_from && sender?.currency && sender?.currency !== currency_from)
 				throw new BadRequestException("Currency does not mactch account one");
 		}
 
 		if (to) {
 			const recipient = (await services[1].getById({ id: to })) as Account;
 
-			if (recipient.type && currency_to && recipient?.currency !== currency_to)
+			if (
+				recipient.type &&
+				currency_to &&
+				recipient?.currency &&
+				recipient?.currency !== currency_to
+			)
 				throw new BadRequestException("Currency does not mactch account one");
 		}
 	}
