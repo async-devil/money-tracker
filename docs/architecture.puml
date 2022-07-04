@@ -1,0 +1,101 @@
+@startuml architecture
+
+interface HTTP
+HTTP --> [Frontend]
+
+component "API Gateway" {
+  interface "REST" as rest_gateway
+  [Frontend] --> rest_gateway
+
+  [Clients service] <-> [Auth service]
+  [Accounts service] --> [Auth service]
+  [Categories service] --> [Auth service]
+  [Transactions service] --> [Auth service]
+
+  [Clients service] ..> [Accounts service]
+  [Clients service] ..> [Categories service]
+  [Clients service] ..> [Transactions service]
+
+  [Accounts service] ..> [Transactions service]
+  [Transactions service] --> [Accounts service]
+
+  [Categories service] ..> [Transactions service]
+  [Transactions service] --> [Categories service]
+
+  interface "RMQ" as rmq_gateway
+  [Requeust service] --> rmq_gateway
+}
+
+rmq_gateway --> [RabbitMQ]
+
+folder "Microservices" {
+  component "Auth microservice" {
+    interface RMQ as rmq_auth
+    [RabbitMQ] -> rmq_auth : auth_queue
+
+    [Session module] --> rmq_auth
+    [Auth module] --> rmq_auth
+
+    [Auth module] --> [Session module]
+  
+    interface PSQL as psql_auth
+    [Session module] --> psql_auth
+  }
+
+  component "Clients microservice" {
+    interface RMQ as rmq_clients
+    [RabbitMQ] -> rmq_clients : clients_queue
+
+    [Clients module] --> rmq_clients
+    [Access module] --> rmq_clients
+
+    [Access module] --> [Clients module]
+  
+    interface PSQL as psql_clients
+    [Clients module] --> psql_clients
+  }
+
+  component "Accounts microservice" {
+    interface RMQ as rmq_accounts
+    [RabbitMQ] -> rmq_accounts : accounts_queue
+
+    [Accounts module] --> rmq_accounts
+    [Operations module] --> rmq_accounts
+
+    [Operations module] --> [Accounts module]
+  
+    interface PSQL as psql_accounts
+    [Accounts module] --> psql_accounts
+  }
+
+  component "Categories microservice" {
+    interface RMQ as rmq_categories
+    [RabbitMQ] -> rmq_categories : categories_queue
+
+    [Categories module] --> rmq_categories
+  
+    interface PSQL as psql_categories
+    [Categories module] --> psql_categories
+  }
+
+  component "Transactions microservice" {
+    interface RMQ as rmq_transactions
+    [RabbitMQ] -> rmq_transactions : transactions_queue
+
+    [Transactions module] --> rmq_transactions
+  
+    interface PSQL as psql_transactions
+    [Transactions module] --> psql_transactions
+  }
+}
+
+database "PostgreSQL" {
+  interface "in" as in_psql
+  psql_auth --> in_psql
+  psql_clients --> in_psql
+  psql_accounts --> in_psql
+  psql_categories --> in_psql
+  psql_transactions --> in_psql
+}
+
+@enduml
