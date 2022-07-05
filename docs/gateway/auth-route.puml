@@ -1,0 +1,88 @@
+@startuml auth_route
+
+actor Client as cl
+
+participant "Auth route" as aur
+
+box "Clients microservice" #LightBLue
+  participant "Clients module" as clm
+  participant "Access module" as acm
+end box
+
+box "Auth microservice" #YellowGreen
+  participant "Session module" as ssm
+  participant "Auth module" as aum
+end box
+
+== Registration route ==
+
+cl -> aur : /register
+aur -> clm : create client
+clm -> clm : validate data
+
+alt Duplicate client
+  clm -> aur : error
+  aur -> cl : 400
+end
+
+clm -> aur : created client
+aur -> ssm : client data
+|||
+ssm -> aur : created session
+aur -> cl : session refresh token
+
+== Login route ==
+
+cl -> aur : /login
+aur -> acm : client data
+acm -> acm : validate data
+
+alt  Client does not exist or password mismatches
+  acm -> aur : error
+  aur -> cl : 401
+end
+
+acm -> aur : no error
+aur -> clm : client email
+clm -> aur : client searched by email
+|||
+aur -> ssm : client data
+ssm -> aur : created session
+aur -> cl : session refresh token
+
+== Refresh tokens route ==
+
+cl -> aur : /refresh
+aur -> aum : refresh token
+aum -> ssm : get session by refresh token
+
+alt Session does not exist
+  ssm -> aur : error
+  aur -> cl : 404
+end
+
+ssm -> aum : session
+|||
+aum -> ssm : get session validity
+ssm -> aum : session validity state
+|||
+aum -> ssm : delete session by token
+
+alt Session is expired
+  aum -> aur : error
+  aur -> cl : 401
+end
+
+aum -> ssm : create session
+ssm -> aum : session
+aum -> aur : session refresh token and generated access token
+|||
+aur -> ssm : get new session by refresh token
+ssm -> aur : session
+|||
+aur -> ssm : get session expiration date
+ssm -> aur : expiration date
+|||
+aur -> cl : access and refresh token cookies
+
+@enduml
