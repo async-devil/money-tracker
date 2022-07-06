@@ -85,4 +85,11 @@ ssm -> aur : expiration date
 |||
 aur -> cl : access and refresh token cookies
 
+== Logout route ==
+
+cl -> aur : /logout
+aur -> ssm : delete session by refresh token
+|||
+aur -> cl : wiped access and refresh token cookies
+
 @enduml
