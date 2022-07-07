@@ -1,0 +1,107 @@
+@startuml transactions_operations_service
+actor Service as se
+
+participant "Transactions operations service" as tos
+
+box "Transactions microservice" #Aquamarine
+  participant "Transactions module" as trm
+end box
+
+box "Accounts microservice" #LightYellow
+  participant "Accounts module" as acm
+  participant "Operations module" as opm
+end box
+
+box "Categories microservice" #LightSteelBlue
+  participant "Categories module" as cam
+end box
+
+== Create transaction ==
+se -> tos : create transaction dto
+
+group Check if sender and recepient exist
+  tos -> acm : get account by id
+
+  alt Account not found
+    acm -> tos : error
+    tos --> se : 404
+  end
+
+  tos -> tos : match account currency to transaction one
+
+  alt Currencies are not matching
+    tos --> se : 400
+  end
+  |||
+  alt Recharge type
+    rnote left of tos
+      From category to account
+    end note
+
+    tos -> cam : get category by id
+
+    alt Category not found
+      cam -> tos : error
+      tos --> se : 404
+    end
+  end
+  |||
+  alt Withdraw type
+    rnote left of tos
+      From account to category
+    end note
+
+    tos -> cam : get category by id
+
+    alt Category not found
+      cam -> tos : error
+      tos --> se : 404
+    end
+  end
+  |||
+  alt Transfer type
+    rnote left of tos
+      From account to account
+    end note
+
+    tos -> acm : get account by id
+
+    alt Account not found
+      acm -> tos : error
+      tos --> se : 404
+    end
+
+    tos -> tos : match account currency to transaction one
+
+    alt Currencies are not matching
+      tos --> se : 400
+    end
+  end
+end
+
+tos -> trm : create new transaction by dto
+
+alt Transaction field is invalid
+  trm -> tos : error
+  tos --> se : 400
+end
+
+trm -> tos : new transaction
+
+group Operate account by transaction type
+  alt Recharge type
+    tos -> opm : recharge transaction to account with to amount
+  end
+  |||
+  alt Withdraw type
+    tos -> opm : withdraw transaction from account with from amount
+  end
+  |||
+  alt Transaction type
+    tos -> opm : withdraw transaction from account with from amount
+    tos -> opm : recharge transaction to account with to amount
+  end
+end
+
+tos --> se : transaction
+@enduml
