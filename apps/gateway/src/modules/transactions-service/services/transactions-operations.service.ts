@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { BadRequestException, Injectable } from "@nestjs/common";
 
 import { AccountsService } from "src/modules/accounts-service/accounts-service.service";
@@ -43,7 +44,7 @@ export class TransactionsOperationsService {
 				return [this.accountsService, this.accountsService];
 
 			default:
-				throw new BadRequestException("Unknow transaction type");
+				throw new BadRequestException("Unknown transaction type");
 		}
 	}
 
@@ -61,7 +62,7 @@ export class TransactionsOperationsService {
 			const sender = (await services[0].getById({ id: from })) as Account;
 
 			if (sender.type && currency_from && sender?.currency && sender?.currency !== currency_from)
-				throw new BadRequestException("Currency does not mactch account one");
+				throw new BadRequestException("Currency does not match account one");
 		}
 
 		if (to) {
@@ -73,7 +74,7 @@ export class TransactionsOperationsService {
 				recipient?.currency &&
 				recipient?.currency !== currency_to
 			)
-				throw new BadRequestException("Currency does not mactch account one");
+				throw new BadRequestException("Currency does not match account one");
 		}
 	}
 
