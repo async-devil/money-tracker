@@ -22,14 +22,14 @@ clm -> clm : validate data
 
 alt Duplicate client
   clm -> aur : error
-  aur -> cl : 400
+  aur --> cl : 400
 end
 
 clm -> aur : created client
 aur -> ssm : client data
 |||
 ssm -> aur : created session
-aur -> cl : session refresh token
+aur --> cl : session refresh token
 
 == Login route ==
 
@@ -39,7 +39,7 @@ acm -> acm : validate data
 
 alt  Client does not exist or password mismatches
   acm -> aur : error
-  aur -> cl : 401
+  aur --> cl : 401
 end
 
 acm -> aur : no error
@@ -48,7 +48,7 @@ clm -> aur : client searched by email
 |||
 aur -> ssm : client data
 ssm -> aur : created session
-aur -> cl : session refresh token
+aur --> cl : session refresh token
 
 == Refresh tokens route ==
 
@@ -58,7 +58,7 @@ aum -> ssm : get session by refresh token
 
 alt Session does not exist
   ssm -> aur : error
-  aur -> cl : 404
+  aur --> cl : 404
 end
 
 ssm -> aum : session
@@ -70,7 +70,7 @@ aum -> ssm : delete session by token
 
 alt Session is expired
   aum -> aur : error
-  aur -> cl : 401
+  aur --> cl : 401
 end
 
 aum -> ssm : create session
@@ -83,13 +83,13 @@ ssm -> aur : session
 aur -> ssm : get session expiration date
 ssm -> aur : expiration date
 |||
-aur -> cl : access and refresh token cookies
+aur --> cl : access and refresh token cookies
 
 == Logout route ==
 
 cl -> aur : /logout
 aur -> ssm : delete session by refresh token
 |||
-aur -> cl : wiped access and refresh token cookies
+aur --> cl : wiped access and refresh token cookies
 
 @enduml
