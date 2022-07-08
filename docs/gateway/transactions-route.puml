@@ -1,0 +1,118 @@
+@startuml transactions_route
+
+actor Client as cl
+
+participant "Transactions route" as trr
+
+participant "Access token guard" as atg
+
+participant "Transactions operations service" as tos
+
+box "Transactions microservice" #Aquamarine
+  participant "Transactions module" as trm
+end box
+
+== Create category ==
+cl -> trr : POST /transactions/
+
+trr -> atg : request
+atg -> atg : stuff
+atg -> trr : modified request
+|||
+trr -> tos : client id from request and dto
+tos -> tos : stuff
+tos -> trr : transaction
+trr --> cl : transaction
+
+== Get transactions by query ==
+cl -> trr : GET /transactions?query
+
+trr -> atg : request
+atg -> atg : stuff
+atg -> trr : modified request
+|||
+trr -> trr : parse query json
+
+alt Invalid json
+  trr --> cl : 400
+end
+
+trr -> trr : assign client id to query filters
+trr -> trm : get transactions by query
+trm -> trr : transactions
+trr --> cl : transactions
+
+== Get transaction by id ==
+cl -> trr : GET /transactions/:id
+
+trr -> atg : request
+atg -> atg : stuff
+atg -> trr : modified request
+|||
+trr -> trm : get transaction by id
+
+alt Transaction not found
+  trm -> trr : error
+  trr --> cl : 404
+end
+
+trm -> trr : transaction
+trr -> trr : match transaction owner with client id from request
+
+alt Transaction owner does not match client id from request
+  trr --> cl : 404
+end
+
+trr --> cl : transaction
+
+== Update transaction by id ==
+cl -> trr : PUT /transactions/:id
+
+trr -> atg : request
+atg -> atg : stuff
+atg -> trr : modified request
+|||
+trr -> trm : get transaction by id
+
+alt Transaction not found
+  trm -> trr : error
+  trr --> cl : 404
+end
+
+trm -> trr : transaction
+trr -> trr : match transaction owner with client id from request
+
+alt Transaction owner does not match client id from request
+  trr --> cl : 404
+end
+
+trr -> tos : update transaction by id
+tos -> tos : stuff
+tos -> trr : updated transaction
+trr --> cl : updated transaction
+
+== Delete transaction by id ==
+cl -> trr : DELETE /transactions/:id
+
+trr -> atg : request
+atg -> atg : stuff
+atg -> trr : modified request
+|||
+trr -> trm : get transaction by id
+
+alt Transaction not found
+  trm -> trr : error
+  trr --> cl : 404
+end
+
+trm -> trr : transaction
+trr -> trr : match transaction owner with client id from request
+
+alt Transaction owner does not match client id from request
+  trr --> cl : 404
+end
+
+trr -> tos : delete transaction by id
+tos -> tos : stuff
+trr --> cl : nothing
+@enduml
