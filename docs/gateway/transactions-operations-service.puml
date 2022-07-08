@@ -104,4 +104,105 @@ group Operate account by transaction type
 end
 
 tos --> se : transaction
+
+== Update transaction ==
+se -> tos : update transaction by id dto
+tos -> trm : get transaction by id
+
+alt Transaction not found
+  trm -> tos : error
+  tos --> se : 404
+end
+
+alt Dto has at least one of the following properties
+  rnote left of tos
+    amount_from/to
+    currency_from/to
+    from/to
+  endnote
+
+  tos -> tos : See "Check if sender and recepient exist" group
+
+  group Operate account by transaction type
+    alt Recharge type
+      tos -> opm : withdraw transaction to account with to amount
+      tos -> opm : recharge transaction dto.to account with dto.to amount
+    end
+
+    alt Withdraw type
+      tos -> opm : recharge transaction from account with from amount
+      tos -> opm : withdraw transaction dto.from account with dto.from amount
+    end
+
+    alt Transfer type
+      tos -> opm : recharge transaction from account with from amount
+      tos -> opm : withdraw transaction to account with to amount
+      |||
+      tos -> opm : withdraw transaction dto.from account with dto.from amount
+      tos -> opm : recharge transaction dto.to account with dto.to amount
+    end
+  end
+end
+
+tos -> trm : update transaction by id
+trm -> trm : get transaction by id
+trm -> trm : assign new values and save
+trm -> tos : transaction
+tos --> se : transaction
+
+== Delete transaction ==
+se -> tos : delete transaction by id dto
+tos -> trm : get transaction by id
+
+alt Transaction not found
+  trm -> tos : error
+  tos --> se : 404
+end
+
+group Operate account by transaction type
+  alt Recharge type
+    tos -> opm : withdraw transaction to account with to amount
+  end
+
+  alt Withdraw type 
+    tos -> opm : recharge transaction from account with from amount
+  end
+
+  alt Transfer type
+    tos -> opm : recharge transaction from account with from amount
+    tos -> opm : withdraw transaction to account with to amount
+  end
+end
+
+tos -> trm : delete transaction by id
+tos --> se : nothing
+
+== Delete all transactions by account id ==
+se -> tos : delete all transactions by account id dto
+tos -> trm : get all transactions where from id == account id
+trm -> tos : transactions list
+|||
+tos -> trm : get all transactions where to id == account id
+trm -> tos : transactions list
+
+loop Until all transactions are itterated
+  tos -> tos : delete transaction by id
+end
+
+tos --> se : nothing
+
+== Delete all transactions by category id ==
+se -> tos : delete all transactions by category id dto
+tos -> trm : get all transactions where from id == category id
+trm -> tos : transactions list
+|||
+tos -> trm : get all transactions where to id == category id
+trm -> tos : transactions list
+
+loop Until all transactions are itterated
+  tos -> tos : delete transaction by id
+end
+
+tos --> se : nothing
+
 @enduml
