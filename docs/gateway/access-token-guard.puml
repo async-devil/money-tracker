@@ -1,0 +1,38 @@
+@startuml access_token_guard
+
+actor Service as se
+
+participant "Access token guard" as atg
+
+box "Auth microservice" #YellowGreen
+  participant "Session module" as ssm
+  participant "Auth module" as aum
+end box
+
+se -> atg : request
+atg -> atg : get cookies
+atg -> atg : check access token cookie existence
+
+alt Access token is undefined
+  atg --> se : 401
+end
+
+atg -> aum : validate access token
+aum -> atg : result of validation
+
+alt Access token is Invalid
+  atg --> se : 401
+end
+
+atg -> aum : get embedded client id from access token
+aum -> aum : extract id
+
+alt Client id is missing
+  aum -> atg : error
+  atg --> se : 401
+end
+
+aum -> atg : client id
+atg -> atg : modify request with client id
+atg --> se : modified request
+@enduml
