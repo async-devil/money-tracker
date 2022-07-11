@@ -32,6 +32,9 @@ const mainRules = {
 	"react/jsx-curly-newline": 0,
 
 	"import/no-extraneous-dependencies": 0,
+	"no-return-await": 0,
+	"@typescript-eslint/return-await": 0,
+	"@typescript-eslint/no-unsafe-assignment": 0,
 };
 
 const typescriptRules = {

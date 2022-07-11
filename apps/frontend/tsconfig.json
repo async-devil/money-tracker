@@ -17,6 +17,7 @@
 		"strictNullChecks": true,
 		"noImplicitAny": true,
 		"noFallthroughCasesInSwitch": true,
+		"strictPropertyInitialization": false,
 
 		"skipLibCheck": true,
 		"moduleResolution": "node",
