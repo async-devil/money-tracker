@@ -15,10 +15,16 @@
     "concurrently": "^7.0.0",
     "cra-template-typescript": "1.2.0",
     "eslint-config-react-app": "^7.0.1",
+    "i18next": "^21.8.13",
+    "i18next-browser-languagedetector": "^6.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^11.18.0",
+    "react-icons": "^4.4.0",
     "react-redux": "^8.0.2",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "redux-saga": "^1.1.3",
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
@@ -55,6 +61,7 @@
     "typescript": "^4.3.5",
     "web-vitals": "^2.1.0"
   },
+  "proxy": "http://localhost:8000",
   "browserslist": {
     "production": [
       ">0.2%",
