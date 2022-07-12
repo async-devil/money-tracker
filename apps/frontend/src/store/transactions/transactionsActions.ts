@@ -1,5 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 
+import { GetTransactionsByQueryDto } from "src/common/requests/transactions/types/request/get-transactions-by-query.dto";
 import { Transaction } from "src/common/requests/transactions/types/response/transaction.entity";
 import { HttpException } from "src/common/requests/types/HttpException";
 
@@ -10,7 +11,9 @@ export enum TransactionsActionsEnum {
 }
 
 export const transactionsActions = {
-	getTransactionsRequest: createAction(TransactionsActionsEnum.GET_TRANSACTIONS_REQUEST),
+	getTransactionsRequest: createAction<GetTransactionsByQueryDto>(
+		TransactionsActionsEnum.GET_TRANSACTIONS_REQUEST
+	),
 	getTransactionsSuccess: createAction<Transaction[]>(
 		TransactionsActionsEnum.GET_TRANSACTIONS_SUCCESS
 	),
