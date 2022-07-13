@@ -5,7 +5,7 @@ import { GetTransactionsByQueryDto } from "src/common/requests/transactions/type
 import { RootStateType } from "src/store/rootStore";
 import { transactionsActions } from "src/store/transactions/transactionsActions";
 
-import TransactionItem from "./TransactionItem";
+import TransactionItem from "./TransactionItem/TransactionItem";
 
 const mapState = (state: RootStateType) => ({
 	transactions: state.transactions,
