@@ -50,7 +50,7 @@ const TransactionAmounts = (props: { transaction: Transaction }) => {
 		amountFrom.amount === amountTo.amount && amountFrom.currency === amountTo.currency;
 
 	const rowData = (amount: string, currency: string) => {
-		return `${parseFloat(amountList[0].amount)} ${amountList[0].currency}`;
+		return `${parseFloat(amount)} ${currency}`;
 	};
 
 	return (
