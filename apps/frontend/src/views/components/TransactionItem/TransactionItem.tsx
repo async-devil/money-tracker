@@ -1,10 +1,10 @@
-import { Avatar, Card, CardProps, Col, Divider, Row } from "antd";
+import { Card, CardProps, Col, Divider, Row } from "antd";
 import moment from "moment";
 import React from "react";
-import { GrTransaction } from "react-icons/gr";
 import styled from "styled-components";
 
 import CustomIcon from "src/common/components/CustomIcon";
+import VariableIcon from "src/common/components/VariableIcon";
 import { Transaction } from "src/common/requests/transactions/types/response/transaction.entity";
 
 import TransactionAmounts from "./TransactionAmounts";
@@ -12,12 +12,20 @@ import TransactionAmounts from "./TransactionAmounts";
 const CustomCard: React.FunctionComponent<CardProps> = styled(Card)`
 	width: 504px;
 
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	font-size: 16px;
+
+	.ant-row {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
 
 	.icon-column {
 		align-self: center;
+	}
+
+	.from-row {
+		font-size: 14px;
 	}
 
 	.currency-column {
@@ -50,7 +58,7 @@ const TransactionItem = (props: { transaction: Transaction }) => {
 			<Row>
 				<Col span={2} className="icon-column">
 					<CustomIcon size="large" shape="square" background={undefined} color={undefined}>
-						<GrTransaction size={20} />
+						<VariableIcon name="iconNameTo" size="20" />
 					</CustomIcon>
 				</Col>
 				<Col span={1}>
@@ -58,7 +66,12 @@ const TransactionItem = (props: { transaction: Transaction }) => {
 				</Col>
 				<Col span={13}>
 					<Row>{`${transaction.to}`}</Row>
-					<Row>{`${transaction.from}`}</Row>
+					<Row className="from-row">
+						<span>
+							<VariableIcon name="iconNameFrom" />
+							{`${transaction.from}`}
+						</span>
+					</Row>
 				</Col>
 				<Col span={6} className="currency-column">
 					<TransactionAmounts transaction={transaction} />
