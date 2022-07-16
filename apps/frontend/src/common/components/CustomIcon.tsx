@@ -13,9 +13,7 @@ const CustomAvatar = styled(Avatar)<{ color?: string; background?: string }>`
 	}
 
 	svg {
-		path {
-			stroke: ${(props) => props.color || "rgb(0, 0, 0)"};
-		}
+		color: ${(props) => props.color || "rgb(0, 0, 0)"};
 	}
 `;
 

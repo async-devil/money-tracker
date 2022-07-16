@@ -7,7 +7,7 @@ import {
 	TransactionType,
 } from "src/common/requests/transactions/types/response/transaction.entity";
 
-const CustomRow = styled(Row)<{ type: TransactionType; secondary?: boolean }>`
+const CustomRow = styled(Row)<{ type: TransactionType; $secondary?: boolean }>`
 	color: #${(props) => {
 			switch (props.type) {
 				case TransactionType.RECHARGE:
@@ -19,9 +19,9 @@ const CustomRow = styled(Row)<{ type: TransactionType; secondary?: boolean }>`
 				case TransactionType.TRANSFER:
 					return "bfbfbf";
 			}
-		}}${(props) => (props.secondary ? 80 : "")};
+		}}${(props) => (props.$secondary ? 80 : "")};
 
-	font-size: ${(props) => (props.secondary ? "inherit" : "16px")};
+	font-size: ${(props) => (props.$secondary ? "inherit" : "16px")};
 
 	&:before {
 		content: "${(props) => {
@@ -59,7 +59,7 @@ const TransactionAmounts = (props: { transaction: Transaction }) => {
 				{rowData(amountList[0].amount, amountList[0].currency)}
 			</CustomRow>
 			{!isAmountEqual ? (
-				<CustomRow type={transaction.type} secondary={true}>
+				<CustomRow type={transaction.type} $secondary={true}>
 					{rowData(amountList[1].amount, amountList[1].currency)}
 				</CustomRow>
 			) : null}
