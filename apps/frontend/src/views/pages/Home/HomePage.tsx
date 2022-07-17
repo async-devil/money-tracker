@@ -1,9 +1,14 @@
+import { Layout } from "antd";
 import React from "react";
 
-import TransactionsList from "src/views/components/TransactionsList";
+const { Header, Content } = Layout;
 
 const HomePage = () => {
-	return <TransactionsList query={{}} />;
+	return (
+		<Layout>
+			<p>Not implemented yet</p>
+		</Layout>
+	);
 };
 
 export default HomePage;
