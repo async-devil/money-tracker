@@ -7,10 +7,14 @@ import { GetCategoriesByQueryDto } from "src/common/requests/categories/types/re
 import { Category } from "src/common/requests/categories/types/response/category.entity";
 import { HttpException } from "src/common/requests/types/HttpException";
 
+import { miscActions } from "../misc/misc.actions";
 import { categoriesActions, CategoriesActionsEnum } from "./categories.actions";
 
 export function* onLoadCategories(action: PayloadAction<GetCategoriesByQueryDto>) {
+	const loadingId = Math.floor(Date.now() * Math.random());
+
 	try {
+		yield put(miscActions.addLoading({ id: loadingId, action: action.type }));
 		const result: AxiosResponse<Category[]> = yield call(() =>
 			ApiRequests.categories.getByQuery(action.payload)
 		);
@@ -19,9 +23,9 @@ export function* onLoadCategories(action: PayloadAction<GetCategoriesByQueryDto>
 	} catch (err) {
 		const error = err as AxiosError<HttpException>;
 
-		yield put(categoriesActions.setCategoriesLoading(false));
-
-		console.error(error);
+		yield put(miscActions.setError(error.response?.data as HttpException));
+	} finally {
+		yield put(miscActions.removeLoading(loadingId));
 	}
 }
 

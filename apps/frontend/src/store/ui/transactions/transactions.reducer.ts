@@ -6,24 +6,12 @@ import { transactionsActions } from "./transactions.actions";
 
 export type TransactionsStateType = {
 	transactions: Transaction[];
-	isLoading: boolean;
-	isLoaded: boolean;
 };
 
-const initialState: TransactionsStateType = { transactions: [], isLoading: false, isLoaded: false };
+const initialState: TransactionsStateType = { transactions: [] };
 
 export const transactionsReducer = createReducer(initialState, (builder) => {
-	builder
-		.addCase(transactionsActions.loadTransactions, (state) => {
-			state.isLoaded = false;
-			state.isLoading = true;
-		})
-		.addCase(transactionsActions.setTransactionsLoading, (state, action) => {
-			state.isLoading = action.payload;
-		})
-		.addCase(transactionsActions.setTransactions, (state, action) => {
-			state.transactions = action.payload;
-			state.isLoaded = true;
-			state.isLoading = false;
-		});
+	builder.addCase(transactionsActions.setTransactions, (state, action) => {
+		state.transactions = action.payload;
+	});
 });

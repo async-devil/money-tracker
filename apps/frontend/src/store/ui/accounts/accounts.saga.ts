@@ -7,10 +7,15 @@ import { GetAccountsByQueryDto } from "src/common/requests/accounts/types/reques
 import { Account } from "src/common/requests/accounts/types/response/account.entity";
 import { HttpException } from "src/common/requests/types/HttpException";
 
+import { miscActions } from "../misc/misc.actions";
 import { accountsActions, AccountsActionsEnum } from "./accounts.actions";
 
 export function* onLoadAccounts(action: PayloadAction<GetAccountsByQueryDto>) {
+	const loadingId = Math.floor(Date.now() * Math.random());
+
 	try {
+		yield put(miscActions.addLoading({ id: loadingId, action: action.type }));
+
 		const result: AxiosResponse<Account[]> = yield call(() =>
 			ApiRequests.accounts.getByQuery(action.payload)
 		);
@@ -19,9 +24,9 @@ export function* onLoadAccounts(action: PayloadAction<GetAccountsByQueryDto>) {
 	} catch (err) {
 		const error = err as AxiosError<HttpException>;
 
-		yield put(accountsActions.setAccountsLoading(false));
-
-		console.error(error);
+		yield put(miscActions.setError(error.response?.data as HttpException));
+	} finally {
+		yield put(miscActions.removeLoading(loadingId));
 	}
 }
 

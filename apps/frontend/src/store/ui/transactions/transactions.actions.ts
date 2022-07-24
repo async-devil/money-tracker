@@ -6,7 +6,6 @@ import { Transaction } from "src/common/requests/transactions/types/response/tra
 export enum TransactionsActionsEnum {
 	LOAD_TRANSACTIONS = "LOAD_TRANSACTIONS",
 	SET_TRANSACTIONS = "GET_TRANSACTIONS",
-	SET_TRANSACTIONS_LOADING = "SET_TRANSACTIONS_LOADING",
 }
 
 export const transactionsActions = {
@@ -14,5 +13,4 @@ export const transactionsActions = {
 		TransactionsActionsEnum.LOAD_TRANSACTIONS
 	),
 	setTransactions: createAction<Transaction[]>(TransactionsActionsEnum.SET_TRANSACTIONS),
-	setTransactionsLoading: createAction<boolean>(TransactionsActionsEnum.SET_TRANSACTIONS_LOADING),
 };
