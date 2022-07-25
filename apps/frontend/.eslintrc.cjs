@@ -15,7 +15,6 @@ const mainRules = {
 		{ devDependencies: ["**/*.spec.tsx", "**/*.spec.ts", "**/*.e2e-spec.ts"] },
 	],
 
-	"jsx-quotes": [1, "prefer-double"],
 	"linebreak-style": 0,
 	"no-tabs": 0,
 	"implicit-arrow-linebreak": 0,
@@ -24,12 +23,6 @@ const mainRules = {
 
 	"no-nested-ternary": 0,
 	"no-bitwise": 1,
-
-	"react/jsx-indent": 0,
-	"react/jsx-indent-props": 0,
-	"react/no-array-index-key": 1,
-	"react/require-default-props": 0,
-	"react/jsx-curly-newline": 0,
 
 	"import/no-extraneous-dependencies": 0,
 	"no-return-await": 0,
@@ -55,16 +48,17 @@ module.exports = {
 
 		"plugin:import/recommended",
 		"plugin:import/typescript",
-		"plugin:react/recommended",
-		"plugin:react-hooks/recommended",
 
 		"plugin:sonarjs/recommended",
 		"plugin:promise/recommended",
 		"plugin:security-node/recommended",
+
+		"plugin:@angular-eslint/recommended",
+		"plugin:@angular-eslint/template/process-inline-templates",
 	],
 	ignorePatterns: ["**/*.cjs", "dist"],
 	rules: mainRules,
-	plugins: ["prettier", "import", "react", "react-hooks", "sonarjs", "promise", "security-node"],
+	plugins: ["prettier", "import", "sonarjs", "promise", "security-node"],
 	settings: {
 		"import/resolver": {
 			typescript: {},
@@ -82,7 +76,6 @@ module.exports = {
 				"plugin:@typescript-eslint/eslint-recommended",
 				"plugin:@typescript-eslint/recommended",
 				"plugin:@typescript-eslint/recommended-requiring-type-checking",
-				"airbnb-typescript",
 			],
 			plugins: ["@typescript-eslint"],
 			rules: Object.assign(typescriptRules, mainRules),
@@ -105,6 +98,11 @@ module.exports = {
 		{
 			files: "*.js",
 			parser: "esprima",
+		},
+		{
+			files: ["*.html"],
+			extends: ["plugin:@angular-eslint/template/recommended"],
+			rules: {},
 		},
 	],
 };

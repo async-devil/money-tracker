@@ -1,36 +1,29 @@
 {
+	"compileOnSave": false,
 	"compilerOptions": {
-		"outDir": "./lib",
-		"target": "ESNext",
-		"module": "esnext",
-		"jsx": "react-jsx",
-
 		"baseUrl": "./",
-		"paths": { "src/*": ["src/*"] },
-
-		"removeComments": true,
-		"declaration": true,
-		"sourceMap": true,
-		"resolveJsonModule": true,
-
-		"strict": true,
-		"strictNullChecks": true,
-		"noImplicitAny": true,
-		"noFallthroughCasesInSwitch": true,
-		"strictPropertyInitialization": false,
-
-		"skipLibCheck": true,
-		"moduleResolution": "node",
-
-		"isolatedModules": true,
-		"allowSyntheticDefaultImports": true,
+		"outDir": "./dist/out-tsc",
 		"forceConsistentCasingInFileNames": true,
-
-		"noEmit": true,
-		"allowJs": true,
-		"esModuleInterop": true,
-
-		"typeRoots": ["lib/**/*.d.ts", "lib/*.d.ts", "node_modules/@types"],
-		"lib": ["dom", "dom.iterable", "esnext"]
+		"strict": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"sourceMap": true,
+		"declaration": false,
+		"downlevelIteration": true,
+		"experimentalDecorators": true,
+		"moduleResolution": "node",
+		"importHelpers": true,
+		"target": "es2020",
+		"module": "es2020",
+		"lib": ["es2020", "dom"],
+		"strictPropertyInitialization": false
+	},
+	"angularCompilerOptions": {
+		"enableI18nLegacyMessageIdFormat": false,
+		"strictInjectionParameters": true,
+		"strictInputAccessModifiers": true,
+		"strictTemplates": true
 	}
 }
