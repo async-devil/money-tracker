@@ -13,7 +13,7 @@ import {
 	Req,
 	UseGuards,
 } from "@nestjs/common";
-import { ApiCookieAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
@@ -49,7 +49,7 @@ export class TransactionsRouteController {
 	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Post("/")
 	public async createCategory(
@@ -73,7 +73,7 @@ export class TransactionsRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@ApiExtraModels(GetTransactionsByQueryControllerDto)
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/")
 	public async getTransactionsByQuery(
@@ -101,7 +101,7 @@ export class TransactionsRouteController {
 		status: 200,
 		type: Transaction,
 	})
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/:id")
 	public async getTransactionById(@Req() request: IRequest, @Param("id") id: string) {
@@ -125,7 +125,7 @@ export class TransactionsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Transaction not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Put("/:id")
 	public async updateTransactionById(
@@ -149,7 +149,7 @@ export class TransactionsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Transaction not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Delete("/:id")
 	public async deleteCategoryById(@Req() request: IRequest, @Param("id") id: string) {

@@ -12,6 +12,7 @@ async function bootstrap() {
 	const swaggerConfig = new DocumentBuilder()
 		.setTitle("Nestjs template")
 		.setVersion("1.0.0")
+		.addBearerAuth()
 		.build();
 
 	const app = await NestFactory.create(AppModule);

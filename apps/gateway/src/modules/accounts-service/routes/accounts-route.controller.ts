@@ -13,7 +13,7 @@ import {
 	Req,
 	UseGuards,
 } from "@nestjs/common";
-import { ApiCookieAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
@@ -48,7 +48,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Post("/")
 	public async createAccount(
@@ -69,7 +69,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Account not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/:id")
 	public async getAccountById(@Req() request: IRequest, @Param("id") id: string): Promise<Account> {
@@ -91,7 +91,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@ApiExtraModels(GetAccountsByQuery)
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/")
 	public async getAccountsByQuery(
@@ -121,7 +121,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Account not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Put("/:id")
 	public async updateAccountById(
@@ -144,7 +144,7 @@ export class AccountsRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Account not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Delete("/:id")
 	public async deleteAccountById(@Req() request: IRequest, @Param("id") id: string) {

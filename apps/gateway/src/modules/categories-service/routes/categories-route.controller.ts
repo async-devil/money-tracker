@@ -13,7 +13,7 @@ import {
 	Req,
 	UseGuards,
 } from "@nestjs/common";
-import { ApiCookieAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { HttpException } from "src/common/HttpException";
 import { AccessTokenGuard } from "src/modules/auth-service/guards/access-token.guard";
@@ -48,7 +48,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 401, type: HttpException, description: "Invalid access token" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Post("/")
 	public async createCategory(
@@ -69,7 +69,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Category not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/:id")
 	public async getCategoryById(
@@ -94,7 +94,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
 	@ApiExtraModels(GetCategoriesByQueryControllerDto)
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Get("/")
 	public async getCategoriesByQuery(
@@ -130,7 +130,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Category not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Put("/:id")
 	public async updateCategoryById(
@@ -153,7 +153,7 @@ export class CategoriesRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Category not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
+	@ApiBearerAuth()
 	@UseGuards(AccessTokenGuard)
 	@Delete("/:id")
 	public async deleteCategoryById(@Req() request: IRequest, @Param("id") id: string) {
