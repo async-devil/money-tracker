@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Post, Body, Controller, Res, Req, UnauthorizedException } from "@nestjs/common";
-import { ApiCookieAuth, ApiOperation, ApiResponse, ApiTags, OmitType } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags, OmitType } from "@nestjs/swagger";
 import { Response, Request, CookieOptions } from "express";
 
 import { HttpException } from "src/common/HttpException";
@@ -10,6 +10,7 @@ import { ClientsService } from "src/modules/clients-service/clients-service.serv
 import { AuthService } from "../auth-service.service";
 import { LoginDto } from "../types/request/login.dto";
 import { RegisterDto } from "../types/request/register.dto";
+import { RefreshTokenPairDto } from "../types/response/refresh-token-pair.dto";
 import { TokenPairDto } from "../types/response/token-pair.dto";
 
 export const COOKIE_OPTIONS = (dueTo: string): CookieOptions => {
@@ -111,8 +112,8 @@ export class AuthRouteController {
 	@ApiOperation({ summary: "Generate token pair" })
 	@ApiResponse({
 		status: 201,
-		type: TokenPairDto,
-		description: "Refresh and access tokens which would be stored in cookies",
+		type: RefreshTokenPairDto,
+		description: "Refresh token which would be stored in cookies and access token in response",
 	})
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 401, type: HttpException, description: "Session expired" })
@@ -124,7 +125,6 @@ export class AuthRouteController {
 	@ApiResponse({ status: 404, type: HttpException, description: "Session not found" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
 	@Post("/refresh")
 	public async refreshTokenPair(
 		@Req() request: Request,
@@ -145,11 +145,7 @@ export class AuthRouteController {
 		});
 
 		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
-		response.cookie(
-			"access_token",
-			tokenPair.accessToken,
-			COOKIE_OPTIONS(accessTokenExpirationDate.result)
-		);
+		response.send({ accessToken: tokenPair.accessToken, dueTo: accessTokenExpirationDate });
 	}
 
 	@ApiOperation({ summary: "Logout client" })
@@ -160,12 +156,10 @@ export class AuthRouteController {
 	@ApiResponse({ status: 400, type: HttpException, description: "Invalid request" })
 	@ApiResponse({ status: 504, type: HttpException, description: "Microservice timeout" })
 	@ApiResponse({ status: 502, type: HttpException, description: "Bad gateway" })
-	@ApiCookieAuth()
 	@Post("/logout")
 	public async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
 		await this.authService.deleteSessionByToken({ refreshToken: this.getRefreshToken(request) });
 
 		response.cookie("refresh_token", undefined, { httpOnly: true });
-		response.cookie("access_token", undefined, { httpOnly: true });
 	}
 }
