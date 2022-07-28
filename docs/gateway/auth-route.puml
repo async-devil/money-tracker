@@ -83,13 +83,14 @@ ssm -> aur : session
 aur -> ssm : get session expiration date
 ssm -> aur : expiration date
 |||
-aur --> cl : access and refresh token cookies
+aur --> cl : refresh token cookie
+aur --> cl : access token and expiration date response
 
 == Logout route ==
 
 cl -> aur : /logout
 aur -> ssm : delete session by refresh token
 |||
-aur --> cl : wiped access and refresh token cookies
+aur --> cl : wiped refresh token cookie
 
 @enduml

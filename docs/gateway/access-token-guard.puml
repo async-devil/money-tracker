@@ -10,12 +10,14 @@ box "Auth microservice" #YellowGreen
 end box
 
 se -> atg : request
-atg -> atg : get cookies
-atg -> atg : check access token cookie existence
+atg -> atg : get headers
+atg -> atg : check authentication header existence
 
-alt Access token is undefined
+alt Authentication header is undefined
   atg --> se : 401
 end
+
+atg -> atg : get access token from header
 
 atg -> aum : validate access token
 aum -> atg : result of validation
