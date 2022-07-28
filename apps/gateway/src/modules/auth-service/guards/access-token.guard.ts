@@ -8,7 +8,7 @@ import { IRequest } from "../types/interfaces/IRequest";
  *
  * 	Throws:
  * 	- { statusCode: 400, message: ["accessToken must be a jwt string"], error: "Bad request" }
- * 	- { statusCode: 401, message: "No access token provided", error: "Unauthorized"}
+ * 	- { statusCode: 401, message: "No authorization header provided", error: "Unauthorized"}
  * 	- { statusCode: 401, message: "Invalid access token", error: "Unauthorized"}
  * 	- { statusCode: 500, message: "Unknown error", error: "Internal server error" }
  */
@@ -18,10 +18,12 @@ export class AccessTokenGuard implements CanActivate {
 
 	public async canActivate(context: ExecutionContext): Promise<boolean> {
 		const request = context.switchToHttp().getRequest<IRequest>();
-		const cookies = request.cookies as Record<string, string>;
+		const headers = request.headers;
 
-		const accessToken = cookies["access_token"];
-		if (!accessToken) throw new UnauthorizedException("No access token provided");
+		const authorizationHeader = headers.authorization;
+		if (!authorizationHeader) throw new UnauthorizedException("No authorization header provided");
+
+		const accessToken = authorizationHeader.replace("Bearer ", "");
 
 		const validationResult = await this.authService.validateAccessToken({ accessToken });
 		if (!validationResult.result) throw new UnauthorizedException("Invalid access token");
