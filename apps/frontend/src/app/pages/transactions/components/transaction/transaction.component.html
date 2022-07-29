@@ -1,0 +1,50 @@
+<mat-card class="transaction" (click)="onClick(transaction)">
+	<div class="transaction__content">
+		<div class="transaction__icon-container">
+			<div
+				mat-card-avatar
+				class="transaction__icon"
+				[ngStyle]="{backgroundColor: to.icon_color}"
+			>
+				<mat-icon fontIcon="{{to.icon_name}}"></mat-icon>
+			</div>
+		</div>
+		<div class="transaction__divider">
+			<mat-divider [vertical]="true"></mat-divider>
+		</div>
+		<div class="transaction__info">
+			<div class="transaction__main-info">
+				<div class="transaction__names">
+					<div class="transaction__name-to">{{to.name}}</div>
+					<div class="transaction__name-from">
+						<mat-icon fontIcon="{{from.icon_name}}"></mat-icon>&nbsp;{{from.name}}
+					</div>
+				</div>
+				<div class="transaction__amounts">
+					<div
+						class="transaction__amount-to"
+						[ngStyle]="{} | setAmountColor: transaction.type"
+					>
+						{{transaction.amount_to | currency: " " : "symbol":"1.0-8" |
+						transformAmount:transaction.type}} {{transaction.currency_to}}
+					</div>
+					<div
+						*ngIf="transaction.amount_from !== transaction.amount_to || transaction.currency_from !== transaction.currency_to"
+						[ngStyle]="{} | setAmountColor: transaction.type : true"
+						class="transaction__amount-from"
+					>
+						{{transaction.amount_from | currency: " " : "symbol":"1.0-8" |
+						transformAmount:transaction.type}} {{transaction.currency_from}}
+					</div>
+				</div>
+			</div>
+			<div *ngIf="transaction.notes || transaction.location" class="transaction__notes">
+				Hello
+			</div>
+		</div>
+		<div class="transaction__divider">
+			<mat-divider [vertical]="true"></mat-divider>
+		</div>
+		<div class="transaction__date">{{transaction.date | date:"dd/MM"}}</div>
+	</div>
+</mat-card>

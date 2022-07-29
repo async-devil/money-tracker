@@ -1,0 +1,8 @@
+<app-dashboard-layout>
+	<app-transaction
+		*ngFor="let transaction of transactions | async"
+		[transaction]="transaction"
+		[from]="getEntityByParams(transaction.from, transaction.type, 'from')"
+		[to]="getEntityByParams(transaction.to, transaction.type, 'to')"
+	></app-transaction>
+</app-dashboard-layout>
