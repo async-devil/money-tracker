@@ -145,7 +145,7 @@ export class AuthRouteController {
 		});
 
 		response.cookie("refresh_token", session.refresh_token, COOKIE_OPTIONS(session.valid_until));
-		response.send({ accessToken: tokenPair.accessToken, dueTo: accessTokenExpirationDate });
+		response.send({ accessToken: tokenPair.accessToken, dueTo: accessTokenExpirationDate.result });
 	}
 
 	@ApiOperation({ summary: "Logout client" })
