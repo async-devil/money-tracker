@@ -1,4 +1,5 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { Account } from "src/app/services/accounts/types/response/account.entity";
 import { Category } from "src/app/services/categories/types/response/category.entity";
@@ -9,11 +10,24 @@ import { Transaction } from "src/app/services/transactions/types/response/transa
 	templateUrl: "./transaction.component.html",
 	styleUrls: ["./transaction.component.scss"],
 })
-export class TransactionComponent {
+export class TransactionComponent implements OnInit {
 	@Input() transaction: Transaction;
 
-	@Input() from: Category | Account;
-	@Input() to: Account | Category;
+	@Input() from$: Observable<Category | Account>;
+	@Input() to$: Observable<Account | Category>;
 
 	@Input() onClick: (transaction: Transaction) => void;
+
+	public from: Category | Account;
+	public to: Account | Category;
+
+	public ngOnInit() {
+		this.from$.subscribe((result) => {
+			this.from = result;
+		});
+
+		this.to$.subscribe((result) => {
+			this.to = result;
+		});
+	}
 }
