@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
+import { MatChipsModule } from "@angular/material/chips";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { RouterModule } from "@angular/router";
@@ -26,6 +27,7 @@ import { TransactionsPageComponent } from "./transactions-page/transactions-page
 		MatCardModule,
 		MatIconModule,
 		MatDividerModule,
+		MatChipsModule,
 	],
 })
 export class TransactionsModule {}

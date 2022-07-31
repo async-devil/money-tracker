@@ -1,11 +1,15 @@
 import { Component, OnInit } from "@angular/core";
+import { map, Observable, switchMap } from "rxjs";
 
 import { AccountsService } from "src/app/services/accounts/accounts.service";
 import { Account } from "src/app/services/accounts/types/response/account.entity";
 import { CategoriesService } from "src/app/services/categories/categories.service";
 import { Category } from "src/app/services/categories/types/response/category.entity";
 import { TransactionsService } from "src/app/services/transactions/transactions.service";
-import { TransactionType } from "src/app/services/transactions/types/response/transaction.entity";
+import {
+	Transaction,
+	TransactionType,
+} from "src/app/services/transactions/types/response/transaction.entity";
 
 @Component({
 	selector: "app-transactions-page",
@@ -23,8 +27,10 @@ export class TransactionsPageComponent implements OnInit {
 
 	public ngOnInit() {
 		this.transactionsService.setAll();
-		this.accountsService.setAll();
-		this.categoriesService.setAll();
+	}
+
+	public onTransactionClick(transaction: Transaction) {
+		console.log(transaction);
 	}
 
 	/** Get account or category by id, transaction type and destination*/
@@ -32,13 +38,13 @@ export class TransactionsPageComponent implements OnInit {
 		id: string,
 		type: TransactionType,
 		destination: "to" | "from"
-	): Account | Category {
+	): Observable<Account | Category> {
 		const getters = [
 			(id: string) => this.categoriesService.getById({ id }),
 			(id: string) => this.accountsService.getById({ id }),
 		];
 
-		const result = (() => {
+		return (() => {
 			switch (type) {
 				case TransactionType.RECHARGE:
 					return destination === "from" ? getters[0](id) : getters[1](id);
@@ -50,9 +56,5 @@ export class TransactionsPageComponent implements OnInit {
 					return getters[1](id);
 			}
 		})();
-		console.log(result, id, type, destination);
-		if (!result) throw new Error("Unknown entity"); //TODO: Check error origin
-
-		return result;
 	}
 }
