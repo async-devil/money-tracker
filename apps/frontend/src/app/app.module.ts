@@ -8,6 +8,7 @@ import { AppComponent } from "./app.component";
 import { AccountsModule } from "./pages/accounts/accounts.module";
 import { DashboardModule } from "./pages/dashboard/dashboard.module";
 import { IndexModule } from "./pages/index/index.module";
+import { LoginModule } from "./pages/login/login.module";
 import { TransactionsModule } from "./pages/transactions/transactions.module";
 import { AuthInterceptor } from "./shared/interceptors/auth.interceptor";
 
@@ -18,10 +19,11 @@ import { AuthInterceptor } from "./shared/interceptors/auth.interceptor";
 		AppRoutingModule,
 		BrowserAnimationsModule,
 		HttpClientModule,
-		DashboardModule,
 		IndexModule,
+		DashboardModule,
 		TransactionsModule,
 		AccountsModule,
+		LoginModule,
 	],
 	providers: [
 		{
