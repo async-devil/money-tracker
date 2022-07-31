@@ -45,7 +45,7 @@ export class CategoriesService {
 	}
 
 	public getById(dto: GetCategoryByIdDto) {
-		return this.categories.value.find((category) => category.id === dto.id);
+		return this.http.get<Category>(`/api/categories/${dto.id}`);
 	}
 
 	private errorHandler(error: HttpErrorResponse) {

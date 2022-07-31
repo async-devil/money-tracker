@@ -46,7 +46,7 @@ export class TransactionsService {
 	}
 
 	public getById(dto: GetTransactionByIdDto) {
-		return this.transactions.value.find((transaction) => transaction.id === dto.id);
+		return this.http.get<Transaction>(`/api/transactions/${dto.id}`);
 	}
 
 	private errorHandler(error: HttpErrorResponse) {

@@ -45,7 +45,7 @@ export class AccountsService {
 	}
 
 	public getById(dto: GetAccountByIdDto) {
-		return this.accounts.value.find((account) => account.id === dto.id);
+		return this.http.get<Account>(`/api/accounts/${dto.id}`);
 	}
 
 	private errorHandler(error: HttpErrorResponse) {
