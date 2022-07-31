@@ -22,8 +22,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
 		const copiedRequest = this.getRequestWithAuthHeader(request, accessToken);
 
-		console.log("hello");
-
 		return next.handle(copiedRequest).pipe(
 			catchError((error: HttpErrorResponse) => {
 				if (error.status !== 401 || request.url.endsWith("refresh")) {
@@ -36,8 +34,6 @@ export class AuthInterceptor implements HttpInterceptor {
 							request,
 							response.accessToken
 						);
-
-						console.log(response);
 
 						return next.handle(copiedRequest);
 					})
