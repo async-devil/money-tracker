@@ -82,6 +82,7 @@ services:
       - rabbitmq
     networks:
       - rabbitmq_network
+      - frontend_network
 
     restart: on-failure
 
@@ -238,6 +239,24 @@ services:
 
     restart: unless-stopped
 
+  frontend:
+    image: frontend
+    container_name: frontend
+
+    build:
+      context: ./apps/frontend
+
+    env_file:
+      - .env
+    ports:
+      - 80:80
+
+    depends_on:
+      - gateway
+    networks:
+      - frontend_network
+
+
 volumes:
   rabbitmq_data:
   rabbitmq_log:
@@ -249,4 +268,7 @@ networks:
     driver: bridge
 
   postgres_network:
+    driver: bridge
+
+  frontend_network:
     driver: bridge
