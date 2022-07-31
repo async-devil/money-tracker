@@ -1,59 +1,54 @@
-This template is based on the [Create React App](https://github.com/facebook/create-react-app) and the [NestJS](https://nestjs.com/) project builder.
+# Money-tracker &middot; ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) ![Wakatime](https://wakatime.com/badge/user/bc8fa60c-fa34-4507-b70f-24bdba32a74d/project/0a2a0e7e-41e3-47f2-a304-fafc58b08ef7.svg)
 
-# Technologies:
+Money-tracker is app which is developed to be your helper in organization and analyze your life budget
 
-- Server:
+# Architecture
 
-  - NestJS
-  - TypeORM
-  - Swagger
+This project is based on the microservice architecture.
 
-- Client:
+It includes the following microservices.
 
-  - React
-  - Styled components
-  - SCSS
-  - Axios
+- Angular based frontend deployed using Nginx
+- REST API gateway
+- Authentication service
+- Clients service
+- Accounts service
+- Categories service
+- Transactions service
 
-- General:
+Additional services are:
 
-  - Typescript
-  - Prettier
-  - Eslint
-  - Jest
+- pgAdmin
+- RMQ-management
 
-# Commands
+Backend message broker is RabbitMQ. Each structural microservice is capable of using its own PostgreSQL database if needed.
 
-- `yarn start` create and start production build
-- `yarn build` create production build without starting
-- `yarn start:dev` start developing session
-- `yarn test` test client and server
+All of these services are containerized into separate docker containers which are linked using docker-compose.
 
-Full list of commands you can find at package.json
+To authenticate project uses access/refresh tokens.
 
 # Environment variables:
 
-Template supports developing and production env files. Will be using `.env.development` file for developing scripts and `.env.production` for build purposes.
-
-List of available variables, default values and their names:
-
-- db host: `localhost`; TYPEORM_HOST
-- db port: `5432`; TYPEORM_PORT
-- db username: `postgres`; TYPEORM_USERNAME
-- db username password: `toor`; TYPEORM_PASSWORD
-- db name: `test`; TYPEORM_DATABASE
-
-- jwt access token password: `SECRET_KEY`; JWT_ACCESS_TOKEN_SECRET
-- jwt access token expiration time in seconds: `1800`; JWT_ACCESS_TOKEN_EXPIRATION_TIME
-- jwt refresh token password: `SECRET_KEY`; JWT_REFRESH_TOKEN_SECRET
-- jwt refresh token expiration time in seconds: `432000`; JWT_REFRESH_TOKEN_EXPIRATION_TIME (432000s = 5d)
-
-- server port: `5000`; SERVER_PORT
-- client port: `3000`; PORT
-
-And all the CRA environment variables, see: https://create-react-app.dev/docs/advanced-configuration/
+Default environment file is stored as `.env.example`. To use this project you need to create a `.env` file.
 
 # General information:
 
-The server will serve client at all paths except /api which is a global prefix. In development mode, client will make a proxy to server at /api.
-Client build stored in /build folder. Server build stored in /dist folder.
+All existing docs are stored into the `/docs` folder.
+
+## Technologies used:
+
+- Backend
+
+  - Typescript
+  - Node.js
+  - PostgreSQL
+  - RabbitMQ
+    - Nest.js using Express
+    - TypeORM
+    - Swagger
+
+- Frontend
+  - Typescript
+  - Angular
+  - Nginx
+    - Material UI
