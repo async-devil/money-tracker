@@ -24,7 +24,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
 		return next.handle(copiedRequest).pipe(
 			catchError((error: HttpErrorResponse) => {
-				if (error.status !== 401 || request.url.endsWith("refresh")) {
+				if (
+					error.status !== 401 ||
+					request.url.endsWith("refresh") ||
+					request.url.endsWith("login") ||
+					request.url.endsWith("register")
+				) {
 					return throwError(() => error);
 				}
 
