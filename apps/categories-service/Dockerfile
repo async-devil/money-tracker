@@ -1,4 +1,4 @@
-FROM node
+FROM node:18.7.0-alpine
 
 WORKDIR /usr/src/app
 
@@ -8,4 +8,4 @@ RUN yarn install
 COPY . .
 
 RUN chmod +x ./scripts/start.sh
-CMD ["./scripts/start.sh"]
+CMD ["/bin/sh", "./scripts/start.sh"]
