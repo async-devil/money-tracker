@@ -2,14 +2,13 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgChartsModule } from "ng2-charts";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { AccountsModule } from "./pages/accounts/accounts.module";
-import { DashboardModule } from "./pages/dashboard/dashboard.module";
-import { IndexModule } from "./pages/index/index.module";
-import { LoginModule } from "./pages/login/login.module";
-import { TransactionsModule } from "./pages/transactions/transactions.module";
+import { AuthModule } from "./modules/auth/auth.module";
+import { DashboardModule } from "./modules/dashboard/dashboard.module";
+import { IndexModule } from "./modules/index/index.module";
 import { AuthInterceptor } from "./shared/interceptors/auth.interceptor";
 
 @NgModule({
@@ -19,11 +18,10 @@ import { AuthInterceptor } from "./shared/interceptors/auth.interceptor";
 		AppRoutingModule,
 		BrowserAnimationsModule,
 		HttpClientModule,
+		NgChartsModule,
 		IndexModule,
 		DashboardModule,
-		TransactionsModule,
-		AccountsModule,
-		LoginModule,
+		AuthModule,
 	],
 	providers: [
 		{

@@ -1,0 +1,60 @@
+.login-page {
+	height: 100%;
+
+	display: flex;
+
+	justify-content: center;
+	align-items: center;
+
+	.mat-card {
+		width: 100%;
+		max-width: 500px;
+
+		padding: 40px 40px;
+
+		height: fit-content;
+
+		.mat-card-header {
+			display: flex;
+
+			justify-content: center;
+
+			.mat-card-title {
+				margin-bottom: 40px;
+			}
+		}
+
+		form {
+			display: flex;
+			flex-direction: column;
+
+			button[type="submit"] {
+				display: flex;
+
+				justify-content: center;
+
+				margin-top: 30px;
+
+				p {
+					margin: 0;
+				}
+
+				.mat-progress-spinner ::ng-deep circle {
+					stroke: black;
+				}
+			}
+
+			.mat-card {
+				width: 100%;
+
+				margin-top: 25px;
+				padding: 8px 0;
+
+				text-align: center;
+				font-weight: bold;
+
+				background-color: #ef2f2f;
+			}
+		}
+	}
+}

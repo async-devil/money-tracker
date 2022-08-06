@@ -3,11 +3,10 @@ import { NgModule } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 
 import { GlobalErrorComponent } from "./components/global-error/global-error.component";
-import { DashboardLayoutComponent } from "./layouts/dashboard-layout/dashboard-layout.component";
 
 @NgModule({
-	declarations: [GlobalErrorComponent, DashboardLayoutComponent],
+	declarations: [GlobalErrorComponent],
 	imports: [CommonModule, MatToolbarModule],
-	exports: [GlobalErrorComponent, DashboardLayoutComponent],
+	exports: [GlobalErrorComponent],
 })
 export class SharedModule {}

@@ -1,27 +1,21 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { DashboardPageComponent } from "./pages/dashboard/dashboard-page/dashboard-page.component";
-import { IndexPageComponent } from "./pages/index/index-page/index-page.component";
-import { LoginPageComponent } from "./pages/login/login-page/login-page.component";
-import { TransactionsPageComponent } from "./pages/transactions/transactions-page/transactions-page.component";
 import { AuthGuard } from "./shared/guards/auth/auth.guard";
 
 const routes: Routes = [
-	{ path: "", component: IndexPageComponent },
+	{
+		path: "",
+		loadChildren: () => import("./modules/index/index.module").then((m) => m.IndexModule),
+	},
 	{
 		path: "dashboard",
-		component: DashboardPageComponent,
-		canActivate: [AuthGuard],
+		loadChildren: () =>
+			import("./modules/dashboard/dashboard.module").then((m) => m.DashboardModule),
 	},
 	{
-		path: "dashboard/transactions",
-		component: TransactionsPageComponent,
-		canActivate: [AuthGuard],
-	},
-	{
-		path: "login",
-		component: LoginPageComponent,
+		path: "auth",
+		loadChildren: () => import("./modules/auth/auth.module").then((m) => m.AuthModule),
 	},
 ];
 

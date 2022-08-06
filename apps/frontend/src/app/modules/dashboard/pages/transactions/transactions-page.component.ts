@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { map, Observable, switchMap } from "rxjs";
+import { Observable } from "rxjs";
 
 import { AccountsService } from "src/app/services/accounts/accounts.service";
 import { Account } from "src/app/services/accounts/types/response/account.entity";
