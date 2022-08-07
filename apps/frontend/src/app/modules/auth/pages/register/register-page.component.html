@@ -1,0 +1,50 @@
+<div class="register-page">
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>Registration</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()">
+				<mat-form-field appearance="outline">
+					<mat-label>Email</mat-label>
+					<input
+						matInput
+						type="email"
+						placeholder="example@example.com"
+						formControlName="email"
+						appFocus
+					/>
+					<mat-error>{{getEmailErrorMessage()}}</mat-error>
+				</mat-form-field>
+				<mat-form-field appearance="outline">
+					<mat-label>Password</mat-label>
+					<input
+						matInput
+						[type]="isPasswordHidden ? 'password' : 'text'"
+						formControlName="password"
+					/>
+					<button
+						mat-icon-button
+						matSuffix
+						type="button"
+						(click)="isPasswordHidden = !isPasswordHidden"
+						[attr.aria-label]="'Hide password'"
+						[attr.aria-pressed]="isPasswordHidden"
+					>
+						<mat-icon>{{isPasswordHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+					</button>
+					<mat-error>{{getPasswordErrorMessage()}}</mat-error>
+				</mat-form-field>
+				<mat-card *ngIf="registerError">{{registerError}}</mat-card>
+				<button mat-raised-button type="submit" color="primary" [disabled]="!isValid">
+					<p *ngIf="!isLoading">Sign-up</p>
+					<mat-progress-spinner
+						*ngIf="isLoading"
+						mode="indeterminate"
+						diameter="36"
+					></mat-progress-spinner>
+				</button>
+			</form>
+		</mat-card-content>
+	</mat-card>
+</div>
