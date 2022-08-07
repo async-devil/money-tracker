@@ -6,13 +6,17 @@ import {
 	HttpErrorResponse,
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { catchError, Observable, switchMap, throwError } from "rxjs";
 
 import { AuthService } from "src/app/services/auth/auth.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-	constructor(private readonly authService: AuthService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly router: Router
+	) {}
 
 	public intercept(
 		request: HttpRequest<unknown>,
@@ -34,6 +38,12 @@ export class AuthInterceptor implements HttpInterceptor {
 				}
 
 				return this.authService.refreshTokens().pipe(
+					catchError((error: HttpErrorResponse) => {
+						return throwError(() => {
+							void this.router.navigate(["/auth/login"]);
+							return error;
+						});
+					}),
 					switchMap((response) => {
 						const copiedRequest = this.getRequestWithAuthHeader(
 							request,
