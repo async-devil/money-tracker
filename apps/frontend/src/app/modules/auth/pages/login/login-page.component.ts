@@ -85,7 +85,7 @@ export class LoginPageComponent implements OnInit {
 						const from = this.activeRoute.snapshot.queryParamMap.get("from");
 
 						this.authService.refreshTokens().subscribe(() => {
-							void this.router.navigate([from || "/"]);
+							void this.router.navigate([from || "/dashboard"]);
 						});
 					},
 					error: (error: HttpErrorResponse) => {
