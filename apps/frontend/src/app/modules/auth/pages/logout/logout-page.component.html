@@ -1,1 +1,13 @@
-<p>logout-page works!</p>
+<div class="logout-page">
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>Are you sure you want to logout?</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<button mat-raised-button color="warn" (click)="redirect()">No, redirect me</button>
+			<button mat-raised-button color="primary" (click)="logout()">
+				Yes, let me logout
+			</button>
+		</mat-card-content>
+	</mat-card>
+</div>

@@ -1,0 +1,33 @@
+.logout-page {
+	height: 100%;
+
+	display: flex;
+
+	justify-content: center;
+	align-items: center;
+
+	.mat-card {
+		width: 100%;
+		max-width: 500px;
+
+		padding: 40px 40px;
+
+		height: fit-content;
+
+		.mat-card-header {
+			display: flex;
+
+			justify-content: center;
+
+			.mat-card-title {
+				margin-bottom: 40px;
+			}
+		}
+
+		.mat-card-content {
+			display: flex;
+
+			justify-content: space-around;
+		}
+	}
+}
