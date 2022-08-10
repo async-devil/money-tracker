@@ -1,0 +1,77 @@
+.mat-card {
+	max-width: 37.5rem;
+
+	padding: 1rem;
+
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+	.mat-card-content {
+		display: flex;
+
+		.account__icon-container {
+			display: flex;
+
+			justify-content: center;
+			align-items: center;
+
+			.account__icon {
+				display: flex;
+
+				justify-content: center;
+				align-items: center;
+
+				border-radius: 5%;
+
+				.mat-icon {
+					width: auto;
+					height: auto;
+
+					font-size: 30px;
+				}
+			}
+		}
+
+		.account__divider {
+			padding: 0 0.7rem;
+
+			.mat-divider {
+				height: 100%;
+				width: 1px;
+
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+
+		.account__info {
+			display: flex;
+
+			flex-direction: column;
+		}
+
+		.account__note {
+			width: fit-content;
+
+			display: flex;
+
+			align-items: center;
+
+			background: rgba(255, 255, 255, 0.05);
+
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			border-radius: 5%;
+
+			padding: 1px 5px;
+			margin-top: 5px;
+
+			font-size: 13px;
+
+			.mat-icon {
+				width: 13px;
+				height: 13px;
+
+				font-size: 13px;
+			}
+		}
+	}
+}

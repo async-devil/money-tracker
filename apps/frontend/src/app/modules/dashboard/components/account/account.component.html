@@ -1,0 +1,25 @@
+<mat-card class="account" (click)="onClick(account)">
+	<mat-card-content>
+		<div class="account__icon-container">
+			<div
+				mat-card-avatar
+				class="account__icon"
+				[ngStyle]="{backgroundColor: '#' + account.icon_color}"
+			>
+				<mat-icon>{{account.icon_name}}</mat-icon>
+			</div>
+		</div>
+		<div class="account__divider">
+			<mat-divider vertical></mat-divider>
+		</div>
+		<div class="account__info">
+			<div class="account__name">{{account.name}}</div>
+			<div class="account__balance" [ngStyle]="{} | setBalanceColor: account.balance">
+				{{account.balance| currency: " " : "symbol":"1.0-8" }} {{account.currency}}
+			</div>
+			<div class="account__note" *ngIf="account.notes">
+				<mat-icon>description</mat-icon>&nbsp;{{account.notes}}
+			</div>
+		</div>
+	</mat-card-content>
+</mat-card>
