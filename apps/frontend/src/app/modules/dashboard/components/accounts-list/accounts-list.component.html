@@ -1,0 +1,9 @@
+<div class="accounts-list" *ngFor="let accountsGroup of accounts">
+	<mat-card class="accounts-list__label">{{accountsGroup[0] | uppercase}}</mat-card>
+	<div class="accounts-list__accounts">
+		<app-account
+			*ngFor="let account of accountsGroup[1]"
+			[account]="account"
+		></app-account>
+	</div>
+</div>
