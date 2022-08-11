@@ -1,0 +1,19 @@
+<div class="transactions-list" *ngFor="let transactionsGroup of transactions">
+	<mat-card class="transactions-list__label">
+		<div class="label__date-num">{{transactionsGroup[0] | date : "dd"}}</div>
+		<div class="label__date-details">
+			<p class="date-details_day">{{transactionsGroup[0] | date : "EEEE" | uppercase}}</p>
+			<p class="date-details_month">
+				{{transactionsGroup[0] | date : "MMMM YYYY" | uppercase}}
+			</p>
+		</div>
+	</mat-card>
+	<div class="transactions-list__transactions">
+		<app-transaction
+			*ngFor="let transaction of transactionsGroup[1]"
+			[transaction]="transaction"
+			[from]="getEntityByParams(transaction.from, transaction.type, 'from')"
+			[to]="getEntityByParams(transaction.to, transaction.type, 'to')"
+		></app-transaction>
+	</div>
+</div>
