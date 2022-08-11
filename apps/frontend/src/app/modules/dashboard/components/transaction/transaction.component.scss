@@ -1,19 +1,14 @@
 .mat-card {
-	max-width: 400px;
+	max-width: 37.5rem;
 
-	padding: 16px 8px;
+	padding: 1rem;
 
 	border-top: 1px solid rgba(255, 255, 255, 0.12);
 
 	.transaction__content {
-		display: grid;
-
-		grid-template-columns: repeat(48, 1fr);
-		grid-template-rows: 1fr;
+		display: flex;
 
 		.transaction__icon-container {
-			grid-column: span 5 / span 5;
-
 			display: flex;
 
 			justify-content: center;
@@ -37,32 +32,27 @@
 		}
 
 		.transaction__divider {
-			grid-column: span 2 / span 2;
+			padding: 0 0.7rem;
 		}
 
 		.transaction__info {
 			display: flex;
 
-			grid-column: span 37 / span 37;
-
+			flex-grow: 1;
 			flex-direction: column;
 
 			.transaction__main-info {
-				display: grid;
+				display: flex;
 
-				grid-template-columns: repeat(24, 1fr);
-				grid-template-rows: 1fr;
+				justify-content: space-between;
 
 				.transaction__names {
-					grid-column: span 17 / span 17;
-
 					text-overflow: ellipsis;
 					overflow: hidden;
 					white-space: nowrap;
 
 					.transaction__name-from {
 						display: flex;
-
 						align-items: center;
 
 						.mat-icon {
@@ -75,8 +65,6 @@
 				}
 
 				.transaction__amounts {
-					grid-column: span 7 / span 7;
-
 					div {
 						text-align: end;
 					}
@@ -86,9 +74,10 @@
 			.transaction__notes {
 				display: flex;
 
-				padding-top: 5px;
-
 				gap: 5px;
+				flex-wrap: wrap;
+
+				padding-top: 5px;
 
 				.transaction__note {
 					display: flex;
@@ -115,13 +104,17 @@
 		}
 
 		.transaction__date {
-			grid-column: span 2 / span 2;
+			display: flex;
+
+			align-self: auto;
+			justify-content: center;
 
 			writing-mode: vertical-rl;
 
-			text-align: center;
+			color: rgba(#e6e6e6, 0.7);
 
-			font-size: 16px;
+			font-size: 1rem;
+			font-weight: bold;
 		}
 
 		mat-divider {

@@ -1,4 +1,4 @@
-<mat-card class="transaction" (click)="onClick(transaction)" *ngIf="from && to">
+<mat-card class="transaction" (click)="onClick(transaction)">
 	<div class="transaction__content">
 		<div class="transaction__icon-container">
 			<div
@@ -50,6 +50,6 @@
 		<div class="transaction__divider">
 			<mat-divider vertical></mat-divider>
 		</div>
-		<div class="transaction__date">{{transaction.date | date:"dd/MM"}}</div>
+		<div class="transaction__date">{{transaction.date | date: "HH:mm" }}</div>
 	</div>
 </mat-card>
