@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, catchError, Observable, throwError } from "rxjs";
+import { catchError, Observable, throwError } from "rxjs";
 
 import { ErrorService } from "../error/error.service";
 import { HttpException } from "../error/types/HttpException";
@@ -17,23 +17,8 @@ export class CategoriesService {
 		private readonly errorService: ErrorService
 	) {}
 
-	public readonly categories = new BehaviorSubject<Category[]>([]);
-
-	public setAll() {
-		this.http
-			.get<Category[]>("/api/categories", {
-				params: new HttpParams({
-					fromObject: { query: "e30=" }, //? empty object in base64
-				}),
-			})
-			.pipe(catchError((err: HttpErrorResponse) => this.errorHandler(err)))
-			.subscribe((categories) => {
-				this.categories.next(categories);
-			});
-	}
-
-	public getByQuery(dto: GetCategoriesByQueryDto): Observable<Category[]> {
-		const query = btoa(JSON.stringify(dto));
+	public getByQuery(dto?: GetCategoriesByQueryDto): Observable<Category[]> {
+		const query = btoa(JSON.stringify(dto || {}));
 
 		return this.http
 			.get<Category[]>("/api/categories", {

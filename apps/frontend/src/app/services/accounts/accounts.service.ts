@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, catchError, Observable, throwError } from "rxjs";
+import { catchError, Observable, throwError } from "rxjs";
 
 import { ErrorService } from "../error/error.service";
 import { HttpException } from "../error/types/HttpException";
@@ -17,23 +17,8 @@ export class AccountsService {
 		private readonly errorService: ErrorService
 	) {}
 
-	public readonly accounts = new BehaviorSubject<Account[]>([]);
-
-	public setAll(): void {
-		this.http
-			.get<Account[]>("/api/accounts", {
-				params: new HttpParams({
-					fromObject: { query: "e30=" }, //? empty object in base64
-				}),
-			})
-			.pipe(catchError((err: HttpErrorResponse) => this.errorHandler(err)))
-			.subscribe((accounts) => {
-				this.accounts.next(accounts);
-			});
-	}
-
-	public getByQuery(dto: GetAccountsByQueryDto): Observable<Account[]> {
-		const query = btoa(JSON.stringify(dto));
+	public getByQuery(dto?: GetAccountsByQueryDto): Observable<Account[]> {
+		const query = btoa(JSON.stringify(dto || {}));
 
 		return this.http
 			.get<Account[]>("/api/accounts", {

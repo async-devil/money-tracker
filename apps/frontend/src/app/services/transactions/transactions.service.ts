@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, catchError, Observable, throwError } from "rxjs";
+import { catchError, Observable, throwError } from "rxjs";
 
 import { ErrorService } from "src/app/services/error/error.service";
 
@@ -18,23 +18,8 @@ export class TransactionsService {
 		private readonly errorService: ErrorService
 	) {}
 
-	public readonly transactions = new BehaviorSubject<Transaction[]>([]);
-
-	public setAll(): void {
-		this.http
-			.get<Transaction[]>("/api/transactions", {
-				params: new HttpParams({
-					fromObject: { query: "e30=" }, //? empty object in base64
-				}),
-			})
-			.pipe(catchError((err: HttpErrorResponse) => this.errorHandler(err)))
-			.subscribe((transactions) => {
-				this.transactions.next(transactions);
-			});
-	}
-
-	public getByQuery(dto: GetTransactionsByQueryDto): Observable<Transaction[]> {
-		const query = btoa(JSON.stringify(dto));
+	public getByQuery(dto?: GetTransactionsByQueryDto): Observable<Transaction[]> {
+		const query = btoa(JSON.stringify(dto || {}));
 
 		return this.http
 			.get<Transaction[]>("/api/transactions", {
