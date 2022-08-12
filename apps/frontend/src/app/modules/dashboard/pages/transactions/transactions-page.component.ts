@@ -1,60 +1,67 @@
+import { DatePipe } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
 
 import { AccountsService } from "src/app/services/accounts/accounts.service";
 import { Account } from "src/app/services/accounts/types/response/account.entity";
 import { CategoriesService } from "src/app/services/categories/categories.service";
 import { Category } from "src/app/services/categories/types/response/category.entity";
 import { TransactionsService } from "src/app/services/transactions/transactions.service";
-import {
-	Transaction,
-	TransactionType,
-} from "src/app/services/transactions/types/response/transaction.entity";
+import { Transaction } from "src/app/services/transactions/types/response/transaction.entity";
+import { UtilityService } from "src/app/services/utility/utility.service";
 
 @Component({
 	selector: "app-transactions-page",
 	templateUrl: "./transactions-page.component.html",
 	styleUrls: ["./transactions-page.component.scss"],
+	providers: [DatePipe],
 })
 export class TransactionsPageComponent implements OnInit {
 	constructor(
 		private readonly transactionsService: TransactionsService,
 		private readonly accountsService: AccountsService,
-		private readonly categoriesService: CategoriesService
+		private readonly categoriesService: CategoriesService,
+		private readonly utilityService: UtilityService,
+		private readonly datePipe: DatePipe
 	) {}
 
-	public readonly transactions = this.transactionsService.transactions;
+	/** Groups of M/d/yy transactions */
+	public transactionsGroups: Array<[string, Array<Transaction>]>;
+	public accounts: Account[];
+	public categories: Category[];
 
 	public ngOnInit() {
-		this.transactionsService.setAll();
+		this.transactionsService.getByQuery().subscribe((transactions) => {
+			this.transactionsGroups = this.transformTransactions(transactions);
+
+			this.accountsService
+				.getByQuery()
+				.subscribe((accounts) => (this.accounts = accounts));
+
+			this.categoriesService
+				.getByQuery()
+				.subscribe((categories) => (this.categories = categories));
+		});
 	}
 
-	public onTransactionClick(transaction: Transaction) {
-		console.log(transaction);
+	private dateSortCriteria = (a: string, b: string) => Date.parse(b) - Date.parse(a);
+
+	private transactionsGroupSelector(transaction: Transaction) {
+		return this.datePipe.transform(transaction.date, "shortDate") || "0/0/0";
 	}
 
-	/** Get account or category by id, transaction type and destination*/
-	public getEntityByParams(
-		id: string,
-		type: TransactionType,
-		destination: "to" | "from"
-	): Observable<Account | Category> {
-		const getters = [
-			(id: string) => this.categoriesService.getById({ id }),
-			(id: string) => this.accountsService.getById({ id }),
-		];
+	private transformTransactions(transactions: Transaction[]) {
+		const sortedRawTransactions = transactions.sort((a, b) =>
+			this.dateSortCriteria(a.date, b.date)
+		);
 
-		return (() => {
-			switch (type) {
-				case TransactionType.RECHARGE:
-					return destination === "from" ? getters[0](id) : getters[1](id);
+		const groupedTransactions = this.utilityService.groupBy(
+			sortedRawTransactions,
+			this.transactionsGroupSelector.bind(this)
+		);
 
-				case TransactionType.WITHDRAW:
-					return destination === "from" ? getters[1](id) : getters[0](id);
-
-				case TransactionType.TRANSFER:
-					return getters[1](id);
-			}
-		})();
+		return this.utilityService.sortObjectByKeys(
+			groupedTransactions,
+			this.dateSortCriteria
+		);
 	}
 }
