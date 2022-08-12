@@ -1,5 +1,20 @@
-<mat-toolbar>
-	<span>My Application</span>
-</mat-toolbar>
+<div class="dashboard-layout">
+	<mat-toolbar>
+		<mat-button-toggle-group name="page" aria-label="pages">
+			<mat-button-toggle value="accounts" [routerLink]="['/dashboard/accounts']">
+				<mat-icon>credit_card</mat-icon>
+				<p>Accounts</p>
+			</mat-button-toggle>
+			<mat-button-toggle value="dashboard" [routerLink]="['/dashboard']">
+				<mat-icon>data_usage</mat-icon>
+				<p>Dashboard</p>
+			</mat-button-toggle>
+			<mat-button-toggle value="transactions" [routerLink]="['/dashboard/transactions']">
+				<mat-icon>receipt</mat-icon>
+				<p>Transactions</p>
+			</mat-button-toggle>
+		</mat-button-toggle-group>
+	</mat-toolbar>
 
-<router-outlet></router-outlet>
+	<router-outlet></router-outlet>
+</div>
