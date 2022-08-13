@@ -50,31 +50,54 @@
 		.account__info {
 			display: flex;
 
+			flex-grow: 1;
+
 			flex-direction: column;
-		}
+			justify-content: center;
 
-		.account__note {
-			width: fit-content;
+			.account__note {
+				width: fit-content;
 
-			display: flex;
+				display: flex;
 
-			align-items: center;
+				align-items: center;
 
-			background: rgba(255, 255, 255, 0.05);
+				background: rgba(255, 255, 255, 0.05);
 
-			border: 1px solid rgba(255, 255, 255, 0.12);
-			border-radius: 5%;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				border-radius: 5%;
 
-			padding: 1px 5px;
-			margin-top: 5px;
-
-			font-size: 13px;
-
-			.mat-icon {
-				width: 13px;
-				height: 13px;
+				padding: 1px 5px;
+				margin-top: 5px;
 
 				font-size: 13px;
+
+				.mat-icon {
+					width: 13px;
+					height: 13px;
+
+					font-size: 13px;
+				}
+			}
+		}
+
+		.account__action {
+			display: flex;
+
+			flex-direction: column;
+			align-items: center;
+
+			color: #92979d;
+
+			button {
+				margin-bottom: 0.2rem;
+
+				background-color: #434a52;
+				color: #92979d;
+			}
+
+			p {
+				margin: 0;
 			}
 		}
 	}
