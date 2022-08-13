@@ -1,0 +1,45 @@
+.category {
+	width: 5rem;
+
+	display: inline-flex;
+
+	flex-direction: column;
+
+	justify-content: center;
+	align-items: center;
+
+	padding: 0.5rem 0.2rem;
+
+	cursor: pointer;
+
+	p {
+		margin: 0;
+
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.category__icon {
+		margin: 0.4rem 0;
+
+		.mat-icon {
+			color: #fff;
+		}
+	}
+
+	.category__info {
+		display: flex;
+
+		gap: 0.1rem;
+
+		.category_amount {
+			font-size: 0.8rem;
+			font-weight: bold;
+		}
+
+		.category_currency {
+			font-size: 0.7rem;
+		}
+	}
+}

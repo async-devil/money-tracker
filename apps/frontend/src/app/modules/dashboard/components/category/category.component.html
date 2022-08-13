@@ -1,0 +1,17 @@
+<mat-card matRipple class="category" (click)="onClick(category)">
+	<p class="category__name">{{category.name}}</p>
+	<button
+		mat-mini-fab
+		class="category__icon"
+		[ngStyle]="{backgroundColor: '#' + category.icon_color}"
+	>
+		<mat-icon>{{category.icon_name}}</mat-icon>
+	</button>
+	<div
+		class="category__info"
+		[ngStyle]="{color: amount === 0 ? 'rgba(230, 230, 230, 0.7)' : '#' + category.icon_color}"
+	>
+		<p class="category_amount">{{amount | currency: " " : "symbol":"1.0-8"}}</p>
+		<p class="category_currency">{{currency}}</p>
+	</div>
+</mat-card>
