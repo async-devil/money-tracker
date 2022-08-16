@@ -9,4 +9,7 @@ import { Account } from "src/app/services/accounts/types/response/account.entity
 })
 export class AccountsListComponent {
 	@Input() accounts: Array<[string, Array<Account>]>;
+
+	@Input() onAccountClick: (account: Account) => unknown;
+	@Input() onAccountTransfer: (account: Account) => unknown;
 }

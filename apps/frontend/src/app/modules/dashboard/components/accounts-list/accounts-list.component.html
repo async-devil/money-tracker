@@ -4,6 +4,8 @@
 		<app-account
 			*ngFor="let account of accountsGroup[1]"
 			[account]="account"
+			[onClick]="onAccountClick"
+			[onTransferAction]="onAccountTransfer"
 		></app-account>
 	</div>
 </div>

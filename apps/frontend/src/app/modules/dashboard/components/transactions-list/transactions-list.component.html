@@ -14,6 +14,7 @@
 			[transaction]="transaction"
 			[from]="getEntityByParams(transaction.from, transaction.type, 'from')"
 			[to]="getEntityByParams(transaction.to, transaction.type, 'to')"
+			[onClick]="onTransactionClick"
 		></app-transaction>
 	</div>
 </div>

@@ -17,6 +17,8 @@ export class TransactionsListComponent {
 	@Input() accounts: Account[];
 	@Input() categories: Category[];
 
+	@Input() onTransactionClick: (transaction: Transaction) => unknown;
+
 	public getEntityByParams(
 		id: string,
 		type: TransactionType,
