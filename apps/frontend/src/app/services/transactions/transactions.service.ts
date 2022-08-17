@@ -5,8 +5,10 @@ import { catchError, Observable, throwError } from "rxjs";
 import { ErrorService } from "src/app/services/error/error.service";
 
 import { HttpException } from "../error/types/HttpException";
+import { CreateTransactionDto } from "./types/request/create-transaction.dto";
 import { GetTransactionByIdDto } from "./types/request/get-transaction-by-id.dto";
 import { GetTransactionsByQueryDto } from "./types/request/get-transactions-by-query.dto";
+import { UpdateTransactionByIdDto } from "./types/request/update-transaction-by-id.dto";
 import { Transaction } from "./types/response/transaction.entity";
 
 @Injectable({
@@ -32,6 +34,18 @@ export class TransactionsService {
 
 	public getById(dto: GetTransactionByIdDto) {
 		return this.http.get<Transaction>(`/api/transactions/${dto.id}`);
+	}
+
+	public create(dto: CreateTransactionDto): Observable<Transaction> {
+		return this.http
+			.post<Transaction>("/api/transactions", dto)
+			.pipe(catchError((err: HttpErrorResponse) => this.errorHandler(err)));
+	}
+
+	public updateById(dto: UpdateTransactionByIdDto): Observable<Transaction> {
+		return this.http
+			.put<Transaction>(`/api/transactions/${dto.id}`, dto.data)
+			.pipe(catchError((err: HttpErrorResponse) => this.errorHandler(err)));
 	}
 
 	private errorHandler(error: HttpErrorResponse) {
