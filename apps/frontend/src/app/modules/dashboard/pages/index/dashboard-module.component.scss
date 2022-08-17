@@ -1,5 +1,10 @@
 .dashboard-layout {
 	max-width: 37.5rem;
+	height: 100%;
+
+	display: flex;
+
+	flex-direction: column;
 
 	margin: 0 auto;
 
@@ -27,5 +32,9 @@
 				}
 			}
 		}
+	}
+
+	.page {
+		flex-grow: 1;
 	}
 }

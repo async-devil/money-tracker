@@ -1,2 +1,10 @@
-<p>dashboard-page works!</p>
-<a [routerLink]="['/dashboard/transactions']">To transactions</a>
+<div class="dashboard-page">
+	<app-category
+		*ngFor="let category of categories"
+		[category]="category"
+		[amount]="100"
+		[currency]="'UAH'"
+		[onClick]="onCategoryClick.bind(this)"
+	></app-category>
+	<div class="dashboard__chart">to be developed</div>
+</div>

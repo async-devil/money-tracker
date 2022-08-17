@@ -1,6 +1,7 @@
 <app-transactions-list
+	*ngIf="accounts && categories"
 	[transactions]="transactionsGroups"
 	[accounts]="accounts"
 	[categories]="categories"
-	*ngIf="accounts && categories"
+	[onTransactionClick]="onTransactionClick.bind(this)"
 ></app-transactions-list>

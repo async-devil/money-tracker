@@ -1,5 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { AccountsService } from "src/app/services/accounts/accounts.service";
 import { Account } from "src/app/services/accounts/types/response/account.entity";
@@ -21,7 +22,8 @@ export class TransactionsPageComponent implements OnInit {
 		private readonly accountsService: AccountsService,
 		private readonly categoriesService: CategoriesService,
 		private readonly utilityService: UtilityService,
-		private readonly datePipe: DatePipe
+		private readonly datePipe: DatePipe,
+		private readonly router: Router
 	) {}
 
 	/** Groups of M/d/yy transactions */
@@ -63,5 +65,9 @@ export class TransactionsPageComponent implements OnInit {
 			groupedTransactions,
 			this.dateSortCriteria
 		);
+	}
+
+	public onTransactionClick(transaction: Transaction) {
+		void this.router.navigate([`/dashboard/transactions/${transaction.id}`]);
 	}
 }

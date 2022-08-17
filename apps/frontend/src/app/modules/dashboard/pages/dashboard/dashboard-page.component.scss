@@ -1,0 +1,15 @@
+.dashboard-page {
+	height: 100%;
+
+	display: grid;
+
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(4, 1fr);
+
+	place-content: center;
+	place-items: center;
+
+	.dashboard__chart {
+		grid-area: 2 / 2 / 4 / 4;
+	}
+}
