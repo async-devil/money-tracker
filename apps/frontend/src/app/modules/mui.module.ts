@@ -4,7 +4,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
-import { MatRippleModule } from "@angular/material/core";
+import { MatRippleModule, MatNativeDateModule } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -23,7 +24,9 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 		MatProgressSpinnerModule,
 		MatToolbarModule,
 		MatButtonToggleModule,
-		MatRippleModule
+		MatRippleModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
 	],
 	exports: [
 		CommonModule,
@@ -36,7 +39,9 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 		MatProgressSpinnerModule,
 		MatToolbarModule,
 		MatButtonToggleModule,
-		MatRippleModule
+		MatRippleModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
 	],
 })
 export class MuiModule {}
