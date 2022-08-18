@@ -10,6 +10,7 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSelectModule } from "@angular/material/select";
 import { MatToolbarModule } from "@angular/material/toolbar";
 
 @NgModule({
@@ -27,6 +28,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 		MatRippleModule,
 		MatDatepickerModule,
 		MatNativeDateModule,
+		MatSelectModule,
 	],
 	exports: [
 		CommonModule,
@@ -42,6 +44,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 		MatRippleModule,
 		MatDatepickerModule,
 		MatNativeDateModule,
+		MatSelectModule,
 	],
 })
 export class MuiModule {}

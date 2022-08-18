@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { catchError, concat, of, tap, throwError } from "rxjs";
@@ -22,6 +22,7 @@ import {
 	selector: "app-operate-transaction-page",
 	templateUrl: "./operate-transaction-page.component.html",
 	styleUrls: ["./operate-transaction-page.component.scss"],
+	encapsulation: ViewEncapsulation.None,
 })
 export class OperateTransactionPageComponent implements OnInit {
 	public id: string | "new";
@@ -128,6 +129,8 @@ export class OperateTransactionPageComponent implements OnInit {
 	}
 
 	private setFormValues(dto: CreateTransactionDto) {
+		this.form.controls.from.setValue(this.getEntityById(dto.from));
+		this.form.controls.to.setValue(this.getEntityById(dto.to));
 		this.form.controls.amount.setValue(parseFloat(dto.amount_to));
 		this.form.controls.date.setValue(new Date(dto.date));
 		this.form.controls.location.setValue(dto.location);
@@ -165,7 +168,37 @@ export class OperateTransactionPageComponent implements OnInit {
 		return concat(this.$getAccounts(), this.$getCategories(), this.$getTransaction());
 	}
 
+	public getEntityById(id: string) {
+		const accountSearchResult = this.accounts.find((account) => account.id === id);
+		const categorySearchResult = this.categories.find((category) => category.id === id);
+
+		const result = accountSearchResult || categorySearchResult;
+
+		if (!result) {
+			this.navigateToTransactionsPage();
+			throw new Error("Entity not found: " + id);
+		}
+
+		return result;
+	}
+
+	public getFromEntities(): Array<Category | Account> {
+		return this.subject.type === TransactionType.RECHARGE
+			? this.categories
+			: this.accounts;
+	}
+
+	public getToEntities(): Array<Category | Account> {
+		return this.subject.type === TransactionType.WITHDRAW
+			? this.categories
+			: this.accounts;
+	}
+
 	public form = new FormGroup({
+		from: new FormControl<undefined | Account | Category>(undefined, [
+			Validators.required,
+		]),
+		to: new FormControl<undefined | Account | Category>(undefined, [Validators.required]),
 		date: new FormControl<undefined | Date>(undefined, [Validators.required]),
 		amount: new FormControl(0, [
 			Validators.required,
@@ -178,11 +211,13 @@ export class OperateTransactionPageComponent implements OnInit {
 	public onFormSubmit() {
 		if (this.form.status !== "VALID") return;
 
-		const { amount, date, location, notes } = this.form.value;
+		const { from, to, amount, date, location, notes } = this.form.value;
 
 		console.log(this.form.value);
 
 		const updatedData = {
+			from: from ? from.id : this.subject.from,
+			to: to ? to.id : this.subject.to,
 			amount_from: amount ? amount.toString() : this.subject.amount_from,
 			amount_to: amount ? amount.toString() : this.subject.amount_to,
 			date: date ? date.toISOString() : this.subject.date,
