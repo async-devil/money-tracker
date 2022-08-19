@@ -1,6 +1,6 @@
 <div class="dashboard-layout">
 	<mat-toolbar>
-		<mat-button-toggle-group name="page" aria-label="pages">
+		<mat-button-toggle-group name="page" aria-label="pages" [value]="currentPage">
 			<mat-button-toggle value="accounts" [routerLink]="['/dashboard/accounts']">
 				<mat-icon>credit_card</mat-icon>
 				<p>Accounts</p>
