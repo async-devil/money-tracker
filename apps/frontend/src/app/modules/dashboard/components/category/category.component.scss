@@ -23,8 +23,8 @@
 	.category__icon {
 		margin: 0.4rem 0;
 
-		.mat-icon {
-			color: #fff;
+		::ng-deep .mat-button-wrapper {
+			padding: 0;
 		}
 	}
 

@@ -4,9 +4,9 @@
 			<div
 				mat-card-avatar
 				class="transaction__icon"
-				[ngStyle]="{backgroundColor: '#' + to.icon_color}"
+				[ngStyle]="{backgroundColor: '#' + to.icon_color + '26', border: '1px solid #' + to.icon_color}"
 			>
-				<mat-icon>{{to.icon_name}}</mat-icon>
+				<mat-icon [ngStyle]="{color: '#' + to.icon_color}">{{to.icon_name}}</mat-icon>
 			</div>
 		</div>
 		<div class="transaction__divider">
@@ -17,7 +17,7 @@
 				<div class="transaction__names">
 					<div class="transaction__name-to">{{to.name}}</div>
 					<div class="transaction__name-from">
-						<mat-icon>{{from.icon_name}}</mat-icon>&nbsp;{{from.name}}
+						<mat-icon [ngStyle]="{color: '#' + from.icon_color}">{{from.icon_name}}</mat-icon>&nbsp;{{from.name}}
 					</div>
 				</div>
 				<div class="transaction__amounts">

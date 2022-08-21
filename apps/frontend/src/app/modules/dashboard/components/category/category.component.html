@@ -3,9 +3,9 @@
 	<button
 		mat-mini-fab
 		class="category__icon"
-		[ngStyle]="{backgroundColor: '#' + category.icon_color}"
+		[ngStyle]="{backgroundColor: '#' + category.icon_color + '26', border: '1px solid #' + category.icon_color }"
 	>
-		<mat-icon>{{category.icon_name}}</mat-icon>
+		<mat-icon [ngStyle]="{color: '#' + category.icon_color}">{{category.icon_name}}</mat-icon>
 	</button>
 	<div
 		class="category__info"

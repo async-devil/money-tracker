@@ -4,9 +4,9 @@
 			<div
 				mat-card-avatar
 				class="account__icon"
-				[ngStyle]="{backgroundColor: '#' + account.icon_color}"
+				[ngStyle]="{backgroundColor: '#' + account.icon_color + '26', border: '1px solid #' + account.icon_color}"
 			>
-				<mat-icon>{{account.icon_name}}</mat-icon>
+				<mat-icon [ngStyle]="{color: '#' + account.icon_color}">{{account.icon_name}}</mat-icon>
 			</div>
 		</div>
 		<div class="account__divider">
