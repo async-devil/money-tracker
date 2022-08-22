@@ -80,25 +80,5 @@
 				}
 			}
 		}
-
-		.account__action {
-			display: flex;
-
-			flex-direction: column;
-			align-items: center;
-
-			color: #92979d;
-
-			button {
-				margin-bottom: 0.2rem;
-
-				background-color: #434a52;
-				color: #92979d;
-			}
-
-			p {
-				margin: 0;
-			}
-		}
 	}
 }
