@@ -1,0 +1,51 @@
+.mat-card-title {
+	height: max-content;
+
+	display: grid;
+
+	grid-template-columns: auto 0;
+
+	justify-items: center;
+
+	margin-bottom: 1rem;
+
+	p {
+		display: flex;
+
+		align-items: center;
+
+		margin: 0;
+	}
+
+	button {
+		position: relative;
+
+		justify-self: end;
+
+		bottom: 1.5rem;
+		left: 1.5rem;
+	}
+}
+
+.mat-dialog-actions {
+	display: flex;
+
+	justify-content: center;
+
+	gap: 1.5rem;
+
+	margin: 0;
+
+	.action-button {
+		display: flex;
+
+		flex-direction: column;
+		align-items: center;
+
+		color: #92979d;
+
+		button {
+			margin-bottom: 0.2rem;
+		}
+	}
+}

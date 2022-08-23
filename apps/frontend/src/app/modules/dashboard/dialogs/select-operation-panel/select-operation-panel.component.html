@@ -1,0 +1,18 @@
+<!-- <h2 mat-dialog-title>{{data.title}}</h2> -->
+<mat-card-title>
+	<p>{{data.title}}</p>
+	<button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</mat-card-title>
+
+<mat-dialog-actions>
+	<div class="action-button" *ngFor="let action of data.actions">
+		<button
+			mat-mini-fab
+			[ngStyle]="{backgroundColor: action.iconColor + '26'}"
+			(click)="onClick(action.actionId)"
+		>
+			<mat-icon [ngStyle]="{color: action.iconColor}">{{action.iconName}}</mat-icon>
+		</button>
+		<span>{{action.actionTitle}}</span>
+	</div>
+</mat-dialog-actions>
