@@ -302,6 +302,13 @@ a {
 	background-color: transparent;
 	text-decoration: none;
 }
+a,
+a:hover,
+a:focus,
+a:active {
+	text-decoration: none;
+	color: inherit;
+}
 abbr[title] {
 	border-bottom: none;
 	text-decoration: underline;
