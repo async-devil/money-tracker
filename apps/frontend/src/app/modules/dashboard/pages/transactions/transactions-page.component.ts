@@ -1,5 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 
 import { AccountsService } from "src/app/services/accounts/accounts.service";
@@ -9,6 +10,8 @@ import { Category } from "src/app/services/categories/types/response/category.en
 import { TransactionsService } from "src/app/services/transactions/transactions.service";
 import { Transaction } from "src/app/services/transactions/types/response/transaction.entity";
 import { UtilityService } from "src/app/services/utility/utility.service";
+
+import { SelectOperationPanelComponent } from "../../dialogs/select-operation-panel/select-operation-panel.component";
 
 @Component({
 	selector: "app-transactions-page",
@@ -23,7 +26,8 @@ export class TransactionsPageComponent implements OnInit {
 		private readonly categoriesService: CategoriesService,
 		private readonly utilityService: UtilityService,
 		private readonly datePipe: DatePipe,
-		private readonly router: Router
+		private readonly router: Router,
+		private readonly dialog: MatDialog
 	) {}
 
 	/** Groups of M/d/yy transactions */
@@ -68,6 +72,47 @@ export class TransactionsPageComponent implements OnInit {
 	}
 
 	public onTransactionClick(transaction: Transaction) {
+		const dialogRef = this.dialog.open(SelectOperationPanelComponent, {
+			autoFocus: false,
+			data: {
+				title: "Operate transaction",
+				actions: [
+					{
+						actionTitle: "Edit",
+						actionId: "edit",
+						iconName: "edit",
+						iconColor: "#fcc50f",
+					},
+					{
+						actionTitle: "Delete",
+						actionId: "delete",
+						iconName: "delete",
+						iconColor: "#f44747",
+					},
+				],
+			},
+		});
+
+		dialogRef.componentInstance.$event.subscribe((id) => {
+			switch (id) {
+				case "edit":
+					return this.editTransactionAction(transaction);
+
+				case "delete":
+					return this.deleteTransactionAction(transaction);
+			}
+		});
+	}
+
+	private editTransactionAction(transaction: Transaction) {
+		console.log("edit");
+
+		this.dialog.closeAll();
+
 		void this.router.navigate([`/dashboard/transactions/${transaction.id}`]);
+	}
+
+	private deleteTransactionAction(transaction: Transaction) {
+		console.log("delete");
 	}
 }

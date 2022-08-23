@@ -1,5 +1,4 @@
 <app-accounts-list
 	[accounts]="accountsGroups"
-	[onAccountClick]="onAccountClick"
-	[onAccountTransfer]="onAccountTransfer.bind(this)"
+	[onAccountClick]="onAccountClick.bind(this)"
 ></app-accounts-list>

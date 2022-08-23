@@ -15,11 +15,13 @@ import { CategoryComponent } from "./components/category/category.component";
 import { TransactionComponent } from "./components/transaction/transaction.component";
 import { TransactionsListComponent } from "./components/transactions-list/transactions-list.component";
 import { DashboardRoutingModule } from "./dashboard-routing.module";
+import { SelectOperationPanelComponent } from "./dialogs/select-operation-panel/select-operation-panel.component";
 import { AccountsPageComponent } from "./pages/accounts/accounts-page.component";
 import { DashboardPageComponent } from "./pages/dashboard/dashboard-page.component";
 import { DashboardModuleComponent } from "./pages/index/dashboard-module.component";
 import { OperateTransactionPageComponent } from "./pages/operate-transaction-page/operate-transaction-page.component";
 import { TransactionsPageComponent } from "./pages/transactions/transactions-page.component";
+import { CategoryOperatePanelComponent } from './dialogs/category-operate-panel/category-operate-panel.component';
 
 @NgModule({
 	declarations: [
@@ -41,6 +43,8 @@ import { TransactionsPageComponent } from "./pages/transactions/transactions-pag
 		AccountComponent,
 
 		OperateTransactionPageComponent,
+		SelectOperationPanelComponent,
+  CategoryOperatePanelComponent,
 	],
 	imports: [
 		CommonModule,
