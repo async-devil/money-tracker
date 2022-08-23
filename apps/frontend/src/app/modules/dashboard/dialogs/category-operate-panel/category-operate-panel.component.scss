@@ -1,0 +1,76 @@
+.mat-card-title {
+	height: max-content;
+
+	display: grid;
+
+	grid-template-columns: auto 0;
+
+	justify-items: center;
+
+	margin-bottom: 1rem;
+
+	p {
+		display: flex;
+
+		align-items: center;
+
+		margin: 0;
+	}
+
+	button {
+		position: relative;
+
+		justify-self: end;
+
+		bottom: 1.5rem;
+		left: 1.5rem;
+	}
+}
+
+.mat-card-content {
+	form {
+		display: grid;
+
+		grid-template-columns: minmax(0, 1fr) 3rem;
+
+		.form__inputs {
+			display: flex;
+
+			flex-direction: column;
+
+			padding-right: 1rem;
+
+			.mat-form-field {
+				padding-top: 0.5rem;
+
+				.mat-hint {
+					a {
+						color: #61afef;
+					}
+				}
+			}
+
+			button {
+				min-width: 1rem;
+
+				padding: 0;
+			}
+		}
+
+		.form__preview {
+			display: flex;
+
+			justify-content: center;
+			align-items: center;
+
+			border-radius: 3px;
+
+			.preview_icon {
+				width: 2rem;
+				height: 2rem;
+
+				font-size: 2rem;
+			}
+		}
+	}
+}
