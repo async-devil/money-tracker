@@ -6,7 +6,6 @@ import { AuthGuard } from "src/app/shared/guards/auth/auth.guard";
 import { AccountsPageComponent } from "./pages/accounts/accounts-page.component";
 import { DashboardPageComponent } from "./pages/dashboard/dashboard-page.component";
 import { DashboardModuleComponent } from "./pages/index/dashboard-module.component";
-import { OperateTransactionPageComponent } from "./pages/operate-transaction-page/operate-transaction-page.component";
 import { TransactionsPageComponent } from "./pages/transactions/transactions-page.component";
 
 const routes: Routes = [
@@ -26,10 +25,6 @@ const routes: Routes = [
 			{
 				path: "accounts",
 				component: AccountsPageComponent,
-			},
-			{
-				path: "transactions/:id",
-				component: OperateTransactionPageComponent,
 			},
 		],
 	},

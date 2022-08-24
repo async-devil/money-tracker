@@ -15,13 +15,14 @@ import { CategoryComponent } from "./components/category/category.component";
 import { TransactionComponent } from "./components/transaction/transaction.component";
 import { TransactionsListComponent } from "./components/transactions-list/transactions-list.component";
 import { DashboardRoutingModule } from "./dashboard-routing.module";
+import { AccountOperatePanelComponent } from "./dialogs/account-operate-panel/account-operate-panel.component";
+import { CategoryOperatePanelComponent } from "./dialogs/category-operate-panel/category-operate-panel.component";
 import { SelectOperationPanelComponent } from "./dialogs/select-operation-panel/select-operation-panel.component";
+import { TransactionOperatePanelComponent } from "./dialogs/transaction-operate-panel/transaction-operate-panel.component";
 import { AccountsPageComponent } from "./pages/accounts/accounts-page.component";
 import { DashboardPageComponent } from "./pages/dashboard/dashboard-page.component";
 import { DashboardModuleComponent } from "./pages/index/dashboard-module.component";
-import { OperateTransactionPageComponent } from "./pages/operate-transaction-page/operate-transaction-page.component";
 import { TransactionsPageComponent } from "./pages/transactions/transactions-page.component";
-import { CategoryOperatePanelComponent } from './dialogs/category-operate-panel/category-operate-panel.component';
 
 @NgModule({
 	declarations: [
@@ -42,9 +43,10 @@ import { CategoryOperatePanelComponent } from './dialogs/category-operate-panel/
 		AccountsListComponent,
 		AccountComponent,
 
-		OperateTransactionPageComponent,
 		SelectOperationPanelComponent,
-  CategoryOperatePanelComponent,
+		CategoryOperatePanelComponent,
+		AccountOperatePanelComponent,
+		TransactionOperatePanelComponent,
 	],
 	imports: [
 		CommonModule,

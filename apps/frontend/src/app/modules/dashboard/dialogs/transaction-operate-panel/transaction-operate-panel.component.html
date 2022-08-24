@@ -1,0 +1,98 @@
+<mat-card-title>
+	<p>{{data.id === "new" ? "Create transaction" : "Update transaction"}}</p>
+	<button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</mat-card-title>
+<mat-card-content *ngIf="subject">
+	<form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+		<div class="form__inputs">
+			<mat-form-field>
+				<mat-label>From</mat-label>
+				<mat-select
+					panelClass="operate-transaction-panel__mat-select"
+					formControlName="from"
+				>
+					<mat-select-trigger>
+						<mat-icon>{{form.value.from?.icon_name}}</mat-icon>
+						&nbsp;{{form.value.from?.name}}
+					</mat-select-trigger>
+					<mat-option *ngFor="let entity of getFromEntities()" [value]="entity">
+						<mat-icon>{{entity.icon_name}}</mat-icon>{{entity.name}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>To</mat-label>
+				<mat-select
+					panelClass="operate-transaction-panel__mat-select"
+					formControlName="to"
+				>
+					<mat-select-trigger>
+						<mat-icon>{{form.value.to?.icon_name}}</mat-icon>
+						&nbsp;{{form.value.to?.name}}
+					</mat-select-trigger>
+					<mat-option *ngFor="let entity of getToEntities()" [value]="entity">
+						<mat-icon>{{entity.icon_name}}</mat-icon>{{entity.name}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Amount</mat-label>
+				<input matInput type="number" placeholder="9.99" formControlName="amount" />
+				<span matSuffix>{{subject.currency_to}}</span>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Location</mat-label>
+				<input matInput type="text" placeholder="Local shop" formControlName="location" />
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Notes</mat-label>
+				<input matInput type="text" placeholder="Some notes" formControlName="notes" />
+			</mat-form-field>
+			<div class="content__date" (click)="picker.open()">
+				<input type="hidden" [matDatepicker]="picker" formControlName="date" />
+				<span class="date__output">
+					{{form.value.date | date: "fullDate" | uppercase}}
+				</span>
+				<mat-datepicker touchUi #picker></mat-datepicker>
+			</div>
+			<button
+				mat-raised-button
+				type="submit"
+				color="primary"
+				[disabled]="form.status !== 'VALID'"
+			>
+				{{data.id === "new" ? "Create" : "Update"}}
+			</button>
+		</div>
+		<div
+			class="form__preview"
+			matTooltip="Icon and color preview"
+			matTooltipShowDelay="500"
+			*ngIf="{
+        from: getEntityById(form.value.from?.id), 
+        to: getEntityById(form.value.to?.id)
+      } as destinations"
+			[ngStyle]="{
+        background: 'linear-gradient(to bottom, #' + destinations.from.icon_color + '26, #' + destinations.to.icon_color + '26)',
+        borderImageSource: 'linear-gradient(to bottom, #' + destinations.from.icon_color + ', #' + destinations.to.icon_color + ')'
+      }"
+		>
+			<div class="form__preview_from">
+				<mat-icon
+					class="preview_icon"
+					[ngStyle]="{color: '#' + destinations.from.icon_color}"
+				>
+					{{destinations.from.icon_name}}
+				</mat-icon>
+			</div>
+			<div class="form__preview_to">
+				<mat-icon
+					class="preview_icon"
+					[ngStyle]="{color: '#' + destinations.to.icon_color}"
+				>
+					{{destinations.to.icon_name}}
+				</mat-icon>
+			</div>
+		</div>
+	</form>
+</mat-card-content>
