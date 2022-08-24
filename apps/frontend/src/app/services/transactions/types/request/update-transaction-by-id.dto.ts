@@ -38,13 +38,13 @@ export class UpdateTransactionProperties {
 	 * @optional
 	 * @example "My favorite local shop"
 	 */
-	readonly location?: string;
+	readonly location?: string | null;
 
-	/** Notes about transaction\
+	/** Notes about transaction
 	 * @optional
 	 * @example "Company salary"
 	 */
-	readonly notes?: string;
+	readonly notes?: string | null;
 }
 
 export class UpdateTransactionByIdDto {

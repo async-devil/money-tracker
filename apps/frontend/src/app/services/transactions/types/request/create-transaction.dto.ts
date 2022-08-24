@@ -45,11 +45,11 @@ export class CreateTransactionDto {
 	 * @optional
 	 * @example "My favorite local shop"
 	 */
-	public location?: string;
+	public location: string | null;
 
 	/** Notes about transaction\
 	 * @optional
 	 * @example "Company salary"
 	 */
-	public notes?: string;
+	public notes: string | null;
 }

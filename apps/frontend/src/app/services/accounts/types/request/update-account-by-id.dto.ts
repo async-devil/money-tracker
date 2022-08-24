@@ -15,10 +15,10 @@ export class UpdateAccountProperties {
 	readonly currency?: string;
 
 	/** Balance of the account. 18 numbers in total, 8 numbers after dot
-	 * @default 0
-	 * @example 11.35065001
+	 * @default "0"
+	 * @example "11.35065001"
 	 */
-	readonly balance?: number;
+	readonly balance?: string;
 
 	/** Notes about account from 1 to 200 characters
 	 * @optional
