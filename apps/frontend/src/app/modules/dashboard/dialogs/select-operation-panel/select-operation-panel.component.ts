@@ -19,9 +19,7 @@ export type SelectOperationPanelData = {
 export class SelectOperationPanelComponent {
 	@Output() $event = new EventEmitter<string>();
 
-	constructor(@Inject(MAT_DIALOG_DATA) public readonly data: SelectOperationPanelData) {
-		console.log(data);
-	}
+	constructor(@Inject(MAT_DIALOG_DATA) public readonly data: SelectOperationPanelData) {}
 
 	public onClick(id: string) {
 		this.$event.emit(id);

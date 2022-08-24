@@ -1,15 +1,11 @@
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
 
 import { CategoriesService } from "src/app/services/categories/categories.service";
 import { CreateCategoryDto } from "src/app/services/categories/types/request/create-category.dto";
-import {
-	Category,
-	CategoryType,
-} from "src/app/services/categories/types/response/category.entity";
+import { CategoryType } from "src/app/services/categories/types/response/category.entity";
 
 export type CategoryOperatePanelType = {
 	id: string | "new";
@@ -29,13 +25,10 @@ export class CategoryOperatePanelComponent implements OnInit {
 		private readonly categoriesService: CategoriesService,
 		private readonly dialog: MatDialog,
 		@Inject(MAT_DIALOG_DATA) public readonly data: CategoryOperatePanelType
-	) {
-		console.log(data);
-	}
+	) {}
 
 	public ngOnInit() {
 		if (!this.data.id || (this.data.id === "new" && !this.data.type)) {
-			console.log("Error");
 			this.dialog.closeAll();
 		}
 
@@ -67,7 +60,6 @@ export class CategoryOperatePanelComponent implements OnInit {
 	}
 
 	private setFormValues(dto: CreateCategoryDto) {
-		console.log(dto);
 		this.form.controls.name.setValue(dto.name);
 		this.form.controls.icon_name.setValue(dto.icon_name || null);
 		this.form.controls.icon_color.setValue(dto.icon_color || null);
@@ -107,10 +99,8 @@ export class CategoryOperatePanelComponent implements OnInit {
 	public onFormSubmit() {
 		if (this.form.status !== "VALID") return;
 
-		console.log("submit");
-
 		const $action =
-			this.data.id === "id"
+			this.data.id === "new"
 				? this.createCategory.bind(this)
 				: this.updateCategory.bind(this);
 
