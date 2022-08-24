@@ -1,4 +1,4 @@
-<mat-card matRipple class="account">
+<mat-card matRipple class="account" (click)="onClick(account)">
 	<mat-card-content>
 		<div class="account__icon-container">
 			<div
@@ -6,13 +6,15 @@
 				class="account__icon"
 				[ngStyle]="{backgroundColor: '#' + account.icon_color + '26', border: '1px solid #' + account.icon_color}"
 			>
-				<mat-icon [ngStyle]="{color: '#' + account.icon_color}">{{account.icon_name}}</mat-icon>
+				<mat-icon [ngStyle]="{color: '#' + account.icon_color}"
+					>{{account.icon_name}}</mat-icon
+				>
 			</div>
 		</div>
 		<div class="account__divider">
 			<mat-divider vertical></mat-divider>
 		</div>
-		<div class="account__info" (click)="onClick(account)">
+		<div class="account__info">
 			<div class="account__name">{{account.name}}</div>
 			<div class="account__balance" [ngStyle]="{} | setBalanceColor: account.balance">
 				{{account.balance| currency: " " : "symbol":"1.0-8" }} {{account.currency}}
