@@ -1,0 +1,72 @@
+<mat-card-title>
+	<p>{{data.id === "new" ? "Create account" : "Update account"}}</p>
+	<button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</mat-card-title>
+<mat-card-content>
+	<form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+		<div class="form__inputs">
+			<mat-form-field>
+				<mat-label>Name</mat-label>
+				<input matInput type="text" placeholder="Account" formControlName="name" />
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Balance</mat-label>
+				<input matInput type="number" placeholder="9.99" formControlName="balance" />
+				<span matSuffix>{{subject ? subject.currency : "USD"}}</span>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Type</mat-label>
+				<mat-select formControlName="type">
+					<mat-option *ngFor="let type of accountTypes" [value]="type">
+						{{type | titlecase}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Icon name</mat-label>
+				<input
+					matInput
+					type="text"
+					placeholder="more_horiz"
+					formControlName="icon_name"
+				/>
+				<mat-hint
+					>See:
+					<a
+						href="https://fonts.google.com/icons?icon.platform=android"
+						target="_blank"
+						rel="noopener noreferrer"
+						>icon list</a
+					></mat-hint
+				>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Icon color</mat-label>
+				<input matInput type="text" placeholder="a6a6a6" formControlName="icon_color" />
+				<span matPrefix>#</span>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Notes</mat-label>
+				<input matInput type="text" placeholder="Notes" formControlName="notes" />
+			</mat-form-field>
+			<button
+				mat-raised-button
+				type="submit"
+				color="primary"
+				[disabled]="form.status !== 'VALID'"
+			>
+				{{data.id === "new" ? "Create" : "Update"}}
+			</button>
+		</div>
+		<div
+			class="form__preview"
+			matTooltip="Icon and color preview"
+			matTooltipShowDelay="500"
+			[ngStyle]="{backgroundColor: '#' + form.value.icon_color + '26', border: '1px solid #' + form.value.icon_color}"
+		>
+			<mat-icon class="preview_icon" [ngStyle]="{color: '#' + form.value.icon_color}">
+				{{form.value.icon_name}}
+			</mat-icon>
+		</div>
+	</form>
+</mat-card-content>
