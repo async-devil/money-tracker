@@ -11,6 +11,7 @@ import { TransactionType } from "src/app/services/transactions/types/response/tr
 
 import { CategoryOperatePanelComponent } from "../../dialogs/category-operate-panel/category-operate-panel.component";
 import { SelectOperationPanelComponent } from "../../dialogs/select-operation-panel/select-operation-panel.component";
+import { TransactionOperatePanelComponent } from "../../dialogs/transaction-operate-panel/transaction-operate-panel.component";
 
 @Component({
 	selector: "app-dashboard-page",
@@ -30,6 +31,13 @@ export class DashboardPageComponent implements OnInit {
 		this.categoriesService.getByQuery().subscribe((categories) => {
 			this.categories = categories;
 		});
+	}
+
+	private reloadPage() {
+		this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+		this.router.onSameUrlNavigation = "reload";
+
+		void this.router.navigate(["/dashboard"]);
 	}
 
 	public onCategoryClick(category: Category) {
@@ -84,23 +92,24 @@ export class DashboardPageComponent implements OnInit {
 	}
 
 	private deleteCategoryAction(category: Category) {
-		console.log("delete");
-
 		this.dialog.closeAll();
+
+		this.categoriesService.delete({ id: category.id }).subscribe(() => {
+			this.reloadPage();
+		});
 	}
 
 	private useCategoryAction(category: Category) {
-		console.log("use");
-
 		const query =
 			category.type === CategoryType.INCOME
-				? { type: TransactionType.RECHARGE, from: category.id }
-				: { type: TransactionType.WITHDRAW, to: category.id };
+				? { id: "new", type: TransactionType.RECHARGE, from: category.id }
+				: { id: "new", type: TransactionType.WITHDRAW, to: category.id };
 
 		this.dialog.closeAll();
 
-		void this.router.navigate(["/dashboard/transactions/new"], {
-			queryParams: query,
+		this.dialog.open(TransactionOperatePanelComponent, {
+			autoFocus: false,
+			data: query,
 		});
 	}
 }

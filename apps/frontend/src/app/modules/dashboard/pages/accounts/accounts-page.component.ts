@@ -7,7 +7,9 @@ import { Account } from "src/app/services/accounts/types/response/account.entity
 import { TransactionType } from "src/app/services/transactions/types/response/transaction.entity";
 import { UtilityService } from "src/app/services/utility/utility.service";
 
+import { AccountOperatePanelComponent } from "../../dialogs/account-operate-panel/account-operate-panel.component";
 import { SelectOperationPanelComponent } from "../../dialogs/select-operation-panel/select-operation-panel.component";
+import { TransactionOperatePanelComponent } from "../../dialogs/transaction-operate-panel/transaction-operate-panel.component";
 
 @Component({
 	selector: "app-accounts-page",
@@ -31,6 +33,13 @@ export class AccountsPageComponent implements OnInit {
 				(account) => account.type
 			);
 		});
+	}
+
+	private reloadPage() {
+		this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+		this.router.onSameUrlNavigation = "reload";
+
+		void this.router.navigate(["/dashboard/accounts"]);
 	}
 
 	public onAccountClick(account: Account) {
@@ -76,20 +85,29 @@ export class AccountsPageComponent implements OnInit {
 	}
 
 	private editAccountAction(account: Account) {
-		console.log("edit");
+		this.dialog.closeAll();
+
+		this.dialog.open(AccountOperatePanelComponent, {
+			autoFocus: false,
+			data: { id: account.id },
+		});
 	}
 
 	private deleteAccountAction(account: Account) {
-		console.log("delete");
+		this.dialog.closeAll();
+
+		this.accountsService.delete({ id: account.id }).subscribe(() => {
+			this.reloadPage();
+		});
 	}
 
 	private useAccountAction(account: Account) {
-		console.log("use");
-
 		this.dialog.closeAll();
 
-		void this.router.navigate(["/dashboard/transactions/new"], {
-			queryParams: {
+		this.dialog.open(TransactionOperatePanelComponent, {
+			autoFocus: false,
+			data: {
+				id: "new",
 				type: TransactionType.TRANSFER,
 				from: account.id,
 			},

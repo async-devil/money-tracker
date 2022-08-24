@@ -12,6 +12,7 @@ import { Transaction } from "src/app/services/transactions/types/response/transa
 import { UtilityService } from "src/app/services/utility/utility.service";
 
 import { SelectOperationPanelComponent } from "../../dialogs/select-operation-panel/select-operation-panel.component";
+import { TransactionOperatePanelComponent } from "../../dialogs/transaction-operate-panel/transaction-operate-panel.component";
 
 @Component({
 	selector: "app-transactions-page",
@@ -71,6 +72,13 @@ export class TransactionsPageComponent implements OnInit {
 		);
 	}
 
+	private reloadPage() {
+		this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+		this.router.onSameUrlNavigation = "reload";
+
+		void this.router.navigate(["/dashboard/transactions"]);
+	}
+
 	public onTransactionClick(transaction: Transaction) {
 		const dialogRef = this.dialog.open(SelectOperationPanelComponent, {
 			autoFocus: false,
@@ -105,14 +113,19 @@ export class TransactionsPageComponent implements OnInit {
 	}
 
 	private editTransactionAction(transaction: Transaction) {
-		console.log("edit");
-
 		this.dialog.closeAll();
 
-		void this.router.navigate([`/dashboard/transactions/${transaction.id}`]);
+		this.dialog.open(TransactionOperatePanelComponent, {
+			autoFocus: false,
+			data: { id: transaction.id },
+		});
 	}
 
 	private deleteTransactionAction(transaction: Transaction) {
-		console.log("delete");
+		this.dialog.closeAll();
+
+		this.transactionsService.delete({ id: transaction.id }).subscribe(() => {
+			this.reloadPage();
+		});
 	}
 }
