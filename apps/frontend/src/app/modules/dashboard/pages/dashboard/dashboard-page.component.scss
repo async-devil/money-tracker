@@ -1,15 +1,53 @@
 .dashboard-page {
 	height: 100%;
 
-	display: grid;
+	.dashboard__add-button {
+		position: absolute;
 
-	grid-template-columns: repeat(4, 1fr);
-	grid-template-rows: repeat(4, 1fr);
+		margin-top: 4px;
+		margin-left: 10px;
 
-	place-content: center;
-	place-items: center;
+		z-index: 9999;
 
-	.dashboard__chart {
-		grid-area: 2 / 2 / 4 / 4;
+		background-color: #a5e07526;
+
+		.mat-icon {
+			color: #a5e075;
+		}
+	}
+
+	.mat-tab-group {
+		height: 100%;
+
+		::ng-deep .mat-tab-body-wrapper {
+			height: 100%;
+		}
+	}
+
+	::ng-deep .mat-tab-body-content {
+		height: 100%;
+
+		display: grid;
+
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(4, 1fr);
+
+		place-content: center;
+		place-items: center;
+
+		.dashboard__chart {
+			width: 95%;
+
+			grid-area: 2 / 2 / 4 / 4;
+
+			.chart__info {
+				position: absolute;
+
+				top: 50%;
+				left: 50%;
+
+				transform: translate(-50%, -50%);
+			}
+		}
 	}
 }

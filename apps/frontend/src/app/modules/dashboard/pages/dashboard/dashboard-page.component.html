@@ -1,10 +1,61 @@
 <div class="dashboard-page">
-	<app-category
-		*ngFor="let category of categories"
-		[category]="category"
-		[amount]="100"
-		[currency]="'UAH'"
-		[onClick]="onCategoryClick.bind(this)"
-	></app-category>
-	<div class="dashboard__chart">to be developed</div>
+	<button
+		mat-mini-fab
+		class="dashboard__add-button"
+		matTooltip="Add new category"
+		matTooltipShowDelay="500"
+		(click)="createCategoryAction(selectedType)"
+	>
+		<mat-icon>add</mat-icon>
+	</button>
+	<mat-tab-group
+		mat-align-tabs="center"
+		*ngIf="categories"
+		(selectedTabChange)="setSelectedType($event.index)"
+	>
+		<mat-tab label="Expenses"
+			><app-category
+				*ngFor="let category of getExpenseCategories()"
+				[category]="category.category"
+				[amount]="category.amount"
+				[currency]="'USD'"
+				[onClick]="onCategoryClick.bind(this)"
+			></app-category>
+			<div class="dashboard__chart">
+				<div class="chart__info">
+					<span [ngStyle]="{color: '#ff616e'}"
+						>{{getTotalAmountByType('expense')}} USD</span
+					>
+				</div>
+				<canvas
+					baseChart
+					type="doughnut"
+					[data]="getDoughnutChartDataByType('expense')"
+					[options]="chartOptions"
+				></canvas>
+			</div>
+		</mat-tab>
+		<mat-tab label="Incomes"
+			><app-category
+				*ngFor="let category of getIncomeCategories()"
+				[category]="category.category"
+				[amount]="category.amount"
+				[currency]="'USD'"
+				[onClick]="onCategoryClick.bind(this)"
+			></app-category>
+			<div class="dashboard__chart">
+				<div class="chart__info">
+					<span [ngStyle]="{color: '#a5e075'}"
+						>{{getTotalAmountByType('income')}} USD</span
+					>
+				</div>
+				<canvas
+					baseChart
+					type="doughnut"
+					[data]="getDoughnutChartDataByType('income')"
+					[options]="chartOptions"
+				></canvas>
+			</div>
+		</mat-tab>
+	</mat-tab-group>
 </div>

@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
+import { NgChartsModule } from "ng2-charts";
 
 import { SetAmountColorPipe } from "src/app/shared/pipes/set-amount-color/set-amount-color.pipe";
 import { SetBalanceColorPipe } from "src/app/shared/pipes/set-balance-color/set-balance-color.pipe";
@@ -55,6 +56,7 @@ import { TransactionsPageComponent } from "./pages/transactions/transactions-pag
 		DashboardRoutingModule,
 		SharedModule,
 		MuiModule,
+		NgChartsModule,
 	],
 })
 export class DashboardModule {}
