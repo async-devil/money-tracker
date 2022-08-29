@@ -212,7 +212,7 @@ export class DashboardPageComponent implements OnInit {
 						const total = context.dataset.data.reduce((prev, curr) => prev + curr, 0);
 						const thisAmount = context.dataset.data[context.dataIndex];
 
-						const percentage = Math.floor((thisAmount / total) * 100);
+						const percentage = Math.round((thisAmount / total) * 100);
 
 						return `${context.label}: ${percentage}%`;
 					},

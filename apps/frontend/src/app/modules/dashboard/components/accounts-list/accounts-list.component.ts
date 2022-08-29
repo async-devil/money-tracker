@@ -1,6 +1,9 @@
 import { Component, Input } from "@angular/core";
 
-import { Account } from "src/app/services/accounts/types/response/account.entity";
+import {
+	Account,
+	AccountType,
+} from "src/app/services/accounts/types/response/account.entity";
 
 @Component({
 	selector: "app-accounts-list",
@@ -8,8 +11,7 @@ import { Account } from "src/app/services/accounts/types/response/account.entity
 	styleUrls: ["./accounts-list.component.scss"],
 })
 export class AccountsListComponent {
-	@Input() accounts: Array<[string, Array<Account>]>;
+	@Input() accounts: Array<[AccountType, Array<Account>]>;
 
 	@Input() onAccountClick: (account: Account) => unknown;
-	@Input() onAccountTransfer: (account: Account) => unknown;
 }

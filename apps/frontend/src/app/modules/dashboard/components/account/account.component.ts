@@ -11,5 +11,4 @@ export class AccountComponent {
 	@Input() account: Account;
 
 	@Input() onClick: (account: Account) => unknown;
-	@Input() onTransferAction: (account: Account) => unknown;
 }

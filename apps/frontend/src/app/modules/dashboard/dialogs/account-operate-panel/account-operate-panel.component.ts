@@ -9,6 +9,7 @@ import { AccountType } from "src/app/services/accounts/types/response/account.en
 
 export type AccountOperatePanelType = {
 	id: string | "new";
+	type?: AccountType;
 };
 
 @Component({
@@ -27,12 +28,12 @@ export class AccountOperatePanelComponent implements OnInit {
 	) {}
 
 	public ngOnInit() {
-		if (!this.data.id) {
+		if (!this.data.id || (this.data.id === "new" && !this.data.type)) {
 			this.dialog.closeAll();
 		}
 
 		if (this.data.id === "new") {
-			this.subject = this.getDefaultAccount();
+			this.subject = this.getDefaultAccount(this.data.type || AccountType.REGULAR);
 			this.setFormValues(this.subject);
 		} else {
 			this.accountsService.getById({ id: this.data.id }).subscribe((account) => {
@@ -51,10 +52,10 @@ export class AccountOperatePanelComponent implements OnInit {
 		void this.router.navigate(["/dashboard/accounts"]);
 	}
 
-	private getDefaultAccount(): CreateAccountDto {
+	private getDefaultAccount(type: AccountType): CreateAccountDto {
 		return {
 			name: "Sample",
-			type: AccountType.REGULAR,
+			type,
 			currency: "USD",
 			icon_color: "a6a6a6",
 			icon_name: "more_horiz",

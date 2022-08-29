@@ -1,4 +1,15 @@
-<app-accounts-list
-	[accounts]="accountsGroups"
-	[onAccountClick]="onAccountClick.bind(this)"
-></app-accounts-list>
+<div class="accounts-page">
+	<app-accounts-list
+		[accounts]="accountsGroups"
+		[onAccountClick]="onAccountClick.bind(this)"
+	></app-accounts-list>
+	<button
+		mat-mini-fab
+		class="accounts__add-button"
+		matTooltip="Add new category"
+		matTooltipShowDelay="500"
+		(click)="createAccountAction()"
+	>
+		<mat-icon>add</mat-icon>
+	</button>
+</div>

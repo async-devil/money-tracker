@@ -3,7 +3,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 
 import { AccountsService } from "src/app/services/accounts/accounts.service";
-import { Account } from "src/app/services/accounts/types/response/account.entity";
+import {
+	Account,
+	AccountType,
+} from "src/app/services/accounts/types/response/account.entity";
 import { TransactionType } from "src/app/services/transactions/types/response/transaction.entity";
 import { UtilityService } from "src/app/services/utility/utility.service";
 
@@ -24,14 +27,14 @@ export class AccountsPageComponent implements OnInit {
 		private readonly dialog: MatDialog
 	) {}
 
-	public accountsGroups: Array<[string, Array<Account>]>;
+	public accountsGroups: Array<[AccountType, Array<Account>]>;
 
 	public ngOnInit() {
 		this.accountsService.getByQuery().subscribe((accounts) => {
 			this.accountsGroups = this.utilityService.groupBy(
 				accounts,
 				(account) => account.type
-			);
+			) as Array<[AccountType, Array<Account>]>;
 		});
 	}
 
@@ -111,6 +114,15 @@ export class AccountsPageComponent implements OnInit {
 				type: TransactionType.TRANSFER,
 				from: account.id,
 			},
+		});
+	}
+
+	public createAccountAction() {
+		this.dialog.closeAll();
+
+		this.dialog.open(AccountOperatePanelComponent, {
+			autoFocus: false,
+			data: { id: "new", type: AccountType.REGULAR },
 		});
 	}
 }

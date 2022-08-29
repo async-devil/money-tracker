@@ -1,0 +1,16 @@
+.accounts-page {
+	height: 100%;
+
+	.accounts__add-button {
+		position: absolute;
+
+		bottom: 1rem;
+		right: 1rem;
+
+		background-color: #a5e07526;
+
+		.mat-icon {
+			color: #a5e075;
+		}
+	}
+}
