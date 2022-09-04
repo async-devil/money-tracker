@@ -1,3 +1,15 @@
-<p>home-page works!</p>
-
-<a href="/dashboard">To dashboard</a>
+<div class="home-page">
+	<h1>Greetings!</h1>
+	<h3>
+		This is Money-tracker, an app which is developed to be your helper in organization and
+		analyze your life budget
+	</h3>
+	<nav>
+		<button mat-raised-button color="primary" [routerLink]="['/auth/register']">
+			Sign up
+		</button>
+		<button mat-raised-button color="primary" [routerLink]="['/dashboard']">
+			To dashboard
+		</button>
+	</nav>
+</div>
