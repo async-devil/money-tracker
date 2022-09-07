@@ -74,7 +74,7 @@ Specific frontend features are:
   <img width="100" height="200" src="/media/dashboard-income.png"/>
   <img width="100" height="200" src="/media/accounts-create.png"/>
   <img width="100" height="200" src="/media/accounts.png"/>
-  <img width="100" height="200" src="/media/transactions-expense.png"/>
+  <img width="100" height="200" src="/media/transactions-create.png"/>
   <img width="100" height="200" src="/media/transactions.png"/>
 </p>
 
